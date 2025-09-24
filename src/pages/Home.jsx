@@ -14,6 +14,7 @@ import dubaiWoman from "../public/images/portrait-woman-visiting-luxurious-city-
 import spinToWin from "../public/images/Spin-to-win.png";
 import bardiaAdibi from "../public/images/bardia-adibi.jpg";
 import { useData } from "../contexts/DataContext";
+import { Link } from "react-router-dom";
 // import whatsappIcon from '../public/images/whatsapp-icon.svg'; // NOTE: This file was also missing.
 
 
@@ -105,10 +106,10 @@ const Home = () => {
             <img src={logo} alt="Luckymytrip Logo" className="w-32 h-full object-cover" />
           </div>
           <ul className="hidden md:flex space-x-16 nav-links-ol font-semibold">
-            <li><a className="active" href="#">Home</a></li>
-            <li><a href="/explore">Explore</a></li>
-            <li><a href="#">Tickets</a></li>
-            <li><a href="#">Contact</a></li>
+            <li><Link className="active" to="/">Home</Link></li>
+            <li><Link to="/explore">Explore</Link></li>
+            <li><Link to="/tickets">Tickets</Link></li>
+            <li><Link to="/ContactUs">Contact</Link></li>
           </ul>
           <div className="flex space-x-4 nav-links-oly font-semibold items-center">
             <div>
@@ -284,17 +285,17 @@ const Home = () => {
             <div><img src={logo} alt="Logo" className="w-32"/></div>
             <div>
               <ul className="space-y-2">
-                <li><a href="#">Home</a></li>
-                <li><a href="#">About Us</a></li>
-                <li><a href="#">How to Play</a></li>
-                <li><a href="#">Frequently Asked Questions</a></li>
+                <li><Link to="/">Home</Link></li>
+                <li><Link to="/AboutUs">About Us</Link></li>
+                <li><Link to="/Howtoplay">How to Play</Link></li>
+                <li><Link to="/Faqs">Frequently Asked Questions</Link></li>
               </ul>
             </div>
             <div>
               <ul className="space-y-2">
-                <li><a href="#">Terms and Conditions</a></li>
-                <li><a href="#">Support</a></li>
-                <li><a href="#">Privacy Policy</a></li>
+                <li><Link to="/TermsConditions">Terms and Conditions</Link></li>
+                <li><Link to="/Support">Support</Link></li>
+                <li><Link to="/PrivacyPolicy">Privacy Policy</Link></li>
               </ul>
             </div>
             <div>
