@@ -7,7 +7,7 @@ import { DataProvider } from './contexts/DataContext';
 import './App.css';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from './pages/Home';
-import ExploreNow from './pages/Explorenow.jsx'; // <-- Add this line
+import ExploreNow from './pages/Explorenow.jsx'; // New import
 import Tickets from './pages/tickets';
 import ContactUs from './pages/Contactus.jsx';
 import AboutUs from './pages/AboutUs.jsx';

@@ -285,17 +285,17 @@ const Home = () => {
             <div><img src={logo} alt="Logo" className="w-32"/></div>
             <div>
               <ul className="space-y-2">
-                <li><a href="/">Home</a></li>
-                <li><a href="/AboutUs">About Us</a></li>
-                <li><a href="Howtoplay">How to Play</a></li>
-                <li><a href="Faqs">Frequently Asked Questions</a></li>
+                <li><Link to="/">Home</Link></li>
+                <li><Link to="/AboutUs">About Us</Link></li>
+                <li><Link to="/Howtoplay">How to Play</Link></li>
+                <li><Link to="/Faqs">Frequently Asked Questions</Link></li>
               </ul>
             </div>
             <div>
               <ul className="space-y-2">
-                <li><a href="TermsConditions">Terms and Conditions</a></li>
-                <li><a href="Support">Support</a></li>
-                <li><a href="PrivacyPolicy">Privacy Policy</a></li>
+                <li><Link to="/TermsConditions">Terms and Conditions</Link></li>
+                <li><Link to="/Support">Support</Link></li>
+                <li><Link to="/PrivacyPolicy">Privacy Policy</Link></li>
               </ul>
             </div>
             <div>
