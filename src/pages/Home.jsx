@@ -155,7 +155,7 @@ const Home = () => {
 
       <section className="py-8 relative overflow-hidden">
           <div className="container mx-auto px-4 relative z-10">
-            <h2 className="text-6xl text-red-500 text-center mb-4 pt-12">Start Your JourneY</h2>
+            <h2 className="text-6xl text-red-500 text-center mb-4 pt-12">Start Your Journey</h2>
             <p className="text-4xl text-center font-bold py-2">Get ready for the adventure of a lifetime!</p>
           </div>
       </section>
