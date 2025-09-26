@@ -11,6 +11,7 @@ export const useData = () => {
   return context;
 };
 
+
 export const DataProvider = ({ children }) => {
   // Default users
   const defaultUsers = [
