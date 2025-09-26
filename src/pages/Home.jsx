@@ -194,11 +194,11 @@ const Home = () => {
        <section className="py-8 relative overflow-hidden">
       <div className="container mx-auto px-4 relative z-10">
         {/* Main Jackpot Block */}
-        <div key={jackpotData.id} className="mb-12">
+        <div key={jackpotData?.id || 0} className="mb-12">
           
           {/* Title using data.price */}
           <p className="text-4xl text-center font-bold py-2">
-            Buy a ₹{jackpotData.price} ticket, win a jackpot!
+            Buy a ₹{jackpotData?.price || 0} ticket, win a jackpot!
           </p>
 
           {/* CTA Button */}
@@ -216,10 +216,10 @@ const Home = () => {
                 alt="Jackpot Logo"
                 className="w-48 mb-4"
               />
-              <h2 className="text-white text-3xl font-bold">{jackpotData.title}</h2>
+              <h2 className="text-white text-3xl font-bold">{jackpotData?.title || ""}</h2>
               <p className="text-white font-bold text-lg w-72 mb-8 mt-2">
                 {/* Fallback for empty description */}
-                {jackpotData.description || "Enter for your chance to win this amazing prize."}
+                {jackpotData?.description || "Enter for your chance to win this amazing prize."}
               </p>
               <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 mb-12 px-6 rounded-md w-48">
                 Learn More
@@ -227,8 +227,8 @@ const Home = () => {
             </div>
             <img
               // Using the fallback image because data.image is empty
-              src={jackpotData.image || dubaiWoman}
-              alt={jackpotData.title}
+              src={jackpotData?.image || dubaiWoman}
+              alt={jackpotData?.title || "Dubai Woman"}
               className="relative bottom-0 right-0 max-h-96"
             />
           </div>
@@ -260,21 +260,26 @@ const Home = () => {
         </div>
       </section>
 
-        <section className="py-16">
-          <div className="container mx-auto px-4 flex flex-col md:flex-row justify-center items-center">
-              <div>
-                  <h2 className="text-8xl font-bold text-green-500 mb-4">SPIN LUCK</h2>
-                  <div className="flex items-end">
-                      <div className="w-44">
-                          <span className="text-red-500 text-4xl font-bold">Rs.<span className="text-8xl">49</span></span>
+        <section className="md:py-8 py-4 min-h-96 ">
+          <div className="container md:mx-auto  md:px-16 px-5 flex flex-col md:flex-row justify-start md:justify-center items-center ">
+              <div className=" flex flex-col ">
+                  <h2 className="lg:text-7xl md:text-[50px]  selection:file: text-4xl font-extrabold text-green-500  flex justify-start ">SPIN LUCK</h2>
+                  <div className="flex justify-end items-center ">
+                      <div className="md:w-40 w-[39%] flex gap-1  justify-start items-center  ">
+                          <div className="flex flex-col justify-start ">
+                            <span className="text-black xl:text-2xl  lg:text-xl text-xs font-extrabold">IN</span> 
+                            <span className="text-red-500 xl:text-4xl lg:text-3xl md:text-2xl text-base font-medium">Rs.</span>
+                          </div>
+                          <div><span className="xl:text-[75px]  lg:text-[70px] md:text-[65px] text-[43px] font-bold text-red-500">49</span></div>
+                          
                       </div>
-                      <div className="w-56 text-left p-4">
-                          <p className="text-xl text-gray-700">iPhone 16, Premium Luggage &amp; More!</p>
+                      <div className=" md:w-[60%] w-[61%] ">
+                          <p className="flex items-center justify-start lg:text-xl  text-xs   text-gray-700  font-bold leading-[1] ">iPhone 16, Premium <br/>Luggage &amp; More!</p>
                       </div>
                   </div>
               </div>
-              <div className="relative mt-8 md:mt-0">
-                  <img src={spinToWin} alt="Gift Box" className="mx-auto max-h-[20rem]" />
+              <div className="relative mt-8 md:mt-0 flex justify-center items-center ">
+                  <img src={spinToWin} alt="Gift Box" className="mx-auto lg:max-h-[30rem] md:max-h-[25rem] w-full " />
               </div>
           </div>
         </section>
