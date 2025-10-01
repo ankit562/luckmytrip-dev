@@ -116,7 +116,7 @@ export const Login = async (req, res) => {
     user.refreshToken = refreshToken;
     await user.save();
 
-    res.cookie("jwt", refreshToken, {
+    res.cookie("accessToken", refreshToken, {
       httpOnly: true,
       secure: true,
       sameSite: "Strict",

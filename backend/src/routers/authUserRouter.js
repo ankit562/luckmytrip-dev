@@ -20,7 +20,7 @@ router.route("/verify-email").post(VerifyEmail);
 router.route("/login").post(Login);
 router.route("/refresh-token").post(RefreshToken);
 router.route("/logout").post(authMiddleware(), Logout);
-router.route("/getprofile").post(authMiddleware(), GetProfile);
+router.route("/profile").get(authMiddleware(), GetProfile);
 router.route("/update-profile").patch(authMiddleware(), UpdateProfile);
 router.route("/update-password").patch(authMiddleware(), ForgotPassword);
 router.route("/forgot-password").post(ForgotPasswordRequest);

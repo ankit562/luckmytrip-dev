@@ -1,6 +1,6 @@
 import { Route, Routes, Navigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import './App.css';
+import { useSelector, useDispatch } from "react-redux"
+
 import SignupPage from './pages/SignupPage';
 import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage';
@@ -11,35 +11,46 @@ import AddToCartPage from './pages/AddToCartPage';
 import Dashboard from './pages/dashboard/DashboardPage';
 import OtpPage from './pages/OtpPage';
 import { Toaster } from "react-hot-toast";
+import { Loading } from './components/Loading';
+import { useEffect } from 'react';
+import { fetchProfile } from './features/auth/authUserSlice';
+// import { fetchProfile } from './feature/auth/authSlice';
+// import { useEffect } from 'react';
 
-const PrivateRoute = ({ children }) => {
-  const user = useSelector((state) => state.auth.user);
-  return user ? children : <Navigate to="/login" replace />;
-};
+
+
+
 
 function App() {
-  return (
-    <>
-      <Routes>
-        <Route path="/dashboard" element={
-          <PrivateRoute>
-            <Dashboard />
-          </PrivateRoute>
-        } />
+    const dispatch = useDispatch();
+  const { user, isInitialized, loading } = useSelector(state => state.auth);
 
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/login" element={<LoginPage />} />
+  useEffect(() => {
+    dispatch(fetchProfile());
+  }, [dispatch]);
+
+  if (loading || !isInitialized) {
+    return <Loading />;
+  }
+
+  return (
+    <div className='bg-black min-h-screen'>
+      <Routes>
+        <Route path="/dashboard" element={user ? <Dashboard /> : <Navigate to="/login" />} />
+
+        <Route path="/signup" element={!user ? <SignupPage /> : <Navigate to="/dashboard" />} />
+        <Route path="/login" element={!user ? <LoginPage /> : <Navigate to="/dashboard" />} />
         <Route path="/otp-verification" element={<OtpPage />} />
 
-        <Route path="/" element={<HomePage />} />
-        <Route path="/explore" element={<ExplorePage />} />
-        <Route path="/ticket" element={<TicketPage />} />
-        <Route path="/contactus" element={<ContactUsPage />} />
-        <Route path="/addtocart" element={<AddToCartPage />} />
+        <Route path="/" element={user ? <HomePage /> : <Navigate to="/login" />} />
+        <Route path="/explore" element={user ? <ExplorePage /> : <Navigate to="/login" />} />
+        <Route path="/ticket" element={user ? <TicketPage /> : <Navigate to="/login" />} />
+        <Route path="/contactus" element={user ? <ContactUsPage /> : <Navigate to="/login" />} />
+        <Route path="/addtocart" element={user ? <AddToCartPage /> : <Navigate to="/login" />} />
         <Route path="*" element={<h1>404 Not Found</h1>} />
       </Routes>
       <Toaster />
-    </>
+    </div>
   );
 }
 

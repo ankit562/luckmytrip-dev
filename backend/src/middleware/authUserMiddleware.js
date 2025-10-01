@@ -4,7 +4,7 @@ import { verifyAccessToken } from "../lib/jsonWebToken.js";
 export function authMiddleware(allowedRoles = []) {
   return (req, res, next) => {
     try {
-      const authHeader = req.headers.authorization || req.cookies?.jwt;
+      const authHeader = req.headers.authorization || req.cookies?.accessToken;
       if (!authHeader)
         return res.status(401).json({ message: "Unauthorized: No token" });
 
