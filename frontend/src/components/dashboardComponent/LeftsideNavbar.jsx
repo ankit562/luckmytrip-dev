@@ -1,77 +1,149 @@
 import { useState } from "react";
-import { Home, FileText, Users, ShoppingCart, Search, ChevronDown, Puzzle, Monitor, User, Tag, MenuIcon } from "lucide-react";
+import { Home, FileText, Users, ShoppingCart, Search, ChevronDown, Puzzle, Monitor, User, Tag, MenuIcon, BookOpen, CircleUserRound, ChevronRight } from "lucide-react";
+import { MdOutlineExplore } from "react-icons/md";
+import { LuLayoutDashboard } from "react-icons/lu";
+import { RiAdminFill  } from "react-icons/ri";
+import { RiAdminLine } from "react-icons/ri";
+import { MdContentPaste } from "react-icons/md";
+import {Link} from "react-router-dom"
 
 
 const LeftsideNavbar = () => {
-    const [openDropdown, setOpenDropdown] = useState({
-        home: false,
-        catalog: false,
-        customers: false,
-        extensions: false,
-        design: false,
-        sales: false,
-        marketing: false,
-        system: false
-    });
 
-    const submenu = (section) => [
-        { label: `Marketplace (${section})`, icon: <Tag className="w-4 h-4 mr-2" /> },
-        { label: `Installer (${section})`, icon: <Puzzle className="w-4 h-4 mr-2" /> },
-        { label: `Startup (${section})`, icon: <Monitor className="w-4 h-4 mr-2" /> }
-    ];
-    const navData = [
-        { key: "dashboard", icon: <Home className={`w-5 h-5 mr-2 `} />, label: "Dashboard" },
-        { key: "pages", icon: <Home className={`w-5 h-5 mr-2 `} />, label: "Pages" },
-        { key: "users", icon: <FileText className={`w-5 h-5 mr-2 `} />, label: "Users" },
-        { key: "customers", icon: <Users className={`w-5 h-5 mr-2 `} />, label: "Customers" },
-        // { key: "sales", icon: <ShoppingCart className={`w-5 h-5 mr-2 `} />, label: "Sales" },
-        // { key: "marketing", icon: <Tag className={`w-5 h-5 mr-2 `} />, label: "Marketing" },
-        // { key: "system", icon: <User className={`w-5 h-5 mr-2 `} />, label: "System" }
-    ];
+
+    const [openSection, setOpenSection] = useState("dashboard");
+    const [pagesOpen, setPagesOpen] = useState(null);
+    //   const [usersOpen, setUsersOpen] = useState(false);
+
+    //   // Nested for Home/Explore accordions
+    //   const [homeOpen, setHomeOpen] = useState(false);
+    //   const [exploreOpen, setExploreOpen] = useState(false);
+
+    // Handlers
+    const handleSection = (section) => {
+        if (openSection === section) setOpenSection(null);
+        else setOpenSection(section);
+    };
+
+    const handlePages = (option) => {
+        if (pagesOpen === option) setPagesOpen(null);
+        else setPagesOpen(option);
+    };
     return (
         <>
-            <nav className="bg-[#11303d] text-white w-60 min-h-full flex flex-col  sidebar-responsive">
-                <div className='flex items-center px-6 py-2 text-white font-semibold text-lg bg-[#062d3e] '>
+            <nav className=" bg-white shodow-lg w-60 min-h-full flex flex-col  sidebar-responsive px-2">
+                <div className='flex items-center px-5 py-2  font-semibold text-lg  '>
                     <MenuIcon className='w-5 h-5 mr-2' />
                     <span>Navigation</span>
                 </div>
 
-                {navData.map((item) => (
-                    <div key={item.key} className=" border-t-2 border-t-neutral-700  ">
-                        <button
-                            onClick={() => setOpenDropdown((prev) => ({
-                                ...prev,
-                                [item.key]: !prev[item.key]
-                            }))}
-                            className="flex items-center w-full px-4 py-2 hover:bg-[#022432]  transition justify-between"
-                        >
-                            {item.icon}
-                            <span>{item.label}</span>
-                            <ChevronDown className="ml-auto w-4 h-4" />
-                        </button>
-                        {/* Dropdown - 3 nested items */}
-                        {openDropdown[item.key] && (
-                            <div div 
-                            className= {` bg-[#1d3b48] space-y-1 overflow-hidden flex-col items-center justify-center  transition-[max-height] duration-300 ease-in-out 
-                                ${openDropdown[item.key] ? "max-h-96 " : "max-h-0 py-0"
-                            }`}>
-                                
-                        {submenu(item.label).map((sub, idx) => (
-                            <div
-                                key={idx}
-                                className="flex items-center  px-2 py-2 hover:bg-[#11303d] rounded cursor-pointer"
-                            >
-                                {sub.icon}
-                                <span>{sub.label}</span>
+
+                <div className={`gap-1 flex items-center justify-start  px-5  rounded-lg transition cursor-pointer hover:bg-blue-200
+                    ${openSection === "dashboard" ? "bg-blue-400 font-semibold" : ""}`}
+                    onClick={() => handleSection("dashboard")}>
+                    <LuLayoutDashboard className="w-5 h-5 " />
+                    <button className={`text-left px-5 py-2 `}>
+                        Dashboard </button>
+                </div>
+
+                <div className={`gap-1 flex items-center justify-start  px-5  rounded-lg transition cursor-pointer hover:bg-blue-200
+                    ${openSection === "pages" ? "bg-blue-400 font-semibold" : ""}`}
+                    onClick={() => handleSection("pages")}>
+                    <BookOpen className="w-5 h-5 " />
+                    <button className={`text-left px-5 py-2 `}>
+                        Pages</button>
+
+                </div>
+
+
+                {openSection === "pages" && (
+                    <div className="flex flex-col   border-gray-200  ">
+                        <div className={`gap-2 flex items-center justify-start  px-6 rounded-lg mt-1
+            ${pagesOpen === "home" ? "bg-blue-200 font-semibold" : ""}`}
+                            onClick={() => handlePages("home")}>
+                            <Home className="w-5 h-5" />
+                            <button className={`text-left  py-2 `}> Home</button>
+                        </div>
+                        {pagesOpen === "home" && (
+                            <div className="flex flex-col  border-gray-100">
+                                <div className="flex items-center justify-start py-1 px-6">
+                                    <ChevronRight className="w-5 h-5" />
+                                    <button className="text-left px-4 py-2 "><Link to={'/home/journey'}>Journey</Link></button>
+                                </div >
+                                <div className="flex items-center justify-start py-1 px-6">
+                                    <ChevronRight className="w-5 h-5" />
+                                    <button className="text-left px-4 py-2 "><Link to={'/home/jackpot'}>Jackpot</Link></button>
+                                </div>
+                                <div className="flex items-center justify-start py-1 px-6">
+                                    <ChevronRight className="w-5 h-5" />
+                                    <button className="text-left px-4 py-2 "><Link to={'/home/spinluck'}>SpinLuck offers</Link></button>
+                                </div>     
                             </div>
-                        ))}
+                        )}
+
+                        <div className={`gap-2 flex items-center justify-start  px-6 rounded-lg 
+            ${pagesOpen === "explore" ? "bg-blue-200 font-semibold" : ""}`}
+                            onClick={() => handlePages("explore")}>
+                            <MdOutlineExplore className="w-5 h-5" />
+                            <button className={`text-left  py-2 `}>Explore</button>
+                        </div>
+
+                        {pagesOpen === "explore" && (
+                            <div className="flex flex-col   border-gray-100">
+                                <div className="flex items-center justify-start py-1 px-6">
+                                    <ChevronRight className="w-5 h-5" />
+                                    <button className="text-left px-4 py-2 ">SubMenu</button>
+                                </div >
+                                <div className="flex items-center justify-start py-1 px-6">
+                                    <ChevronRight className="w-5 h-5" />
+                                    <button className="text-left px-4 py-2 ">jackpot</button>
+                                </div>
+                                <div className="flex items-center justify-start py-1 px-6">
+                                    <ChevronRight className="w-5 h-5" />
+                                    <button className="text-left px-4 py-2 ">SpinLuck offers</button>
+                                </div>     
+                            </div>
+                        )}
                     </div>
                 )}
-            </div>
-                ))}
-        </nav >
+
+                <div className={`gap-1 flex items-center justify-start  px-5  rounded-lg  transition cursor-pointer hover:bg-blue-200
+                    ${openSection === "users" ? "bg-blue-400 font-semibold" : ""}`} onClick={() => handleSection("users")}>
+                    <User className="w-5 h-5 " />
+                    <button className={`text-left px-5 py-2  `}> Users</button>
+                </div>
+
+                {openSection === "users" && (
+                    <div className="flex flex-col pl-8  gap-1 ">
+                        <div className="flex justify-start items-center">
+                            <RiAdminFill className="w-5 h-5 " />
+                            <button className="text-left px-4 py-2 ">super Admin</button>
+                        </div>
+                        <div className="flex justify-start items-center">
+                            <RiAdminLine className="w-5 h-5 " />
+                            <button className="text-left px-4 py-2 ">Admin</button>
+                        </div>
+                        <div className="flex justify-start items-center">
+                            <MdContentPaste className="w-5 h-5 " />
+                            <button className="text-left px-4 py-2 ">Content-Creater</button>
+                        </div>
+                    </div>
+                )}
+
+                <div className={`gap-1 flex items-center justify-start  px-5  rounded-lg  transition cursor-pointer hover:bg-blue-200
+                    ${openSection === "client" ? "bg-blue-400 font-semibold" : ""}`}
+                    onClick={() => handleSection("client")}>
+                    <Users className="w-5 h-5" />
+                    <button
+                        className={`text-left px-5 py-2  `}>
+                        Client</button>
+
+                </div>
+
+            </nav >
         </>
     )
 }
 
 export default LeftsideNavbar
+

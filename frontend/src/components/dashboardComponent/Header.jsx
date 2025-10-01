@@ -1,6 +1,6 @@
 import { Bell, ChevronDown, LogOut, User, UserCircle, Store, Home, BookText, MessageSquare, ChevronUp } from 'lucide-react'
 import { useState } from 'react';
-
+import {Link }from 'react-router-dom';
 
 const Header = () => {
     const [open, setOpen] = useState(false);
@@ -10,13 +10,13 @@ const Header = () => {
                 <div className="flex items-center space-x-3">
                     {/* Logo & Title */}
                     <div className="flex items-center space-x-1">
-                        <h2 className="font-bold text-[#255a71] text-2xl">Dashboard</h2>
+                        <h2 className="font-bold text-black text-2xl">Dashboard</h2>
                         <img src="/luckmytrip.png" alt="Opencart" className="h-10 w-12" />
                     </div>
                 </div>
 
                 <div className="flex items-center   justify-end space-x-4">
-                    <Bell className="w-6 h-6 text-[#255a71]" />
+                    <Bell className="w-6 h-6 text-blue-500" />
 
                     <div className="relative hover:bg-gray-100 py-3">
                         <button
@@ -24,41 +24,29 @@ const Header = () => {
                             onClick={() => setOpen(prev => !prev)}
                         >
                             
-                            <UserCircle className="w-8 h-8 text-[#255a71] rounded-full border" />
-                            <span className="font-medium text-[#255a71]">Super Admin</span>
-                            {!open ? (<ChevronDown className="w-4 h-4 text-[#255a71]" />) : (<ChevronUp className="w-4 h-4 text-blue-700" />)}
+                            <UserCircle className="w-8 h-8 text-blue-500 rounded-full border" />
+                            <span className="font-medium text-blue-500">Super Admin</span>
+                            {!open ? (<ChevronDown className="w-4 h-4 text-blue-500" />) : (<ChevronUp className="w-4 h-4 text-blue-700" />)}
                         </button>
                         {open && (
                             <div className="absolute right-0  mt-3 w-48 bg-white rounded shadow-lg border z-50 ">
-                                <div className="border-b px-4 py-2 flex items-center gap-2 hover:bg-blue-50 cursor-pointer">
-                                    <User className="w-5 h-5 text-[#255a71]" />
+                                <div className=" px-4 py-2 flex items-center gap-2 hover:bg-blue-50 cursor-pointer">
+                                    <User className="w-5 h-5 text-blue-500" />
                                     <span>Your Profile</span>
                                 </div>
-                                <div className="border-b px-4 py-2 text-xs text-gray-500">Stores</div>
+                                
                                 <div className="border-b px-4 py-2 flex items-center gap-2 hover:bg-blue-50 cursor-pointer">
-                                    <Store className="w-5 h-5 text-[#255a71]" />
-                                    <span>Your Store</span>
+                                    <Store className="w-5 h-5 text-blue-500" />
+                                   <Link to="/">Open Site</Link> 
                                 </div>
-                                <div className="px-4 py-2 text-xs text-gray-500">Help</div>
-                                <div className="px-4 py-2 flex items-center gap-2 hover:bg-blue-50 cursor-pointer">
-                                    <Home className="w-5 h-5 text-[#255a71]" />
-                                    <span>OpenCart Homepage</span>
-                                </div>
-                                <div className="px-4 py-2 flex items-center gap-2 hover:bg-blue-50 cursor-pointer">
-                                    <BookText className="w-5 h-5 text-[#255a71]" />
-                                    <span>Documentation</span>
-                                </div>
-                                <div className="px-4 py-2 flex items-center gap-2 hover:bg-blue-50 cursor-pointer">
-                                    <MessageSquare className="w-5 h-5 text-[#255a71]" />
-                                    <span>Support Forum</span>
-                                </div>
+
                             </div>
                         )}
                     </div>
 
                     <div className='flex items-center space-x-1 cursor-pointer hover:bg-gray-100 py-4'>
-                        <span className='text-[#255a71] font-medium'>Logout</span>
-                        <LogOut className="w-6 h-6 text-[#255a71]" />
+                        <span className='text-blue-500 font-medium'>Logout</span>
+                        <LogOut className="w-6 h-6 text-blue-500" />
                     </div>
                     
                 </div>

@@ -14,6 +14,9 @@ import { Toaster } from "react-hot-toast";
 import { Loading } from './components/Loading';
 import { useEffect } from 'react';
 import { fetchProfile } from './features/auth/authUserSlice';
+import Journey from './pages/dashboard/home/Journey';
+import Jackpot from './pages/dashboard/home/Jackpot';
+import SpinLuck from './pages/dashboard/home/SpinLuck';
 // import { fetchProfile } from './feature/auth/authSlice';
 // import { useEffect } from 'react';
 
@@ -22,7 +25,7 @@ import { fetchProfile } from './features/auth/authUserSlice';
 
 
 function App() {
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const { user, isInitialized, loading } = useSelector(state => state.auth);
 
   useEffect(() => {
@@ -34,12 +37,16 @@ function App() {
   }
 
   return (
-    <div className='bg-black min-h-screen'>
+    <div className=''>
       <Routes>
-        <Route path="/dashboard" element={user ? <Dashboard /> : <Navigate to="/login" />} />
+        <Route path="/home/journey" element={<Journey/>}/>
+        <Route path="/home/jackpot" element={<Jackpot/>}/>
+        <Route path="/home/spinluck" element={<SpinLuck/>}/>
+        
+        <Route path="/dashboard" element={ <Dashboard /> } />
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/login" element={<LoginPage />} />
 
-        <Route path="/signup" element={!user ? <SignupPage /> : <Navigate to="/dashboard" />} />
-        <Route path="/login" element={!user ? <LoginPage /> : <Navigate to="/dashboard" />} />
         <Route path="/otp-verification" element={<OtpPage />} />
 
         <Route path="/" element={user ? <HomePage /> : <Navigate to="/login" />} />
@@ -55,3 +62,8 @@ function App() {
 }
 
 export default App;
+
+
+        // {/* 
+        // <Route path="/signup" element={!user ? <SignupPage /> : <Navigate to="/dashboard" />} />
+        // <Route path="/login" element={!user ? <LoginPage /> : <Navigate to="/dashboard" />} /> */}

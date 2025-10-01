@@ -14,11 +14,11 @@ export default function Dashboard() {
 
         {/* Main Content */}
         <main className="flex-1 px-10 py-8 bg-blue-50 min-h-0">
-          <h1 className="text-3xl font-bold text-[#5b91aa] mb-4">Home</h1>
+          <h1 className="text-3xl font-bold text-black mb-4">Home</h1>
 
           <div className="flex flex-wrap gap-6">
             {/* Welcome Card */}
-            <div className="bg-gradient-to-r from-[#497488] to-[#334d7d] text-white rounded-xl p-6 flex-1 min-w-[320px] shadow">
+            <div className="bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl p-6 flex-1 min-w-[320px] shadow">
               <h2 className="text-xl font-semibold mb-2">Welcome, Super Admin!</h2>
               <p className="mb-2">You have full access to all system features and can manage all users and content.</p>
               <span className="bg-white/20 py-1 px-4 rounded-lg text-sm font-semibold">Role: SUPERADMIN</span>
