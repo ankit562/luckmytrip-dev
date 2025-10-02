@@ -125,12 +125,12 @@ const Home = () => {
 
       <section className="py-4 relative overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
-            <h1 className="text-center text-[4rem] md:text-[7rem] font-bold mb-12 pb-22">
+            <h1 className="text-center text-[3rem] md:text-[7rem] font-bold mb-12 pb-22">
                 <span className="text-red-500">WIN </span>
                 <span className="text-blue-900">&nbsp;YOUR DREAM </span>
                 <span className="text-red-500">&nbsp;TRIP</span>
             </h1>
-            <div className="flex flex-col md:flex-row justify-center items-center relative">
+            <div className="flex flex-col md:flex-row justify-center items-center relative mt-12 pt-12">
                 <div classname="relative mx-auto max-h-[28rem] z-20">
                    <div className="absolute inset-0 z-10 h-84 pointer-events-none overflow-hidden">
                     <img src={confetti} alt="Celebration confetti" className="w-full h-84 object-cover opacity-80" />
