@@ -17,6 +17,13 @@ import { fetchProfile } from './features/auth/authUserSlice';
 import Journey from './pages/dashboard/home/Journey';
 import Jackpot from './pages/dashboard/home/Jackpot';
 import SpinLuck from './pages/dashboard/home/SpinLuck';
+import DreamTrip from './pages/dashboard/explore/DreamTrip';
+import TripInfo from './pages/dashboard/explore/TripInfo';
+import GoldenWinner from './pages/dashboard/explore/GoldenWinner';
+import SuperAdmin from './pages/dashboard/users/SuperAdmin';
+import Admin from './pages/dashboard/users/Admin';
+import ContentCreator from './pages/dashboard/users/Content-creator';
+import Client from './pages/dashboard/Client';
 // import { fetchProfile } from './feature/auth/authSlice';
 // import { useEffect } from 'react';
 
@@ -42,7 +49,18 @@ function App() {
         <Route path="/home/journey" element={<Journey/>}/>
         <Route path="/home/jackpot" element={<Jackpot/>}/>
         <Route path="/home/spinluck" element={<SpinLuck/>}/>
+
+        <Route path="/home/dreamtrip" element={ <DreamTrip /> } />
+        <Route path="/home/tripinfo" element={ <TripInfo /> } />
+        <Route path="/home/goldenwinner" element={ <GoldenWinner /> } />
+
+        <Route path="/users/superadmin" element={ <SuperAdmin/> } />
+        <Route path="/users/admin" element={ <Admin /> } />
+        <Route path="/users/content-creator" element={ <ContentCreator /> } />
+
+        <Route path="/dashboard/client" element={ <Client /> } />
         
+
         <Route path="/dashboard" element={ <Dashboard /> } />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/login" element={<LoginPage />} />
