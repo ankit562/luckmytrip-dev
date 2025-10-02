@@ -125,7 +125,7 @@ const Home = () => {
 
       <section className="py-4 relative overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
-            <h1 className="text-center text-[7rem] font-bold mb-12 pb-22">
+            <h1 className="text-center text-[4rem] md:text-[7rem] font-bold mb-12 pb-22">
                 <span className="text-red-500">WIN </span>
                 <span className="text-blue-900">&nbsp;YOUR DREAM </span>
                 <span className="text-red-500">&nbsp;TRIP</span>
