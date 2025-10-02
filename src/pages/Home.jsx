@@ -52,35 +52,35 @@ const Home = () => {
       name: 'Bardia Adibi', 
       country: 'India', 
       text: "I still can't believe I won! The Dubai trip exceeded all my expectations...", 
-      img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=576&h=576&q=80' 
+      img: bardiaAdibi 
     },
     { 
       id: 'content2', 
       name: 'Bardia', 
       country: 'India', 
       text: 'A fantastic experience from start to finish. Highly recommended!', 
-      img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=576&h=576&q=80' 
+      img: bardiaAdibi 
     },
     { 
       id: 'content3', 
       name: 'Adibi', 
       country: 'India', 
       text: 'The trip was a dream. Everything was perfectly organized. Thank you!', 
-      img: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=576&h=576&q=80' 
+      img: bardiaAdibi 
     },
     { 
       id: 'content4', 
       name: 'Bardia Adibi 4', 
       country: 'India', 
       text: "Incredible journey! I can't wait to participate again for the next destination.", 
-      img: 'https://images.unsplash.com/photo-1521119989659-a83eee488004?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=576&h=576&q=80' 
+      img: bardiaAdibi 
     },
     { 
       id: 'content5', 
       name: 'Bardia Adibi 5', 
       country: 'India', 
       text: 'Winning this felt unreal! The support from the Luckymytrip team was amazing.', 
-      img: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=576&h=576&q=80' 
+      img: bardiaAdibi 
     },
     { 
       id: 'content6', 
@@ -125,30 +125,31 @@ const Home = () => {
 
       <section className="py-4 relative overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
-            <h1 className="text-center text-4xl md:text-[7rem] font-bold mb-4 pb-22">
+            <h1 className="text-center text-[7rem] font-bold mb-12 pb-22">
                 <span className="text-red-500">WIN </span>
                 <span className="text-blue-900">&nbsp;YOUR DREAM </span>
                 <span className="text-red-500">&nbsp;TRIP</span>
             </h1>
-            <div className="flex justify-center items-center relative h-[32rem]">
-                <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
-                    <img src={confetti} alt="Celebration confetti" className="w-full h-full object-contain opacity-80" />
-                </div>
-                <img src={globe} alt="Travel Map" className="rounded-full mx-auto absolute max-h-full" />
-                <img src={girl} alt="Person with arms spread" className="relative z-10 max-h-full" />
-                
-                <div className="absolute w-48 md:w-64 top-1/2 left-1/4 transform -translate-x-1/2 bg-white rounded-lg shadow-lg p-2 z-20">
-                    <img src={shanghai} alt="Baku" className="rounded-lg w-full h-auto object-cover"/>
-                    <div className="text-red-500 text-center font-bold py-1">BAKU</div>
-                </div>
-                <div className="absolute w-48 md:w-64 top-1/4 right-1/3 transform translate-x-1/3 bg-white rounded-lg shadow-lg p-2 z-30">
-                    <img src={shanghai} alt="Dubai" className="rounded-lg w-full h-auto object-cover"/>
-                    <div className="text-green-500 text-center font-bold py-1">DUBAI</div>
-                </div>
-                <div className="absolute w-48 md:w-64 top-1/2 right-1/4 transform translate-x-1/2 bg-white rounded-lg shadow-lg p-2 z-30">
-                    <img src={shanghai} alt="Thailand" className="rounded-lg w-full h-auto object-cover"/>
-                    <div className="text-yellow-500 text-center font-bold py-1">THAILAND</div>
-                </div>
+            <div className="flex flex-col md:flex-row justify-center items-center relative">
+                <div classname="relative mx-auto max-h-[28rem] z-20">
+                   <div className="absolute inset-0 z-10 h-84 pointer-events-none overflow-hidden">
+                    <img src={confetti} alt="Celebration confetti" className="w-full h-84 object-cover opacity-80" />
+                  </div>
+                    <img src={globe} alt="Travel Map" className="rounded-full mx-auto absolute" />
+                     <img src={girl} alt="Person with arms spread" className="relative transform z-10" />
+                  <div className="absolute w-65 h-56 top-1/2 left-20 transform -translate-x-1/2 bg-white rounded-lg shadow-lg p-2">
+                     <img src={shanghai} alt="Baku" className="rounded-lg w-64 h-42 object-cover"/>
+                      <div className="text-red-500 text-center font-bold py-1">BAKU</div>
+                    </div>
+                    <div className="absolute w-65 h-56 bottom-3/4 right-1/3 transform translate-x-1/3 bg-white rounded-lg shadow-lg p-2 z-30">
+                      <img src={shanghai} alt="Dubai" className="rounded-lg w-64 h-42 object-cover"/>
+                      <div className="text-green-500 text-center font-bold py-1">DUBAI</div>
+                    </div>
+                    <div className="absolute w-65 h-56 top-1/2 right-20 transform translate-x-3/4 translate-y-1/4 bg-white rounded-lg shadow-lg p-2 z-30">
+                       <img src={shanghai} alt="Thailand" className="rounded-lg w-64 h-42 object-cover"/>
+                       <div className="text-yellow-500 text-center font-bold py-1">THAILAND</div>
+                    </div>
+               </div>
             </div>
         </div>
       </section>
@@ -209,7 +210,7 @@ const Home = () => {
           </div>
 
           {/* Jackpot Display Card */}
-          <div className="bg-blue-900 rounded-lg flex items-center justify-between overflow-hidden relative">
+          <div className="hero-container bg-blue-900 rounded-lg flex items-center justify-between overflow-hidden relative">
             <div className="hero-text px-16 z-10">
               <img
                 src={jackpot} // Using the static imported jackpot logo
@@ -229,7 +230,7 @@ const Home = () => {
               // Using the fallback image because data.image is empty
               src={jackpotData.image || dubaiWoman}
               alt={jackpotData.title}
-              className="relative bottom-0 right-0 max-h-96"
+              className="relative bottom-0 right-0 max-h-96 lady-image"
             />
           </div>
         </div>
@@ -240,7 +241,7 @@ const Home = () => {
         <div className="container mx-auto px-4">
             <h2 className="text-6xl text-red-500 text-center mb-5 py-8">Feedback From Our Prize Winners</h2>
             <div className="grid md:grid-cols-2 gap-8 items-center">
-                <div className="flex flex-wrap gap-4 justify-center">
+                <div className="flex flex-wrap grid grid-cols-3 gap-4">
                     {testimonials.map(t => (
                         <div key={t.id} className={`w-24 h-24 rounded-lg overflow-hidden cursor-pointer border-4 transition-all ${activeTestimonial === t.id ? 'border-blue-500 scale-110' : 'border-transparent'}`} onClick={() => setActiveTestimonial(t.id)}>
                             <img src={t.img} alt={t.name} className="w-full h-full object-cover" />
