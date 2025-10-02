@@ -125,28 +125,28 @@ const Home = () => {
 
       <section className="py-4 relative overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
-            <h1 className="text-center text-[7rem] font-bold mb-12 pb-22">
+            <h1 className="text-center text-[3rem] md:text-[7rem] font-bold mb-12 pb-22">
                 <span className="text-red-500">WIN </span>
                 <span className="text-blue-900">&nbsp;YOUR DREAM </span>
                 <span className="text-red-500">&nbsp;TRIP</span>
             </h1>
-            <div className="flex flex-col md:flex-row justify-center items-center relative">
+            <div className="flex flex-col md:flex-row justify-center items-center relative mt-12 pt-12">
                 <div classname="relative mx-auto max-h-[28rem] z-20">
                    <div className="absolute inset-0 z-10 h-84 pointer-events-none overflow-hidden">
                     <img src={confetti} alt="Celebration confetti" className="w-full h-84 object-cover opacity-80" />
                   </div>
                     <img src={globe} alt="Travel Map" className="rounded-full mx-auto absolute" />
                      <img src={girl} alt="Person with arms spread" className="relative transform z-10" />
-                  <div className="absolute w-65 h-56 top-1/2 left-20 transform -translate-x-1/2 bg-white rounded-lg shadow-lg p-2">
-                     <img src={shanghai} alt="Baku" className="rounded-lg w-64 h-42 object-cover"/>
+                  <div className="absolute w-32 h-42 md:w-64 top-1/2 left-20 transform -translate-x-1/2 bg-white rounded-lg shadow-lg p-2 z-30">
+                     <img src={shanghai} alt="Baku" className="rounded-lg w-32 h-42 md:w-64 object-cover"/>
                       <div className="text-red-500 text-center font-bold py-1">BAKU</div>
                     </div>
-                    <div className="absolute w-65 h-56 bottom-3/4 right-1/3 transform translate-x-1/3 bg-white rounded-lg shadow-lg p-2 z-30">
-                      <img src={shanghai} alt="Dubai" className="rounded-lg w-64 h-42 object-cover"/>
+                    <div className="absolute w-32 h-42 md:w-64 bottom-3/4 right-1/3 transform translate-x-1/2 bg-white rounded-lg shadow-lg p-2 z-30">
+                      <img src={shanghai} alt="Dubai" className="rounded-lg w-32 h-42 md:w-64 object-cover"/>
                       <div className="text-green-500 text-center font-bold py-1">DUBAI</div>
                     </div>
-                    <div className="absolute w-65 h-56 top-1/2 right-20 transform translate-x-3/4 translate-y-1/4 bg-white rounded-lg shadow-lg p-2 z-30">
-                       <img src={shanghai} alt="Thailand" className="rounded-lg w-64 h-42 object-cover"/>
+                    <div className="absolute w-32 h-42 md:w-64 top-1/2 right-20 transform translate-x-3/4 translate-y-1/4 bg-white rounded-lg shadow-lg p-2 z-30">
+                       <img src={shanghai} alt="Thailand" className="rounded-lg w-32 h-42 md:w-64 object-cover"/>
                        <div className="text-yellow-500 text-center font-bold py-1">THAILAND</div>
                     </div>
                </div>
