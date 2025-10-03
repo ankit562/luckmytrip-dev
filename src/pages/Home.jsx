@@ -160,7 +160,7 @@ const Home = () => {
             <span className="text-red-500">&nbsp;TRIP</span>
           </h1>
           <div className="flex flex-col md:flex-row justify-center items-center relative mt-12 pt-12">
-            <div classname="relative mx-auto max-h-[28rem] z-20">
+            <div className="relative mx-auto max-h-[28rem] z-20">
               <div className="absolute inset-0 z-10 h-84 pointer-events-none overflow-hidden">
                 <img src={confetti} alt="Celebration confetti" className="w-full h-84 object-cover opacity-80" />
               </div>
