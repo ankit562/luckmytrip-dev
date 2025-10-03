@@ -157,10 +157,10 @@ export default function TripInfo() {
         <LeftsideNavbar />
 
         <main className="flex flex-col md:px-10 px-4 py-8 bg-blue-50 min-h-0 w-full">
-          <h1 className="text-3xl font-bold text-black mb-6">Trip Information</h1>
-          <div className="flex justify-start items-center px-5 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 max-w-36 mb-2 gap-1">
+          <h1 className=" text-2xl md:text-3xl font-bold text-black mb-6">TripInfo Slide</h1>
+          <div className="flex justify-start items-center px-5 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 max-w-32 md:max-w-36 mb-2 gap-1">
             <IoIosAddCircleOutline className="w-5 h-5" />
-            <button onClick={onAddNew} className="text-end">
+            <button onClick={onAddNew} className="text-sm md:*:text-base">
               Add Field
             </button>
           </div>

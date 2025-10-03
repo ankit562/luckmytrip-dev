@@ -50,17 +50,16 @@ function App() {
         <Route path="/home/jackpot" element={<Jackpot/>}/>
         <Route path="/home/spinluck" element={<SpinLuck/>}/>
 
-        <Route path="/home/dreamtrip" element={ <DreamTrip /> } />
-        <Route path="/home/tripinfo" element={ <TripInfo /> } />
-        <Route path="/home/goldenwinner" element={ <GoldenWinner /> } />
+        <Route path="/explore/dreamtrip" element={ <DreamTrip /> } />
+        <Route path="/explore/tripinfo" element={ <TripInfo/> } />
+        <Route path="/explore/goldenwinner" element={ <GoldenWinner /> } />
 
         <Route path="/users/superadmin" element={ <SuperAdmin/> } />
-        <Route path="/users/admin" element={ <Admin /> } />
-        <Route path="/users/content-creator" element={ <ContentCreator /> } />
+        <Route path="/users/admin" element={ <Admin/> } />
+        <Route path="/users/content-creator" element={ <ContentCreator/> } />
 
         <Route path="/dashboard/client" element={ <Client /> } />
         
-
         <Route path="/dashboard" element={ <Dashboard /> } />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/login" element={<LoginPage />} />

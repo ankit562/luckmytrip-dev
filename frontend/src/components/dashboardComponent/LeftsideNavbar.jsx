@@ -45,7 +45,8 @@ const LeftsideNavbar = () => {
                     onClick={() => handleSection("dashboard")}>
                     <LuLayoutDashboard className="w-5 h-5 " />
                     <button className={`text-left px-5 py-2 `}>
-                        Dashboard </button>
+                        <Link to={'/dashboard'}>Dashboard</Link>
+                         </button>
                 </div>
 
                 <div className={`gap-1 flex items-center justify-start  px-5  rounded-lg transition cursor-pointer hover:bg-blue-200
@@ -94,15 +95,15 @@ const LeftsideNavbar = () => {
                             <div className="flex flex-col   border-gray-100">
                                 <div className="flex items-center justify-start py-1 px-6">
                                     <ChevronRight className="w-5 h-5" />
-                                    <button className="text-left px-4 py-2 ">Dream Trip</button>
+                                    <button className="text-left px-4 py-2 "><Link to={'/explore/dreamtrip'}>DreamTrip Slide</Link></button>
                                 </div >
                                 <div className="flex items-center justify-start py-1 px-6">
                                     <ChevronRight className="w-5 h-5" />
-                                    <button className="text-left px-4 py-2 ">Trip Info</button>
+                                    <button className="text-left px-4 py-2 "><Link to={'/explore/tripinfo'}>TripInfo Slide</Link></button>
                                 </div>
                                 <div className="flex items-center justify-start py-1 px-6">
                                     <ChevronRight className="w-5 h-5" />
-                                    <button className="text-left px-4 py-2 ">Golden winner info</button>
+                                    <button className="text-left px-4 py-2 "><Link to={'/explore/goldenwinner'}>Golden winner</Link></button>
                                 </div>     
                             </div>
                         )}
@@ -119,15 +120,15 @@ const LeftsideNavbar = () => {
                     <div className="flex flex-col pl-8  gap-1 ">
                         <div className="flex justify-start items-center">
                             <RiAdminFill className="w-5 h-5 " />
-                            <button className="text-left px-4 py-2 ">super Admin</button>
+                            <button className="text-left px-4 py-2 "><Link to={'/users/superadmin'}>super Admin</Link></button>
                         </div>
                         <div className="flex justify-start items-center">
                             <RiAdminLine className="w-5 h-5 " />
-                            <button className="text-left px-4 py-2 ">Admin</button>
+                            <button className="text-left px-4 py-2 "><Link to={'/users/admin'}>Admin</Link></button>
                         </div>
                         <div className="flex justify-start items-center">
                             <MdContentPaste className="w-5 h-5 " />
-                            <button className="text-left px-4 py-2 ">Content-Creater</button>
+                            <button className="text-left px-4 py-2 "><Link to={'/users/content-creator'}>Content-Creater</Link></button>
                         </div>
                     </div>
                 )}
@@ -137,8 +138,8 @@ const LeftsideNavbar = () => {
                     onClick={() => handleSection("client")}>
                     <Users className="w-5 h-5" />
                     <button
-                        className={`text-left px-5 py-2  `}>
-                        Client</button>
+                        className={`text-left px-5 py-2  `}><Link to={'/dashboard/client'}>Client</Link>
+                        </button>
 
                 </div>
 
@@ -160,7 +161,7 @@ const LeftsideNavbar = () => {
                     onClick={() => handleSection("dashboard")}>
                     <LuLayoutDashboard className="w-5 h-5 " />
                     <button className={`text-left px-5 py-2 `}>
-                        Dashboard </button>
+                        <Link to={'/dashboard'}>Dashboard</Link> </button>
                 </div>
 
                 <div className={`gap-1 flex items-center justify-start  px-5  rounded-lg transition cursor-pointer hover:bg-blue-200
@@ -209,15 +210,15 @@ const LeftsideNavbar = () => {
                             <div className="flex flex-col   border-gray-100">
                                 <div className="flex items-center justify-start py-1 px-6">
                                     <ChevronRight className="w-5 h-5" />
-                                    <button className="text-left px-4 py-2 ">Dream Trip</button>
+                                    <button className="text-left px-4 py-2 "><Link to={'/explore/dreamtrip'}>DreamTrip Slide</Link></button>
                                 </div >
                                 <div className="flex items-center justify-start py-1 px-6">
                                     <ChevronRight className="w-5 h-5" />
-                                    <button className="text-left px-4 py-2 ">Trip Info</button>
+                                    <button className="text-left px-4 py-2 "><Link to={'/explore/tripinfo'}>TripInfo Slide</Link></button>
                                 </div>
                                 <div className="flex items-center justify-start py-1 px-6">
                                     <ChevronRight className="w-5 h-5" />
-                                    <button className="text-left px-4 py-2 ">Golden winner info</button>
+                                    <button className="text-left px-4 py-2 "><Link to={'/explore/goldenwinner'}>Golden winner</Link></button>
                                 </div>     
                             </div>
                         )}
@@ -234,15 +235,15 @@ const LeftsideNavbar = () => {
                     <div className="flex flex-col pl-8  gap-1 ">
                         <div className="flex justify-start items-center">
                             <RiAdminFill className="w-5 h-5 " />
-                            <button className="text-left px-4 py-2 ">super Admin</button>
+                            <button className="text-left px-4 py-2 "><Link to={'/users/superadmin'}>super Admin</Link></button>
                         </div>
                         <div className="flex justify-start items-center">
                             <RiAdminLine className="w-5 h-5 " />
-                            <button className="text-left px-4 py-2 ">Admin</button>
+                            <button className="text-left px-4 py-2 "><Link to={'/users/admin'}>Admin</Link></button>
                         </div>
                         <div className="flex justify-start items-center">
                             <MdContentPaste className="w-5 h-5 " />
-                            <button className="text-left px-4 py-2 ">Content-Creater</button>
+                            <button className="text-left px-4 py-2 "><Link to={'/users/content-creator'}>Content-Creater</Link></button>
                         </div>
                     </div>
                 )}
@@ -253,7 +254,7 @@ const LeftsideNavbar = () => {
                     <Users className="w-5 h-5" />
                     <button
                         className={`text-left px-5 py-2  `}>
-                        Client</button>
+                       <Link to={'/dashboard/client'}>Client</Link></button>
 
                 </div>
 

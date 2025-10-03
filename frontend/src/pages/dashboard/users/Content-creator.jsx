@@ -78,38 +78,38 @@ export default function ContentCreator() {
       <Header />
       <div className="flex flex-1 min-h-0">
         <LeftsideNavbar />
-        <main className="flex flex-col md:px-10 px-4 py-8 bg-blue-50 min-h-0 w-full">
-          <section className="bg-white rounded-xl shadow p-6 m-6">
+        <main className="flex flex-col md:px-10 px-1 py-8 bg-blue-50 min-h-0 w-full">
+          <section className="bg-white rounded-xl shadow p-1 md:p-6 m-2 md:m-6">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-semibold">Content-Creator</h2>
-              <button onClick={() => setShowAddModal(true)} className="bg-blue-600 text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-700 transition">
+              <h2 className="text-xl md:text-2xl font-semibold">Content-Creator</h2>
+              <button onClick={() => setShowAddModal(true)} className="bg-blue-600 text-white font-semibold px-3 md:px-6 py-1 md:py-2 rounded-lg hover:bg-blue-700 transition">
                 Add
               </button>
             </div>
             {/* Responsive grid */}
-            <div className="grid gap-6 md:grid-cols-2 grid-cols-1">
+            <div className="grid gap-6 lg:grid-cols-2 grid-cols-1">
               {admins.map(admin => (
                 <div key={admin.id} className="bg-white rounded-lg border p-5 flex items-center gap-5">
-                  <div className="w-12 h-12 flex items-center justify-center rounded-full bg-blue-100 text-blue-700 text-lg font-bold">
+                  <div className="md:w-12 md:h-12 w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 text-blue-700 text-sm md:text-lg font-bold">
                     {admin.name.charAt(0)}
                   </div>
                   <div className="flex-1">
-                    <div className="text-lg font-bold mb-0.5">{admin.name}</div>
-                    <div className="text-gray-600 mb-2 text-sm">{admin.email}</div>
-                    <div className="text-gray-600 mb-2 text-sm">{admin.address}</div>
+                    <div className="text-base md:text-lg font-bold mb-0.5">{admin.name}</div>
+                    <div className="text-gray-600 mb-2 text-xs md:text-sm">{admin.email}</div>
+                    <div className="text-gray-600 mb-2 text-xs md:text-sm">{admin.address}</div>
                     <span className={`inline-block px-3 py-1 rounded-lg text-xs font-semibold ${admin.type === "SUPERADMIN" ? "bg-purple-200 text-purple-700" : "bg-blue-200 text-blue-700"}`}>
                       {admin.type}
                     </span>
                   </div>
                   <div className="flex gap-3 ml-auto">
                     <span
-                      className="text-blue-600 font-medium cursor-pointer hover:underline"
+                      className="text-blue-600 font-medium cursor-pointer hover:underline md:text-sm lg:text-lg text-xs"
                       onClick={() => handleEditClick(admin)}
                     >
                       Edit
                     </span>
                     <span
-                      className="text-red-500 font-medium cursor-pointer hover:underline"
+                      className="text-red-500 font-medium cursor-pointer hover:underline md:text-sm lg:text-lg text-xs "
                       onClick={() => handleDeleteClick(admin)}
                     >
                       Delete

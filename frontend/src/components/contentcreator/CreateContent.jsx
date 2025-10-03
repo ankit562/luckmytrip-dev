@@ -117,10 +117,10 @@ export default function MyContentEmpty() {
   return (
     <section className="p-6 m-6 bg-white rounded-xl shadow">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-semibold">My Content</h2>
+        <h2 className=" text-base md:text-2xl font-semibold">My Content</h2>
         <button
           onClick={openCreateModal}
-          className="bg-purple-600 hover:bg-purple-700 text-white text-lg font-medium px-6 py-2 rounded-lg transition"
+          className="bg-purple-600 hover:bg-purple-700 text-white  text-xs md:text-lg font-medium md:px-6 md:py-2 px-3 py-1 rounded-lg transition"
         >
           Create New Content
         </button>
@@ -134,7 +134,7 @@ export default function MyContentEmpty() {
           </p>
           <button
             onClick={openCreateModal}
-            className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg text-base font-semibold"
+            className="bg-purple-600 hover:bg-purple-700 text-white  px-3 py-2 :md:px-6 md:py-2 rounded-lg  text-sm md:text-base font-semibold"
           >
             Create Your First Content
           </button>

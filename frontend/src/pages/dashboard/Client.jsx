@@ -41,7 +41,7 @@ const initialJourneys = [
 
 export default function Client() {
   const [journeys, setJourneys] = useState(initialJourneys);
-  const [editId, setEditId] = useState(null); // null means add new
+  const [editId, setEditId] = useState(null); 
   const [editData, setEditData] = useState({
     fullname: "",
     email: "",
@@ -166,10 +166,10 @@ export default function Client() {
         <LeftsideNavbar />
 
         <main className="flex flex-col md:px-10 px-4 py-8 bg-blue-50 min-h-0 w-full">
-          <h1 className="text-3xl font-bold text-black mb-6">Trip Information</h1>
-          <div className="flex justify-start items-center px-5 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 max-w-36 mb-2 gap-1 cursor-pointer" onClick={onAddNew}>
+          <h1 className=" text-xl md:text-3xl font-bold text-black mb-6">Client Information</h1>
+          <div className="flex justify-start items-center px-5 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 md:max-w-36  max-w-32 mb-2 gap-1 cursor-pointer" onClick={onAddNew}>
             <IoIosAddCircleOutline className="w-5 h-5" />
-            <span>Add Field</span>
+            <span className="text-sm md:text-base">Add Field</span>
           </div>
 
           <div className="w-full overflow-x-auto">
