@@ -41,6 +41,7 @@ function App() {
               <Routes>
                 <Route path="/dashboard" element={<AppContent />} />
                 <Route path="/" element={<Home/>} />
+
                 <Route path="/explore" element={<ExploreNow />} />
                 <Route path="/Tickets" element={<Tickets />} />
                 <Route path="/ContactUs" element={<ContactUs />} />

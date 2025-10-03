@@ -297,21 +297,26 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="py-12 md:py-16">
-        <div className="container mx-auto px-4 flex flex-col md:flex-row justify-evenly items-center gap-8 md:gap-16">
-          <div>
-            <h2 className="text-5xl  md:text-7xl lg:text-8xl  font-bold text-green-500 mb-4">SPIN LUCK</h2>
-            <div className="flex flex-col sm:flex-row items-center justify-evenly">
-              <div className="w-40">
-                <span className="text-red-500 text-2xl sm:text-3xl md:text-4xl font-bold">Rs.<span className="text-5xl sm:text-6xl md:text-8xl">49</span></span>
+      <section className="md:py-8 py-4 min-h-96 ">
+        <div className="container md:mx-auto  md:px-16 px-5 flex flex-col md:flex-row justify-start md:justify-center items-center ">
+          <div className=" flex flex-col ">
+            <h2 className="lg:text-7xl md:text-[50px]  selection:file: text-4xl font-extrabold text-green-500  flex justify-start ">SPIN LUCK</h2>
+            <div className="flex justify-end items-center ">
+              <div className="md:w-40 w-[39%] flex gap-1  justify-start items-center  ">
+                <div className="flex flex-col justify-start ">
+                  <span className="text-black xl:text-2xl  lg:text-xl text-xs font-extrabold">IN</span>
+                  <span className="text-red-500 xl:text-4xl lg:text-3xl md:text-2xl text-base font-medium">Rs.</span>
+                </div>
+                <div><span className="xl:text-[75px]  lg:text-[70px] md:text-[65px] text-[43px] font-bold text-red-500">49</span></div>
+
               </div>
-              <div className="w-56 text-left p-2 sm:p-4">
-                <p className="text-sm sm:text-lg md:text-xl text-gray-700">iPhone 16, Premium Luggage &amp; More!</p>
+              <div className=" md:w-[60%] w-[61%] ">
+                <p className="flex items-center justify-start lg:text-xl  text-xs   text-gray-700  font-bold leading-[1] ">iPhone 16, Premium <br />Luggage &amp; More!</p>
               </div>
             </div>
           </div>
-          <div className="relative mt-8 md:mt-0 w-full md:w-auto flex justify-center">
-            <img src={spinToWin} alt="Gift Box" className="mx-auto max-h-[20rem]" />
+          <div className="relative mt-8 md:mt-0 flex justify-center items-center ">
+            <img src={spinToWin} alt="Gift Box" className="mx-auto lg:max-h-[30rem] md:max-h-[25rem] w-full " />
           </div>
         </div>
       </section>
