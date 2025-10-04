@@ -23,6 +23,7 @@ const Home = () => {
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [activeTestimonial, setActiveTestimonial] = useState('content1');
+  const [menuOpen, setMenuOpen] = useState(false);
   const sliderTrackRef = useRef(null);
 
   const openLogin = () => setIsLoginOpen(true);
@@ -52,35 +53,35 @@ const Home = () => {
       name: 'Bardia Adibi',
       country: 'India',
       text: "I still can't believe I won! The Dubai trip exceeded all my expectations...",
-      img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=576&h=576&q=80'
+      img: bardiaAdibi
     },
     {
       id: 'content2',
       name: 'Bardia',
       country: 'India',
       text: 'A fantastic experience from start to finish. Highly recommended!',
-      img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=576&h=576&q=80'
+      img: bardiaAdibi
     },
     {
       id: 'content3',
       name: 'Adibi',
       country: 'India',
       text: 'The trip was a dream. Everything was perfectly organized. Thank you!',
-      img: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=576&h=576&q=80'
+      img: bardiaAdibi
     },
     {
       id: 'content4',
       name: 'Bardia Adibi 4',
       country: 'India',
       text: "Incredible journey! I can't wait to participate again for the next destination.",
-      img: 'https://images.unsplash.com/photo-1521119989659-a83eee488004?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=576&h=576&q=80'
+      img: bardiaAdibi
     },
     {
       id: 'content5',
       name: 'Bardia Adibi 5',
       country: 'India',
       text: 'Winning this felt unreal! The support from the Luckymytrip team was amazing.',
-      img: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=576&h=576&q=80'
+      img: bardiaAdibi
     },
     {
       id: 'content6',
@@ -103,51 +104,80 @@ const Home = () => {
       <nav className="w-full p-4">
         <div className="container mx-auto flex items-center justify-between uppercase">
           <div className="text-xl font-bold">
-            <img src={logo} alt="Luckymytrip Logo" className="w-32 h-full object-cover" />
+            <img src={logo} alt="Luckymytrip Logo" className="w-24 sm:w-28" />
           </div>
-          <ul className="hidden md:flex space-x-16 nav-links-ol font-semibold">
+          <ul className="hidden md:flex space-x-6 lg:space-x-12 nav-links-ol font-semibold">
             <li><Link className="active" to="/">Home</Link></li>
             <li><Link to="/explore">Explore</Link></li>
             <li><Link to="/tickets">Tickets</Link></li>
             <li><Link to="/ContactUs">Contact</Link></li>
           </ul>
+        
+
           <div className="flex space-x-4 nav-links-oly font-semibold items-center">
             <div>
               <svg className="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                 <path stroke="currentColor" strokeLinecap="round" strokeWidth="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
               </svg>
             </div>
-            <button onClick={openLogin}>Login</button>
-            <a href="#" onClick={(e) => { e.preventDefault(); openRegister(); }} className="text-blue-600 hover:underline text-lg font-semibold">Register</a>
+            <button onClick={openLogin} className="hidden md:block">Login</button>
+            <a href="#" onClick={(e) => { e.preventDefault(); openRegister(); }} className="hidden md:block text-blue-600 hover:underline text-lg font-semibold">Register</a>
+              <button
+            className="md:hidden text-2xl focus:outline-none"
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            {menuOpen ? "✖" : "☰"}
+          </button>
           </div>
+
+
         </div>
+              {menuOpen && (
+                <div className="md:hidden mt-2 bg-white shadow-md rounded-md p-4 space-y-4 font-semibold flex flex-col">
+                  <Link to="/" onClick={() => setMenuOpen(false)} className="block">Home</Link>
+                  <Link to="/explore" onClick={() => setMenuOpen(false)} className="block">Explore</Link>
+                  <Link to="/tickets" onClick={() => setMenuOpen(false)} className="block">Tickets</Link>
+                  <Link to="/ContactUs" onClick={() => setMenuOpen(false)} className="block">Contact</Link>
+                  <div className="flex flex-col space-y-2 pt-2 border-t">
+                    <button onClick={openLogin} className="w-full text-left">Login</button>
+                    <a
+                      href="#"
+                      onClick={(e) => { e.preventDefault(); openRegister(); setMenuOpen(false); }}
+                      className="text-blue-600 hover:underline"
+                    >
+                      Register
+                    </a>
+                  </div>
+                </div>
+              )}  
       </nav>
 
       <section className="py-4 relative overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
-          <h1 className="text-center text-4xl md:text-[7rem] font-bold mb-4 pb-22">
+          <h1 className="text-center text-[3rem] md:text-[7rem] font-bold mb-12 pb-22">
             <span className="text-red-500">WIN </span>
             <span className="text-blue-900">&nbsp;YOUR DREAM </span>
             <span className="text-red-500">&nbsp;TRIP</span>
           </h1>
-          <div className="flex justify-center items-center relative h-[32rem]">
-            <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
-              <img src={confetti} alt="Celebration confetti" className="w-full h-full object-contain opacity-80" />
-            </div>
-            <img src={globe} alt="Travel Map" className="rounded-full mx-auto absolute max-h-full" />
-            <img src={girl} alt="Person with arms spread" className="relative z-10 max-h-full" />
-
-            <div className="absolute w-48 md:w-64 top-1/2 left-1/4 transform -translate-x-1/2 bg-white rounded-lg shadow-lg p-2 z-20">
-              <img src={shanghai} alt="Baku" className="rounded-lg w-full h-auto object-cover" />
-              <div className="text-red-500 text-center font-bold py-1">BAKU</div>
-            </div>
-            <div className="absolute w-48 md:w-64 top-1/4 right-1/3 transform translate-x-1/3 bg-white rounded-lg shadow-lg p-2 z-30">
-              <img src={shanghai} alt="Dubai" className="rounded-lg w-full h-auto object-cover" />
-              <div className="text-green-500 text-center font-bold py-1">DUBAI</div>
-            </div>
-            <div className="absolute w-48 md:w-64 top-1/2 right-1/4 transform translate-x-1/2 bg-white rounded-lg shadow-lg p-2 z-30">
-              <img src={shanghai} alt="Thailand" className="rounded-lg w-full h-auto object-cover" />
-              <div className="text-yellow-500 text-center font-bold py-1">THAILAND</div>
+          <div className="flex flex-col md:flex-row justify-center items-center relative mt-12 pt-12">
+            <div className="relative mx-auto max-h-[28rem] z-20">
+              <div className="absolute inset-0 z-10 h-84 pointer-events-none overflow-hidden">
+                <img src={confetti} alt="Celebration confetti" className="w-full h-84 object-cover opacity-80" />
+              </div>
+              <img src={globe} alt="Travel Map" className="rounded-full mx-auto absolute" />
+              <img src={girl} alt="Person with arms spread" className="relative transform translate-y-1/4 z-10" />
+              <div className="absolute w-32 h-42 md:w-64 top-1/2 left-14 md:left-32 transform -translate-x-1/2 bg-white rounded-lg shadow-lg p-2 z-30">
+                <img src={shanghai} alt="Baku" className="rounded-lg w-32 h-42 md:w-64 object-cover" />
+                <div className="text-red-500 text-center font-bold py-1">BAKU</div>
+              </div>
+              <div className="absolute w-32 h-42 md:w-64 bottom-3/4 right-1/3 transform translate-x-1/2 bg-white rounded-lg shadow-lg p-2 z-30">
+                <img src={shanghai} alt="Dubai" className="rounded-lg w-32 h-42 md:w-64 object-cover" />
+                <div className="text-green-500 text-center font-bold py-1">DUBAI</div>
+              </div>
+              <div className="absolute w-32 h-42 md:w-64 top-1/2 right-20 md:right-48 tranform translate-x-3/4 translate-y-1/4 bg-white rounded-lg shadow-lg p-2 z-30">
+                <img src={shanghai} alt="Thailand" className="rounded-lg w-32 h-42 md:w-64 object-cover" />
+                <div className="text-yellow-500 text-center font-bold py-1">THAILAND</div>
+              </div>
             </div>
           </div>
         </div>
@@ -155,8 +185,8 @@ const Home = () => {
 
       <section className="py-8 relative overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
-          <h2 className="text-6xl text-red-500 text-center mb-4 pt-12">Start Your Journey</h2>
-          <p className="text-4xl text-center font-bold py-2">Get ready for the adventure of a lifetime!</p>
+          <h2 className="text-3xl sm:text-4xl md:text-6xl text-red-500 text-center mb-4 pt-12">Start Your Journey</h2>
+          <p className="text-xl sm:text-2xl md:text-4xl text-center font-bold py-2">Get ready for the adventure of a lifetime!</p>
         </div>
       </section>
 
@@ -194,65 +224,72 @@ const Home = () => {
       <section className="py-8 relative overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
           {/* Main Jackpot Block */}
-          <div key={jackpotData?.id || 0} className="mb-12">
+          {jackpotData ? (
+            <div key={jackpotData.id} className="mb-12">
 
-            {/* Title using data.price */}
-            <p className="text-4xl text-center font-bold py-2">
-              Buy a ₹{jackpotData?.price || 0} ticket, win a jackpot!
-            </p>
+              {/* Title using data.price */}
+              <p className="text-4xl text-center font-bold py-2">
+                Buy a ₹{jackpotData.price} ticket, win a jackpot!
+              </p>
 
-            {/* CTA Button */}
-            <div className="text-center py-6 pb-16">
-              <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-md w-48">
-                Click Here
-              </button>
-            </div>
-
-            {/* Jackpot Display Card */}
-            <div className="bg-blue-900 rounded-lg flex items-center justify-between overflow-hidden relative">
-              <div className="hero-text px-16 z-10">
-                <img
-                  src={jackpot} // Using the static imported jackpot logo
-                  alt="Jackpot Logo"
-                  className="w-48 mb-4"
-                />
-                <h2 className="text-white text-3xl font-bold">{jackpotData?.title || ""}</h2>
-                <p className="text-white font-bold text-lg w-72 mb-8 mt-2">
-                  {/* Fallback for empty description */}
-                  {jackpotData?.description || "Enter for your chance to win this amazing prize."}
-                </p>
-                <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 mb-12 px-6 rounded-md w-48">
-                  Learn More
+              {/* CTA Button */}
+              <div className="text-center py-6 pb-16">
+                <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-md w-48">
+                  Click Here
                 </button>
               </div>
-              <img
-                // Using the fallback image because data.image is empty
-                src={jackpotData?.image || dubaiWoman}
-                alt={jackpotData?.title || "Dubai Woman"}
-                className="relative bottom-0 right-0 max-h-96"
-              />
+
+              {/* Jackpot Display Card */}
+              <div className="hero-container bg-blue-900 rounded-lg flex items-center justify-between overflow-hidden relative">
+                <div className="hero-text px-16 z-10">
+                  <img
+                    src={jackpot} // Using the static imported jackpot logo
+                    alt="Jackpot Logo"
+                    className="w-48 mb-4"
+                  />
+                  <h2 className="text-white text-3xl font-bold">{jackpotData.title}</h2>
+                  <p className="text-white font-bold text-lg w-72 mb-8 mt-2">
+                    {/* Fallback for empty description */}
+                    {jackpotData.description || "Enter for your chance to win this amazing prize."}
+                  </p>
+                  <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 mb-12 px-6 rounded-md w-48">
+                    Learn More
+                  </button>
+                </div>
+                <img
+                  // Using the fallback image because data.image is empty
+                  src={jackpotData.image || dubaiWoman}
+                  alt={jackpotData.title}
+                  className="relative bottom-0 right-0 max-h-96 lady-image"
+                />
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-gray-500 text-lg font-medium">
+                Jackpot details are not available at the moment.
+              </p>
+            </div>)}
         </div>
       </section>
 
       <section id="testimonials" className="py-8">
         <div className="container mx-auto px-4">
-          <h2 className="text-6xl text-red-500 text-center mb-5 py-8">Feedback From Our Prize Winners</h2>
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div className="flex flex-wrap gap-4 justify-center">
+          <h2 className="text-2xl sm:text-3xl md:text-6xl text-red-500 text-center mb-5 py-8 font-semibold">Feedback From Our Prize Winners</h2>
+          <div className="flex flex-col items-center flex-wrap justify-evenly md:flex-row gap-6 md:gap-8">
+            <div className="grid grid-cols-3 gap-4">
               {testimonials.map(t => (
                 <div key={t.id} className={`w-24 h-24 rounded-lg overflow-hidden cursor-pointer border-4 transition-all ${activeTestimonial === t.id ? 'border-blue-500 scale-110' : 'border-transparent'}`} onClick={() => setActiveTestimonial(t.id)}>
                   <img src={t.img} alt={t.name} className="w-full h-full object-cover" />
                 </div>
               ))}
             </div>
-            <div className="bg-gray-50 p-6 rounded-lg min-h-[150px] relative">
+            <div className="bg-gray-50 p-6 md:p-8 rounded-lg min-h-[150px] relative">
               {testimonials.map(t => (
                 <div key={t.id} className={`transition-opacity duration-300 ${activeTestimonial === t.id ? 'opacity-100' : 'opacity-0 absolute'}`}>
-                  <h4 className="font-bold text-xl">{t.name}</h4>
-                  <p className="text-gray-500">{t.country}</p>
-                  <p className="text-justify mt-2">{t.text}</p>
+                  <h4 className="font-bold text-lg sm:text-xl md:text-2xl">{t.name}</h4>
+                  <p className="text-gray-500 text-sm sm:text-base">{t.country}</p>
+                  <p className="text-justify mt-2 text-sm sm:text-base md:text-lg">{t.text}</p>
                 </div>
               ))}
             </div>
@@ -285,9 +322,9 @@ const Home = () => {
       </section>
 
       <footer className="py-8">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-8 text-xl text-black">
-            <div><img src={logo} alt="Logo" className="w-32" /></div>
+        <div className="container mx-auto px-4 flex justify-center flex-col items-center">
+            <div><img src={logo} alt="Logo" className="w-28" /></div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 text-xl text-black">
             <div>
               <ul className="space-y-2">
                 <li><Link to="/">Home</Link></li>
