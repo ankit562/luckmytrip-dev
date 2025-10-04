@@ -4,6 +4,8 @@ import {
   ContentCreator,
   SuperAdmin,
 } from "../models/authUserModel.js";
+import mongoose from 'mongoose';
+
 
 import bcrypt from "bcrypt";
 
@@ -22,7 +24,7 @@ const getModelByRole = (role) => {
       return Client;
     case "admin":
       return Admin;
-    case "content_creator":
+    case "content-creator":
       return ContentCreator;
     case "superadmin":
       return SuperAdmin;
@@ -31,38 +33,36 @@ const getModelByRole = (role) => {
   }
 };
 
-// Register client user with OTP generation & email verification token
 export const Register = async (req, res) => {
   try {
-    const {
-      fullName, email, password, phone,
-    } = req.body;
-
-    if (!(fullName && email && password && phone)) {
-      return res.status(400).send("All inputs are required");
+    const { fullName, email, password, phone, role , address ,ticket } = req.body;
+    
+    if (!(fullName && email && password && phone && role)) { // require role too
+      return res.status(400).send("All inputs and role are required");
     }
-
-    const existedUser = await Client.findOne({ $or: [{ email }, { phone }] });
+    
+    const UserModel = getModelByRole(role);
+    
+    // Validate duplicates in the chosen Model instead of Client only
+    const existedUser = await UserModel.findOne({ $or: [{ email }, { phone }] });
     if (existedUser) {
       return res.status(400).send("User with email or phone already exists");
     }
 
-    const user = new Client({
+    const user = new UserModel({
       fullName,
       email,
       password,
       phone,
+      role,
       isVerified: false,
     });
-
+    
     const otp = user.generateOTP();
-
     await user.save();
 
-    // Send OTP email
     await sendVerificationEmail(email, otp);
     
- 
     return res.status(201).json({
       message: "Registered successfully. OTP sent to email for verification.",
       email: user.email,
@@ -71,6 +71,7 @@ export const Register = async (req, res) => {
     return res.status(500).json({ message: "Error registering user", error: error.message });
   }
 };
+
 
 // Verify user email with OTP
 export const VerifyEmail = async (req, res) => {
@@ -116,12 +117,21 @@ export const Login = async (req, res) => {
     user.refreshToken = refreshToken;
     await user.save();
 
-    res.cookie("accessToken", refreshToken, {
+    res.cookie("accessToken", accessToken, {  
       httpOnly: true,
       secure: true,
       sameSite: "Strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      maxAge: 15 * 60 * 1000  
     });
+
+    res.cookie("refreshToken", refreshToken, {  
+      httpOnly: true,
+      secure: true,
+      sameSite: "Strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000
+    });
+
+    res.json({ message: "Logged in successfully" });
 
     res.json({ message: "Logged in successfully", accessToken });
   } catch (error) {
@@ -201,7 +211,8 @@ export const Logout = async (req, res) => {
       }
     }
 
-    res.clearCookie("jwt", { httpOnly: true, secure: true, sameSite: "Strict" });
+    res.clearCookie("accessToken", { httpOnly: true, secure: true, sameSite: "Strict" });
+     res.clearCookie("refreshToken", { httpOnly: true, secure: true, sameSite: "Strict" });
     res.json({ message: "Logged out successfully" });
   } catch (error) {
     res.status(500).json({ message: "Logout failed", error: error.message });
@@ -211,8 +222,7 @@ export const Logout = async (req, res) => {
 // Get profile data depending on user role
 export const GetProfile = async (req, res) => {
   try {
-    const Model = getModelByRole(req.user.role);
-    const user = await Model.findById(req.user.userId)
+    const user = await Client.findById(req.user.userId)
       .select("-password -refreshToken -verifyToken -forgotPasswordToken");
     if (!user) return res.status(404).send("User not found");
     res.json(user);
@@ -221,22 +231,47 @@ export const GetProfile = async (req, res) => {
   }
 };
 
-// Update profile except sensitive fields like password and tokens
+export const GetAllUsers = async (req, res) => {
+  try {
+    // Find all users, exclude sensitive fields
+    const users = await Client.find({})
+      .select("-password -refreshToken -verifyToken -forgotPasswordToken")
+      .lean();
+
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: "Could not get users", error: error.message });
+  }
+};
+
+
 export const UpdateProfile = async (req, res) => {
   try {
-    const Model = getModelByRole(req.user.role);
-    const updates = { ...req.body };
+    const profileId = req.params.id;
 
-    // Remove sensitive updates
+    if (!mongoose.Types.ObjectId.isValid(profileId)) {
+      return res.status(400).json({ message: "Invalid profile ID." });
+    }
+
+    const updates = { ...req.body };
     delete updates.password;
     delete updates.refreshToken;
     delete updates.verifyToken;
     delete updates.forgotPasswordToken;
 
-    const updatedUser = await Model.findByIdAndUpdate(req.user.userId, updates, { new: true })
-      .select("-password -refreshToken -verifyToken -forgotPasswordToken");
+    // Use the base Client model here, not getModelByRole
+    const updatedUser = await Client.findByIdAndUpdate(
+      profileId,
+      updates,
+      { new: true }
+    ).select("-password -refreshToken -verifyToken -forgotPasswordToken");
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "Profile not found" });
+    }
     res.json(updatedUser);
   } catch (error) {
+    console.error("UpdateProfile error:", error);
     res.status(500).json({ message: "Failed to update profile", error: error.message });
   }
 };
@@ -260,5 +295,39 @@ export const ForgotPassword = async (req, res) => {
     res.json({ message: "Password updated successfully" });
   } catch (error) {
     res.status(500).json({ message: "Failed to update password", error: error.message });
+  }
+};
+
+
+export const deleteUser = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    console.log(userId)
+    if (!userId) return res.status(400).json({ message: "User ID is required" });
+    
+
+    // List of all user role models
+    const roleModels = [SuperAdmin, Admin, ContentCreator, Client];
+
+    let user = null;
+    let userModel = null;
+
+    // Find user in one of the collections
+    for (const Model of roleModels) {
+      user = await Model.findById(userId);
+      if (user) {
+        userModel = Model;
+        break;
+      }
+    }
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    // Delete user
+    await userModel.findByIdAndDelete(userId);
+
+    res.json({ message: "User deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to delete user", error: error.message });
   }
 };

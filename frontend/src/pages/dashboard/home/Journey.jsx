@@ -17,6 +17,9 @@ import React, { useState } from "react";
 import Header from "../../../components/dashboardComponent/Header";
 import LeftsideNavbar from "../../../components/dashboardComponent/LeftsideNavbar";
 import { IoIosAddCircleOutline } from "react-icons/io";
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { fetchProfile } from '../../../features/auth/authUserSlice';
 
 const initialJourneys = [
   {
@@ -46,6 +49,9 @@ const initialJourneys = [
 ];
 
 export default function Journey() {
+  
+const dispatch = useDispatch();
+const { user, loading, isInitialized } = useSelector(state => state.auth);
   const [journeys, setJourneys] = useState(initialJourneys);
   const [editId, setEditId] = useState(null); // null means add new
   const [editData, setEditData] = useState({ name: "", content: "", image: null, imageUrl: "" });
@@ -53,6 +59,12 @@ export default function Journey() {
   const [deleteId, setDeleteId] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
+      useEffect(() => {
+      if (isInitialized && !user && !loading) {
+        console.log('Retrying user profile fetch...');
+        dispatch(fetchProfile());
+      }
+    }, [isInitialized, user, loading, dispatch]);
   // Open add new modal
   function onAddNew() {
     setEditId(null);
@@ -133,7 +145,7 @@ export default function Journey() {
       {/* Body Layout */}
       <div className="flex flex-1 min-h-0">
         {/* sidebar navigation */}
-        <LeftsideNavbar />
+        <LeftsideNavbar user={user} />
 
         <main className="flex flex-col md:px-10 px-4 py-8 bg-blue-50 min-h-0 w-full">
           <h1 className=" text-2xl md:text-3xl font-bold text-black mb-6">Journey</h1>

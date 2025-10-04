@@ -15,16 +15,21 @@ const LoginPage = () => {
     const navigate = useNavigate();
     
     const { loading , error, user} = useSelector(state => state.auth);
+    const client = user && user.role === 'client';
+    const admin = user && (user.role === 'admin' || user.role === 'superadmin' || user.role === 'content-creator') ;
 
   useEffect(() => {
-    if (user) {  
+    if (client) {  
+      navigate('/')
+    }
+    else if(admin) {
       navigate('/dashboard')
     }
      else {
        navigate('/login')
       }
     
-  }, [user, navigate]);
+  }, [client, admin , navigate]);
 
   useEffect(() => {
     if (error) {

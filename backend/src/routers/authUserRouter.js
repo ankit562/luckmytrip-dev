@@ -9,6 +9,8 @@ import {
   UpdateProfile,
   ForgotPassword,
   ForgotPasswordRequest,   
+  GetAllUsers ,
+  deleteUser
 } from '../controllers/authUserController.js';
 
 import { authMiddleware } from '../middleware/authUserMiddleware.js';
@@ -19,11 +21,13 @@ router.route("/register").post(Register);
 router.route("/verify-email").post(VerifyEmail);
 router.route("/login").post(Login);
 router.route("/refresh-token").post(RefreshToken);
+router.route("/allprofiles").get(authMiddleware(), GetAllUsers);
 router.route("/logout").post(authMiddleware(), Logout);
 router.route("/profile").get(authMiddleware(), GetProfile);
-router.route("/update-profile").patch(authMiddleware(), UpdateProfile);
+router.route("/update-profile/:id").patch(authMiddleware(), UpdateProfile);
 router.route("/update-password").patch(authMiddleware(), ForgotPassword);
 router.route("/forgot-password").post(ForgotPasswordRequest);
+router.route("/:userId").delete(authMiddleware(), deleteUser);
 
 
 export default router;

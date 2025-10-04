@@ -17,6 +17,7 @@ import TermsConditions from './pages/TermsConditions.jsx';
 import Support from './pages/Support.jsx';
 import PrivacyPolicy from './pages/PrivacyPolicy.jsx';
 
+
 function AppContent() {
   const { user } = useAuth();
 
@@ -51,6 +52,7 @@ function App() {
                 <Route path="/TermsConditions" element={<TermsConditions />} />
                 <Route path="/Support" element={<Support />} />
                 <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
+
               </Routes>
             </BrowserRouter>
           </AuthProvider>

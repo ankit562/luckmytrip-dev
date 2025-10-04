@@ -26,12 +26,12 @@ const clientSchema = new mongoose.Schema({
     unique: true,
     trim: true,
   },
-  address: {
+  address: { 
     type: String,
   },
   role: {
     type: String,
-    enum: ['client', 'admin', 'content_creator', 'superadmin'],
+    enum: ['client', 'admin', 'content-creator', 'superadmin'],
     default: 'client',
   },
   socialLogins: {
@@ -39,6 +39,9 @@ const clientSchema = new mongoose.Schema({
     gmail: { id: String, token: String },
     instagram: { id: String, token: String },
     twitter: { id: String, token: String },
+  },ticket:{
+    type:Number,
+    default:0
   },
   refreshToken: {
     type: String,  // for JWT refresh token management
@@ -54,7 +57,7 @@ const clientSchema = new mongoose.Schema({
 });
 
 // Password hashing before save
-clientSchema.pre('save', async function(next) {
+clientSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
 
   try {
@@ -67,12 +70,12 @@ clientSchema.pre('save', async function(next) {
 });
 
 // Password compare method
-clientSchema.methods.comparePassword = async function(candidatePassword) {
+clientSchema.methods.comparePassword = async function (candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };
 
 // OTP generation for email verification
-clientSchema.methods.generateOTP = function() {
+clientSchema.methods.generateOTP = function () {
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
   this.verifyToken = otp;
   this.verifyTokenExpiry = Date.now() + 10 * 60 * 1000; // 10 minutes expiry
@@ -80,7 +83,7 @@ clientSchema.methods.generateOTP = function() {
 };
 
 // Forgot password token generation
-clientSchema.methods.generateForgotPasswordToken = function() {
+clientSchema.methods.generateForgotPasswordToken = function () {
   const token = crypto.randomBytes(32).toString('hex');
   this.forgotPasswordToken = token;
   this.forgotPasswordTokenExpiry = Date.now() + 60 * 60 * 1000; // 1 hour expiry
@@ -92,18 +95,18 @@ const Client = mongoose.model('Client', clientSchema);
 
 // Discriminators for other roles extending Client
 const contentCreatorSchema = new mongoose.Schema({
-  role: { type: String, default: 'content_creator' },
-  address: { type: String, required: true },
+  role: { type: String, default: 'content-creator' },
+  address: { type: String, required: false },
 });
 
 const adminSchema = new mongoose.Schema({
   role: { type: String, default: 'admin' },
-  address: { type: String, required: true },
+  address: { type: String, required: false },
 });
 
 const superAdminSchema = new mongoose.Schema({
   role: { type: String, default: 'superadmin' },
-  address: { type: String, required: true },
+  address: { type: String, required: false },
 });
 
 const ContentCreator = Client.discriminator('ContentCreator', contentCreatorSchema);

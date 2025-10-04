@@ -1,119 +1,192 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchTickets, createTicket, editTicket, removeTicket } from '../../features/tickets/ticketSlice'; // adjust import path
 
 function CreateContentForm({ onCancel, onSubmit, initialData }) {
   const [form, setForm] = useState({
-    title: initialData?.title || "",
+    name: initialData?.name || "",
     description: initialData?.description || "",
     price: initialData?.price || "",
-    tickets: initialData?.tickets || "",
-    drawDate: initialData?.drawDate || "",
-    banner: null,
-    category: initialData?.category || "Offers",
-    status: initialData?.status || "Draft"
+    ticket: initialData?.ticket || "",
+    date: initialData?.date ? initialData.date.slice(0, 10) : "", 
+    image: null,
+    category: initialData?.category || "offer",
+    status: initialData?.status || "publish"
   });
 
-  const handleChange = (e) => {
-    const { name, value, files, type } = e.target;
-    setForm((prev) =>
-      type === "file" ? { ...prev, [name]: files[0] } : { ...prev, [name]: value }
-    );
-  };
+const handleChange = (e) => {
+  const { name, value, files, type } = e.target;
+  setForm((prev) =>
+    type === "file" ? { ...prev, [name]: files[0] } : { ...prev, [name]: value }
+  );
+};
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSubmit(form);
-  };
+const handleSubmit = (e) => {
+  e.preventDefault();
+
+  const formData = new FormData();
+  for (const key in form) {
+    if (key === "image" && form.image instanceof File) {
+      formData.append("image", form.image);
+    } else {
+      formData.append(key, form[key]);
+    }
+  }
+
+  onSubmit(formData);
+};
+
 
   return (
     <form className="grid gap-4" onSubmit={handleSubmit}>
-      <input name="title" placeholder="Name" value={form.title} onChange={handleChange} required className="border rounded w-full px-2 py-1" />
-      <textarea name="description" placeholder="Description" value={form.description} onChange={handleChange} required className="border rounded w-full px-2 py-1" />
+      <input
+        name="name"
+        placeholder="Name"
+        value={form.name}
+        onChange={handleChange}
+        required
+        className="border rounded w-full px-2 py-1"
+      />
+      <textarea
+        name="description"
+        placeholder="Description"
+        value={form.description}
+        onChange={handleChange}
+        required
+        className="border rounded w-full px-2 py-1"
+      />
       <div className="grid grid-cols-2 gap-4">
-        <input name="price" placeholder="Price (₹)" type="number" min="0" value={form.price} onChange={handleChange} required className="border rounded w-full px-2 py-1" />
-        <input name="tickets" placeholder="Total Tickets" type="number" min="0" value={form.tickets} onChange={handleChange} required className="border rounded w-full px-2 py-1" />
+        <input
+          name="price"
+          placeholder="Price (₹)"
+          type="number"
+          min="0"
+          value={form.price}
+          onChange={handleChange}
+          required
+          className="border rounded w-full px-2 py-1"
+        />
+        <input
+          name="ticket"
+          placeholder="Total Tickets"
+          type="number"
+          min="0"
+          value={form.ticket}
+          onChange={handleChange}
+          required
+          className="border rounded w-full px-2 py-1"
+        />
       </div>
-      <input name="drawDate" type="date" value={form.drawDate} onChange={handleChange} required className="border rounded w-full px-2 py-1" />
-      <input name="banner" type="file" accept="image/*" onChange={handleChange} className="w-full" />
-      <select name="category" value={form.category} onChange={handleChange} className="border rounded w-full px-2 py-1">
-        <option>Offers</option>
-        <option>Events</option>
-        <option>Updates</option>
+      <input
+        name="date"
+        type="date"
+        value={form.date}
+        onChange={handleChange}
+        required
+        className="border rounded w-full px-2 py-1"
+      />
+      <input
+        name="image"
+        type="file"
+        accept="image/*"
+        onChange={handleChange}
+        className="w-full"
+        required={!initialData} // require if creating new, optional if editing
+      />
+      <select
+        name="category"
+        value={form.category}
+        onChange={handleChange}
+        className="border rounded w-full px-2 py-1"
+      >
+        <option value="offer">Offer</option>
+        <option value="event">Event</option>
       </select>
-      <select name="status" value={form.status} onChange={handleChange} className="border rounded w-full px-2 py-1">
-        <option>Draft</option>
-        <option>Published</option>
-        <option>Archived</option>
+      <select
+        name="status"
+        value={form.status}
+        onChange={handleChange}
+        className="border rounded w-full px-2 py-1"
+      >
+        <option value="publish">Publish</option>
+        <option value="archived">Archived</option>
       </select>
       <div className="flex justify-end gap-3">
-        <button type="button" onClick={onCancel} className="px-4 py-1 rounded border">Cancel</button>
-        <button type="submit" className="bg-purple-600 text-white px-4 py-1 rounded">Submit</button>
+        <button
+          type="button"
+          onClick={onCancel}
+          className="px-4 py-1 rounded border"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          className="bg-purple-600 text-white px-4 py-1 rounded"
+        >
+          Submit
+        </button>
       </div>
     </form>
   );
 }
 
-function Modal({ children, onClose }) {
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl shadow max-w-3xl w-full p-6 relative">
-        <button
-          aria-label="Close modal"
-          className="absolute top-4 right-4 text-gray-600 hover:text-gray-900"
-          onClick={onClose}
-        >
-          &#10005;
-        </button>
-        {children}
-      </div>
-    </div>
-  );
-}
+
 
 export default function MyContentEmpty() {
-  const [contents, setContents] = useState([]);
+  const dispatch = useDispatch();
+
+const { tickets = [], loading, error } = useSelector(state => state.tickets || {});
+  console.log(tickets);
+
+
 
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [editModalData, setEditModalData] = useState(null);
   const [deleteModalData, setDeleteModalData] = useState(null);
 
+  useEffect(() => {
+    dispatch(fetchTickets());
+  }, [dispatch]);
+
+
   const openCreateModal = () => setCreateModalOpen(true);
   const closeCreateModal = () => setCreateModalOpen(false);
-
   const openEditModal = (content) => setEditModalData(content);
   const closeEditModal = () => setEditModalData(null);
-
   const openDeleteModal = (content) => setDeleteModalData(content);
   const closeDeleteModal = () => setDeleteModalData(null);
 
   // Add content handler
-  const handleCreateSubmit = (formData) => {
-    const newContent = {
-      id: Date.now(),
-      ...formData,
-      banner: formData.banner ? URL.createObjectURL(formData.banner) : null
-    };
-    setContents(prev => [newContent, ...prev]);
-    closeCreateModal();
+  const handleCreateSubmit = async (formData) => {
+    try {
+      await dispatch(createTicket(formData)).unwrap();
+      closeCreateModal();
+    } catch (e) {
+      alert("Failed to create content: " + (e?.message || "Unknown error"));
+    }
   };
 
   // Edit content handler
-  const handleEditSubmit = (formData) => {
-    setContents(prev =>
-      prev.map(item =>
-        item.id === editModalData.id
-          ? { ...item, ...formData, banner: formData.banner ? URL.createObjectURL(formData.banner) : item.banner }
-          : item
-      )
-    );
-    closeEditModal();
+  const handleEditSubmit = async (formData) => {
+    try {
+      await dispatch(editTicket({ id: editModalData._id, formData })).unwrap();
+      closeEditModal();
+    } catch (e) {
+      alert("Failed to update content: " + (e?.message || "Unknown error"));
+    }
   };
 
   // Delete content handler
-  const handleDeleteConfirm = () => {
-    setContents(prev => prev.filter(item => item.id !== deleteModalData.id));
-    closeDeleteModal();
+  const handleDeleteConfirm = async () => {
+    try {
+      await dispatch(removeTicket(deleteModalData._id)).unwrap();
+      closeDeleteModal();
+    } catch (e) {
+      alert("Failed to delete content: " + (e?.message || "Unknown error"));
+    }
   };
 
+  // Render logic remains mostly unchanged but use `tickets` from redux instead of local state
   return (
     <section className="p-6 m-6 bg-white rounded-xl shadow">
       <div className="flex justify-between items-center mb-6">
@@ -126,7 +199,9 @@ export default function MyContentEmpty() {
         </button>
       </div>
 
-      {contents.length === 0 ? (
+      {loading ? (
+        <p>Loading contents...</p>
+      ) : tickets.length === 0 ? (
         <div className="flex flex-col items-center justify-center min-h-[250px]">
           <span className="text-6xl mb-3" role="img" aria-label="file">📝</span>
           <p className="text-lg text-gray-600 mb-4 text-center">
@@ -150,29 +225,27 @@ export default function MyContentEmpty() {
               </tr>
             </thead>
             <tbody>
-              {contents.map(({ id, title, tickets, price, description, banner, drawDate, status, category }) => (
-                <tr key={id} className="hover:bg-gray-50">
-                  <td className="p-3 border-b border-gray-300">{title}</td>
-                  <td className="p-3 border-b border-gray-300">{tickets}</td>
+              {tickets.map(({ _id, name, ticket, price, description, image, date, status, category }) => (
+                <tr key={_id} className="hover:bg-gray-50">
+                  <td className="p-3 border-b border-gray-300">{name}</td>
+                  <td className="p-3 border-b border-gray-300">{ticket}</td>
                   <td className="p-3 border-b border-gray-300">₹{price}</td>
                   <td className="p-3 border-b border-gray-300 max-w-xs truncate" title={description}>{description}</td>
                   <td className="p-3 border-b border-gray-300">
-                    {banner ? (
-                      <img src={banner} alt="banner" className="h-12 w-20 object-cover rounded" />
+                    {image ? (
+                      <img src={image} alt="banner" className="h-12 w-20 object-cover rounded" />
                     ) : (
                       "-"
                     )}
                   </td>
-                  <td className="p-3 border-b border-gray-300">{drawDate}</td>
+                  <td className="p-3 border-b border-gray-300">{date}</td>
                   <td className="p-3 border-b border-gray-300">{status}</td>
                   <td className="p-3 border-b border-gray-300">{category}</td>
                   <td className="p-3 border-b border-gray-300">
-
-                    <button onClick={() => openEditModal(contents.find(c => c.id === id))} className="text-blue-600 ">Edit</button>
-                    
+                    <button onClick={() => openEditModal(tickets.find(c => c._id === _id))} className="text-blue-600 ">Edit</button>
                   </td>
                   <td className="p-3 border-b border-gray-300">
-                     <button onClick={() => openDeleteModal(contents.find(c => c.id === id))} className="text-red-600 ">Delete</button>
+                     <button onClick={() => openDeleteModal(tickets.find(c => c._id === _id))} className="text-red-600 ">Delete</button>
                   </td>
                 </tr>
               ))}
@@ -181,21 +254,18 @@ export default function MyContentEmpty() {
         </div>
       )}
 
-      {/* Create Content Modal */}
       {createModalOpen && (
         <Modal onClose={closeCreateModal}>
           <CreateContentForm onSubmit={handleCreateSubmit} onCancel={closeCreateModal} />
         </Modal>
       )}
 
-      {/* Edit Content Modal */}
       {editModalData && (
         <Modal onClose={closeEditModal}>
           <CreateContentForm initialData={editModalData} onSubmit={handleEditSubmit} onCancel={closeEditModal} />
         </Modal>
       )}
 
-      {/* Delete Confirmation Modal */}
       {deleteModalData && (
         <Modal onClose={closeDeleteModal}>
           <div>
@@ -209,5 +279,22 @@ export default function MyContentEmpty() {
         </Modal>
       )}
     </section>
+  );
+}
+
+function Modal({ children, onClose }) {
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-xl shadow max-w-3xl w-full p-6 relative">
+        <button
+          aria-label="Close modal"
+          className="absolute top-4 right-4 text-gray-600 hover:text-gray-900"
+          onClick={onClose}
+        >
+          &#10005;
+        </button>
+        {children}
+      </div>
+    </div>
   );
 }

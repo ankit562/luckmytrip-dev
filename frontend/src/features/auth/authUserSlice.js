@@ -18,7 +18,7 @@ export const logoutUser = createAsyncThunk('auth/logoutUser', async () => {
 
 export const fetchProfile = createAsyncThunk('auth/fetchProfile', async () => {
   const response = await authAPI.getProfile();
-  return response.data.user; 
+  return response.data; 
 });
 
 export const verifyOtpUser = createAsyncThunk('auth/verifyOtpUser', async (otpData) => {
@@ -26,15 +26,30 @@ export const verifyOtpUser = createAsyncThunk('auth/verifyOtpUser', async (otpDa
   return response.data;
 });
 
+export const getAllProfile = createAsyncThunk('auth/getAllProfile', async () => {
+  const response = await authAPI.getAllProfile();
+  return response.data;
+})
+
+export const deleteUser = createAsyncThunk('auth/deleteUser', async (id) => {
+  const response = await authAPI.deleteUser(id);
+  return response.data;
+})
+
+export const UpdateProfile = createAsyncThunk('auth/UpdateProfile', async ({ id, userData }) => {
+  const response = await authAPI.UpdateProfile(id, userData);
+  return response.data;
+});
 
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
     user: null,
     loading: false,
+    users: [],
     error: null,
     isAuthenticated: false,
-    isInitialized: false, 
+    isInitialized: false,
   },
   reducers: {
     clearError(state) {
@@ -51,12 +66,12 @@ const authSlice = createSlice({
         state.loading = false;
         state.user = action.payload;
         state.isAuthenticated = true;
-        state.isInitialized = true; 
+        state.isInitialized = true;
       })
       .addCase(signupUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
-        state.isInitialized = true; 
+        state.isInitialized = true;
       })
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
@@ -66,17 +81,17 @@ const authSlice = createSlice({
         state.loading = false;
         state.user = action.payload;
         state.isAuthenticated = true;
-        state.isInitialized = true; 
+        state.isInitialized = true;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
-        state.isInitialized = true; 
+        state.isInitialized = true;
       })
       .addCase(logoutUser.fulfilled, (state) => {
         state.user = null;
         state.isAuthenticated = false;
-        state.isInitialized = true; 
+        state.isInitialized = true;
       })
       .addCase(fetchProfile.pending, (state) => {
         state.loading = true;
@@ -85,30 +100,62 @@ const authSlice = createSlice({
         state.loading = false;
         state.user = action.payload;
         state.isAuthenticated = true;
-        state.isInitialized = true; 
+        state.isInitialized = true;
       })
       .addCase(fetchProfile.rejected, (state) => {
         state.loading = false;
         state.user = null;
         state.isAuthenticated = false;
-        state.isInitialized = true; 
+        state.isInitialized = true;
       })
       .addCase(verifyOtpUser.pending, (state) => {
-      state.loading = true;
-      state.error = null;
-    })
-    .addCase(verifyOtpUser.fulfilled, (state, action) => {
-      state.loading = false;
-      state.user = { ...state.user, ...action.payload };
-      state.isAuthenticated = true;
-      state.isInitialized = true;
-    })
-    .addCase(verifyOtpUser.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.error.message;
-      state.isInitialized = true;
-    })
-  },
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(verifyOtpUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = { ...state.user, ...action.payload };
+        state.isAuthenticated = true;
+        state.isInitialized = true;
+      })
+      .addCase(verifyOtpUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+        state.isInitialized = true;
+      })
+      .addCase(getAllProfile.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getAllProfile.fulfilled, (state, action) => {
+        state.loading = false;
+        state.users = action.payload;
+        state.isInitialized = true;
+      })
+      .addCase(getAllProfile.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(deleteUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.users = state.users.filter((user) => user._id !== action.payload._id);
+      })
+      .addCase(deleteUser.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(UpdateProfile.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(UpdateProfile.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+      })
+      .addCase(UpdateProfile.rejected, (state) => {
+        state.loading = false;
+      })  
+  }
+
 });
 
 export const { clearError } = authSlice.actions;
