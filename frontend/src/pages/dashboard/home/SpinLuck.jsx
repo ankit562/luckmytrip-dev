@@ -1,68 +1,29 @@
-import {
-  Home,
-  Search,
-  ShoppingCart,
-  Bell,
-  User,
-  ChevronDown,
-  LogOut,
-  Users,
-  FileText,
-  Settings,
-  BarChart3,
-  MenuIcon,
-  Plus,
-} from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../../../components/dashboardComponent/Header";
 import LeftsideNavbar from "../../../components/dashboardComponent/LeftsideNavbar";
 import { IoIosAddCircleOutline } from "react-icons/io";
+import { useSelector, useDispatch } from "react-redux";
 
-const initialJourneys = [
-  {
-    id: 1,
-    name: "Sony Camera",
-    imageUrl:
-      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=facearea&w=48&h=48",
-    price: "₹100",
-    content: "Explore the beauty of the snowy Alps and scenic landscapes.",
-  },
-  {
-    id: 2,
-    name: "I Phone",
-    imageUrl:
-      "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=facearea&w=48&h=48",
-    price: "₹150",
-    content: "Wildlife encounters on a breathtaking African safari journey.",
-  },
-  {
-    id: 3,
-    name: "Mac Book",
-    imageUrl:
-      "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=facearea&w=48&h=48",
-    price: "₹120",
-    content: "Discover vibrant city life and dazzling nightscapes.",
-  },
-  {
-    id: 4,
-    name: "Mac Book",
-    imageUrl:
-      "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=facearea&w=48&h=48",
-    price: "₹1320",
-    content: "Discover vibrant city life and dazzling nightscapes.",
-  },
-  {
-    id: 5,
-    name: "Mac Book",
-    imageUrl:
-      "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=facearea&w=48&h=48",
-    price: "₹1200",
-    content: "Discover vibrant city life and dazzling nightscapes.",
-  },
-];
+import {
+  fetchProducts,
+  createProduct,
+  editProduct,
+  removeProduct,
+} from "../../../features/products/productSlice"; // adjust path to your slice
+
+import { fetchProfile } from "../../../features/auth/authUserSlice";
 
 export default function SpinLuck() {
-  const [journeys, setJourneys] = useState(initialJourneys);
+  const dispatch = useDispatch();
+  const { user, loading: authLoading, isInitialized } = useSelector(
+    (state) => state.auth
+  );
+  const {
+    products,
+    loading: productsLoading,
+    error: productsError,
+  } = useSelector((state) => state.products);
+
   const [editId, setEditId] = useState(null); // null means add new
   const [editData, setEditData] = useState({
     name: "",
@@ -75,63 +36,47 @@ export default function SpinLuck() {
   const [deleteId, setDeleteId] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
+  // Fetch user profile if needed
+  useEffect(() => {
+    if (isInitialized && !user && !authLoading) {
+      dispatch(fetchProfile());
+    }
+  }, [isInitialized, user, authLoading, dispatch]);
+
+  // Fetch products on mount
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, [dispatch]);
+
   // Open add new modal
-  function onAddNew() {
+  const onAddNew = () => {
     setEditId(null);
     setEditData({ name: "", content: "", image: null, imageUrl: "", price: "" });
     setIsEditModalOpen(true);
-  }
+  };
 
-  // Open edit modal with data
-  function onEdit(row) {
-    setEditId(row.id);
+  // Open edit modal with product data
+  const onEdit = (product) => {
+    setEditId(product._id);
     setEditData({
-      name: row.name,
-      content: row.content,
-      image: null,
-      imageUrl: row.imageUrl || "",
-      price: row.price || "",
+      name: product.name,
+      content: product.content,
+      image: null, // new upload goes here
+      imageUrl: product.image || "",
+      price: product.price || "",
     });
     setIsEditModalOpen(true);
-  }
+  };
 
-  // Close edit modal and reset
-  function onCancelEdit() {
+  // Close add/edit modal and reset
+  const onCancelEdit = () => {
     setIsEditModalOpen(false);
     setEditData({ name: "", content: "", image: null, imageUrl: "", price: "" });
     setEditId(null);
-  }
+  };
 
-  // Confirm edit or add
-  function onConfirmEdit() {
-    if (editId === null) {
-      // Add new: generate new id
-      const newId = journeys.length ? Math.max(...journeys.map((j) => j.id)) + 1 : 1;
-      setJourneys([
-        ...journeys,
-        { id: newId, ...editData, image: null, imageUrl: editData.imageUrl },
-      ]);
-    } else {
-      // Update existing
-      setJourneys(
-        journeys.map((j) =>
-          j.id === editId
-            ? {
-              ...j,
-              name: editData.name,
-              content: editData.content,
-              imageUrl: editData.imageUrl,
-              price: editData.price,
-            }
-            : j
-        )
-      );
-    }
-    onCancelEdit();
-  }
-
-  // Image upload + preview
-  function onImgChange(e) {
+  // Handle form input changes including file input with preview
+  const onImgChange = (e) => {
     const file = e.target.files[0];
     if (file && file.size < 1024 * 1024) {
       const reader = new FileReader();
@@ -141,98 +86,133 @@ export default function SpinLuck() {
     } else {
       alert("Max image size: 1MB");
     }
-  }
+  };
 
-  // Open delete modal
-  function onDelete(row) {
-    setDeleteId(row.id);
+  const onFormChange = (e) => {
+    const { name, value } = e.target;
+    setEditData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // Confirm add or edit product
+  const onConfirmEdit = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("name", editData.name);
+      formData.append("content", editData.content);
+      formData.append("price", editData.price);
+
+      if (editData.image instanceof File) {
+        formData.append("image", editData.image);
+      }
+
+      if (editId === null) {
+        // Add new product
+        await dispatch(createProduct(formData)).unwrap();
+      } else {
+        // Edit existing product
+        await dispatch(editProduct({ id: editId, formData })).unwrap();
+      }
+
+      onCancelEdit();
+    } catch (error) {
+      alert("Failed to save product: " + error.message);
+    }
+  };
+
+  // Open delete confirmation modal
+  const onDelete = (product) => {
+    setDeleteId(product._id);
     setIsDeleteModalOpen(true);
-  }
-
-  // Confirm delete in modal
-  function confirmDelete() {
-    setJourneys(journeys.filter((j) => j.id !== deleteId));
-    setIsDeleteModalOpen(false);
-    setDeleteId(null);
-  }
+  };
 
   // Cancel delete modal
-  function cancelDelete() {
+  const cancelDelete = () => {
     setIsDeleteModalOpen(false);
     setDeleteId(null);
-  }
+  };
+
+  // Confirm delete product
+  const confirmDelete = async () => {
+    try {
+      await dispatch(removeProduct(deleteId)).unwrap();
+      cancelDelete();
+    } catch (error) {
+      alert("Failed to delete product: " + error.message);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-blue-50 flex flex-col">
       <Header />
-      {/* Body Layout */}
       <div className="flex flex-1 min-h-0">
-        {/* sidebar navigation */}
-        <LeftsideNavbar />
-
-        {/* Main Content */}
-
+        <LeftsideNavbar user={user} />
         <main className="flex flex-col md:px-10 px-4 py-8 bg-blue-50 min-h-0 w-full">
           <h1 className="text-2xl md:text-3xl font-bold text-black mb-6">SpinLuck</h1>
 
-          <div className="flex justify-start items-center px-5 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 md:max-w-36 max-w-32 mb-2 gap-1">
+          <div
+            onClick={onAddNew}
+            className="flex justify-start items-center cursor-pointer px-5 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 md:max-w-36 max-w-32 mb-2 gap-1"
+          >
             <IoIosAddCircleOutline className="w-5 h-5" />
-            <button onClick={onAddNew} className="text-sm md:text-base">
-              Add Field
-            </button>
+            <button className="text-sm md:text-base">Add Field</button>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="min-w-full border text-sm bg-white rounded shadow">
-              <thead>
-                <tr className="bg-gray-100">
-                  <th className="p-3 text-left">Name</th>
-                  <th className="p-3 text-left">Image</th>
-                  <th className="p-3 text-left">Price</th>
-                  <th className="p-3 text-left">Content</th>
-                  <th className="p-3 text-left">Edit</th>
-                  <th className="p-3 text-left">Delete</th>
-                </tr>
-              </thead>
-              <tbody>
-                {journeys.map((row) => (
-                  <tr key={row.id} className="border-t hover:bg-gray-50">
-                    <td className="p-3">{row.name}</td>
-                    <td className="p-3">
-                      {row.imageUrl && (
-                        <img
-                          src={row.imageUrl}
-                          alt={row.name}
-                          className="md:w-12 md:h-12 w-10 h-10 object-cover rounded"
-                        />
-                      )}
-                    </td>
-                    <td className="p-3">{row.price}</td>
-                    <td className="p-3 max-w-md truncate text-sm md:text-base">{row.content}</td>
-                    <td className="p-3 space-x-1">
-                      <button
-                        onClick={() => onEdit(row)}
-                        className="text-blue-600 hover:underline rounded-md bg-yellow-100 px-2 py-1"
-                      >
-                        Edit
-                      </button>
-                    </td>
-
-                    <td className="p-3 space-x-1">
-                      <button
-                        onClick={() => onDelete(row)}
-                        className="text-red-600 hover:underline rounded-md bg-red-100 px-2 py-1"
-                      >
-                        Delete
-                      </button>
-                    </td>
+          {productsLoading ? (
+            <p>Loading products...</p>
+          ) : productsError ? (
+            <p className="text-red-500 text-center">Error loading products: { productsError}</p>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="min-w-full border text-sm bg-white rounded shadow">
+                <thead>
+                  <tr className="bg-gray-100">
+                    <th className="p-3 text-left">Name</th>
+                    <th className="p-3 text-left">Image</th>
+                    <th className="p-3 text-left">Price</th>
+                    <th className="p-3 text-left">Content</th>
+                    <th className="p-3 text-left">Edit</th>
+                    <th className="p-3 text-left">Delete</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {products.map((product) => (
+                    <tr key={product._id} className="border-t hover:bg-gray-50">
+                      <td className="p-3">{product.name}</td>
+                      <td className="p-3">
+                        {product.image && (
+                          <img
+                            src={product.image}
+                            alt={product.name}
+                            className="md:w-12 md:h-12 w-10 h-10 object-cover rounded"
+                          />
+                        )}
+                      </td>
+                      <td className="p-3">{product.price}</td>
+                      <td className="p-3 max-w-md truncate text-sm md:text-base">{product.content}</td>
+                      <td className="p-3">
+                        <button
+                          onClick={() => onEdit(product)}
+                          className="text-blue-600 hover:underline rounded-md bg-yellow-100 px-2 py-1"
+                        >
+                          Edit
+                        </button>
+                      </td>
+                      <td className="p-3">
+                        <button
+                          onClick={() => onDelete(product)}
+                          className="text-red-600 hover:underline rounded-md bg-red-100 px-2 py-1"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
 
-          {/* Edit Modal */}
+          {/* Edit/Add Modal */}
           {isEditModalOpen && (
             <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
               <div className="bg-white rounded shadow-lg md:p-6 p-3 md:w-full w-[90%] max-w-md relative">
@@ -256,9 +236,10 @@ export default function SpinLuck() {
                   <div>
                     <label className="block mb-1 font-medium">Name</label>
                     <input
+                      name="name"
                       type="text"
                       value={editData.name}
-                      onChange={(e) => setEditData((prev) => ({ ...prev, name: e.target.value }))}
+                      onChange={onFormChange}
                       required
                       className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
                     />
@@ -272,14 +253,15 @@ export default function SpinLuck() {
                         className="w-24 h-24 object-cover rounded mb-2"
                       />
                     )}
-                    <input type="file" accept="image/*" onChange={onImgChange} />
+                    <input name="image" type="file" accept="image/*" onChange={onImgChange} />
                   </div>
                   <div>
                     <label className="block mb-1 font-medium">Price</label>
                     <input
+                      name="price"
                       type="text"
                       value={editData.price}
-                      onChange={(e) => setEditData((prev) => ({ ...prev, price: e.target.value }))}
+                      onChange={onFormChange}
                       required
                       className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
                     />
@@ -287,8 +269,9 @@ export default function SpinLuck() {
                   <div>
                     <label className="block mb-1 font-medium">Content</label>
                     <textarea
+                      name="content"
                       value={editData.content}
-                      onChange={(e) => setEditData((prev) => ({ ...prev, content: e.target.value }))}
+                      onChange={onFormChange}
                       required
                       rows={4}
                       className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -314,7 +297,7 @@ export default function SpinLuck() {
             </div>
           )}
 
-          {/* Delete Modal */}
+          {/* Delete Confirmation Modal */}
           {isDeleteModalOpen && (
             <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
               <div className="bg-white rounded shadow-lg p-6 md:w-full w-[90%] max-w-sm">

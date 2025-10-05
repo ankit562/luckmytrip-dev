@@ -14,6 +14,7 @@ import { Toaster } from "react-hot-toast";
 import { Loading } from './components/Loading';
 import { useEffect } from 'react';
 import { fetchProfile } from './features/auth/authUserSlice';
+
 import Journey from './pages/dashboard/home/Journey';
 import Jackpot from './pages/dashboard/home/Jackpot';
 import SpinLuck from './pages/dashboard/home/SpinLuck';
@@ -24,47 +25,141 @@ import SuperAdmin from './pages/dashboard/users/SuperAdmin';
 import Admin from './pages/dashboard/users/Admin';
 import ContentCreator from './pages/dashboard/users/Content-creator';
 import Client from './pages/dashboard/Client';
-// import { fetchProfile } from './feature/auth/authSlice';
-// import { useEffect } from 'react';
-
-
+import Ticket from './pages/dashboard/Tickets';
+// import axios from './lib/axios';
 
 
 
 function App() {
+  const user = useSelector(state => state.auth.user);
+  const isInitialized = useSelector(state => state.auth.isInitialized);
   const dispatch = useDispatch();
-  const { user, isInitialized, loading } = useSelector(state => state.auth);
 
   useEffect(() => {
-    dispatch(fetchProfile());
-  }, [dispatch]);
+    if (!isInitialized) {
+      (async () => {
+        dispatch(fetchProfile());
 
-  if (loading || !isInitialized) {
+      })();
+    }
+  }, [dispatch, isInitialized]);
+
+  // Show loading until auth check is complete
+  if (!isInitialized) {
     return <Loading />;
   }
+
+
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     axios.post('/auth/refresh-token').catch(() => {
+  //       // Handle failed refresh if needed (optional)
+  //     });
+  //   }, 14 * 60 * 1000); // 14 minutes before token expiry
+
+  //   return () => clearInterval(interval);
+  // }, []);
+
+
 
   return (
     <div className=''>
       <Routes>
-        <Route path="/home/journey" element={<Journey/>}/>
-        <Route path="/home/jackpot" element={<Jackpot/>}/>
-        <Route path="/home/spinluck" element={<SpinLuck/>}/>
+        <Route path="/home/journey"
+          element={
+            user && ["content-creator", "admin", "superadmin"].includes(user.role.toLowerCase())
+              ? (<Journey />)
+              : (<Navigate to="/login" />)
+          } />
 
-        <Route path="/explore/dreamtrip" element={ <DreamTrip /> } />
-        <Route path="/explore/tripinfo" element={ <TripInfo/> } />
-        <Route path="/explore/goldenwinner" element={ <GoldenWinner /> } />
+        <Route path="/home/jackpot"
+          element={
+            user && ["content-creator", "admin", "superadmin"].includes(user.role.toLowerCase())
+              ? (<Jackpot />)
+              : (<Navigate to="/login" />)
+          } />
+        <Route path="/home/spinluck"
+          element={
+            user && ["content-creator", "admin", "superadmin"].includes(user.role.toLowerCase())
+              ? (<SpinLuck />)
+              : (<Navigate to="/login" />)
+          } />
+        {/* home end*/}
 
-        <Route path="/users/superadmin" element={ <SuperAdmin/> } />
-        <Route path="/users/admin" element={ <Admin/> } />
-        <Route path="/users/content-creator" element={ <ContentCreator/> } />
 
-        <Route path="/dashboard/client" element={ <Client /> } />
-        
-        <Route path="/dashboard" element={ <Dashboard /> } />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/login" element={<LoginPage />} />
 
+        <Route path="/explore/dreamtrip"
+          element={
+            user && ["content-creator", "admin", "superadmin"].includes(user.role.toLowerCase())
+              ? (<DreamTrip />)
+              : (<Navigate to="/login" />)
+          } />
+        <Route path="/explore/tripinfo"
+          element={
+            user && ["content-creator", "admin", "superadmin"].includes(user.role.toLowerCase())
+              ? (<TripInfo />)
+              : (<Navigate to="/login" />)
+          } />
+        <Route path="/explore/goldenwinner"
+          element={
+            user && ["content-creator", "admin", "superadmin"].includes(user.role.toLowerCase())
+              ? (<GoldenWinner />)
+              : (<Navigate to="/login" />)
+          } />
+        {/* explore end */}
+
+
+
+
+        <Route path="/users/superadmin"
+          element={
+            user && ["superadmin"].includes(user.role.toLowerCase())
+              ? (<SuperAdmin />)
+              : (<Navigate to="/login" />)
+          } />
+        <Route path="/users/admin"
+          element={
+            user && ["admin", "superadmin"].includes(user.role.toLowerCase())
+              ? (<Admin />)
+              : (<Navigate to="/login" />)
+          } />
+        <Route path="/users/content-creator"
+          element={
+            user && ["content-creator", "admin", "superadmin"].includes(user.role.toLowerCase())
+              ? (<ContentCreator />)
+              : (<Navigate to="/login" />)
+          } />
+        {/* users types */}
+
+
+
+
+        <Route path="/dashboard/client"
+          element={
+            user && ["admin", "superadmin"].includes(user.role.toLowerCase())
+              ? (<Client />)
+              : (<Navigate to="/login" />)
+          } />
+        <Route path="/dashboard/tickets"
+          element={
+            user && ["content-creator", "admin", "superadmin"].includes(user.role.toLowerCase())
+              ? (<Ticket />)
+              : (<Navigate to="/login" />)
+          } />
+        <Route path="/dashboard"
+          element={
+            user && ["content-creator", "admin", "superadmin"].includes(user.role.toLowerCase())
+              ? (<Dashboard />)
+              : (<Navigate to="/login" />)
+          } />
+        {/* dashboard end here */}
+
+
+
+        <Route path="/signup" element={!user ? <SignupPage /> : <Navigate to="/" />} />
+        <Route path="/login" element={!user ? <LoginPage /> : (user && ["client"].includes(user.role.toLowerCase()) ? <Navigate to="/" /> : <Navigate to="/dashboard" />)} />
         <Route path="/otp-verification" element={<OtpPage />} />
+
 
         <Route path="/" element={user ? <HomePage /> : <Navigate to="/login" />} />
         <Route path="/explore" element={user ? <ExplorePage /> : <Navigate to="/login" />} />
@@ -81,6 +176,6 @@ function App() {
 export default App;
 
 
-        // {/* 
-        // <Route path="/signup" element={!user ? <SignupPage /> : <Navigate to="/dashboard" />} />
-        // <Route path="/login" element={!user ? <LoginPage /> : <Navigate to="/dashboard" />} /> */}
+
+// {/* <Route path="/signup" element={<SignupPage />} />
+// <Route path="/login" element={<LoginPage />} /> */}

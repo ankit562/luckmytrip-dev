@@ -1,210 +1,248 @@
-import {
-  Home,
-  Search,
-  ShoppingCart,
-  Bell,
-  User,
-  ChevronDown,
-  LogOut,
-  Users,
-  FileText,
-  Settings,
-  BarChart3,
-  MenuIcon,
-  Plus,
-} from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../../../components/dashboardComponent/Header";
 import LeftsideNavbar from "../../../components/dashboardComponent/LeftsideNavbar";
 import { IoIosAddCircleOutline } from "react-icons/io";
+import { useSelector, useDispatch } from "react-redux";
 
-const initialJourneys = [
-  {
-    id: 1,
-    name: "Adventure in Alps",
-    imageUrl: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=facearea&w=48&h=48",
-    imageUrl2: "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=facearea&w=48&h=48",
-    content: "Explore the beauty of the snowy Alps and scenic landscapes.",
-  },
-  {
-    id: 2,
-    name: "Safari Expedition",
-    imageUrl: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=facearea&w=48&h=48",
-    imageUrl2: "https://images.unsplash.com/photo-1504198453319-5ce911bafcde?auto=format&fit=facearea&w=48&h=48",
-    content: "Wildlife encounters on a breathtaking African safari journey.",
-  },
-  {
-    id: 3,
-    name: "City Lights Tour",
-    imageUrl: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=facearea&w=48&h=48",
-    imageUrl2: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=facearea&w=48&h=48",
-    content: "Discover vibrant city life and dazzling nightscapes.",
-  },
-];
+import {
+  fetchProducts,
+  createProduct,
+  editProduct,
+  removeProduct,
+} from "../../../features/products/productSlice"; // adjust import path
+
+import { fetchProfile } from "../../../features/auth/authUserSlice";
 
 export default function DreamTrip() {
-  const [journeys, setJourneys] = useState(initialJourneys);
-  const [editId, setEditId] = useState(null); // null means add new
-  const [editData, setEditData] = useState({ name: "", content: "", image: null, imageUrl: "", image2: null, imageUrl2: "" });
+  const dispatch = useDispatch();
+  const { user, loading: authLoading, isInitialized } = useSelector(
+    (state) => state.auth
+  );
+  const {
+    products,
+    loading: productsLoading,
+    error: productsError,
+  } = useSelector((state) => state.products);
+
+  const [editId, setEditId] = useState(null);
+  const [editData, setEditData] = useState({
+    name: "",
+    content: "",
+    image: null,
+    imageUrl: "",
+    image2: null,
+    imageUrl2: "",
+  });
+
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  // Open add new modal
-  function onAddNew() {
-    setEditId(null);
-    setEditData({ name: "", content: "", image: null, imageUrl: "", image2: null, imageUrl2: "" });
-    setIsEditModalOpen(true);
-  }
+  // Fetch user profile
+  useEffect(() => {
+    if (isInitialized && !user && !authLoading) {
+      dispatch(fetchProfile());
+    }
+  }, [isInitialized, user, authLoading, dispatch]);
 
-  // Open edit modal with data
-  function onEdit(row) {
-    setEditId(row.id);
+  // Fetch products
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, [dispatch]);
+
+  // Open add modal
+  const onAddNew = () => {
+    setEditId(null);
     setEditData({
-      name: row.name,
-      content: row.content,
+      name: "",
+      content: "",
       image: null,
-      imageUrl: row.imageUrl || "",
+      imageUrl: "",
       image2: null,
-      imageUrl2: row.imageUrl2 || "",
+      imageUrl2: "",
     });
     setIsEditModalOpen(true);
-  }
+  };
 
-  // Close edit modal and reset
-  function onCancelEdit() {
+  // Open edit modal
+  const onEdit = (product) => {
+    setEditId(product._id);
+    setEditData({
+      name: product.name,
+      content: product.content,
+      image: null,
+      imageUrl: product.image || "",
+      image2: null,
+      imageUrl2: product.image2 || "",
+    });
+    setIsEditModalOpen(true);
+  };
+
+  // Close modal
+  const onCancelEdit = () => {
     setIsEditModalOpen(false);
-    setEditData({ name: "", content: "", image: null, imageUrl: "", image2: null, imageUrl2: "" });
+    setEditData({
+      name: "",
+      content: "",
+      image: null,
+      imageUrl: "",
+      image2: null,
+      imageUrl2: "",
+    });
     setEditId(null);
-  }
+  };
 
-  // Confirm edit or add
-  function onConfirmEdit() {
-    if (editId === null) {
-      const newId = journeys.length ? Math.max(...journeys.map(j => j.id)) + 1 : 1;
-      setJourneys([...journeys, {
-        id: newId,
-        name: editData.name,
-        content: editData.content,
-        imageUrl: editData.imageUrl,
-        imageUrl2: editData.imageUrl2,
-      }]);
+  // Handle form changes including file input
+  const onFormChange = (e) => {
+    const { name, value, files, type } = e.target;
+    if (type === "file") {
+      const file = files[0];
+      if (file && file.size < 1024 * 1024) {
+        const reader = new FileReader();
+        reader.onload = (evt) =>
+          setEditData((prev) => ({
+            ...prev,
+            [name]: file,
+            [name + "Url"]: evt.target.result,
+          }));
+        reader.readAsDataURL(file);
+      } else {
+        alert("Max image size: 1MB");
+      }
     } else {
-      setJourneys(journeys.map(j =>
-        j.id === editId
-          ? { ...j, name: editData.name, content: editData.content, imageUrl: editData.imageUrl, imageUrl2: editData.imageUrl2 }
-          : j
-      ));
+      setEditData((prev) => ({ ...prev, [name]: value }));
     }
-    onCancelEdit();
-  }
+  };
 
-  // Handle image 1 upload + preview
-  function onImgChange(e) {
-    const file = e.target.files[0];
-    if (file && file.size < 1024 * 1024) {
-      const reader = new FileReader();
-      reader.onload = evt => setEditData(prev => ({ ...prev, image: file, imageUrl: evt.target.result }));
-      reader.readAsDataURL(file);
-    } else {
-      alert("Max image size: 1MB");
-    }
-  }
+  // Confirm add or edit
+  const onConfirmEdit = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("name", editData.name);
+      formData.append("content", editData.content);
 
-  // Handle image 2 upload + preview
-  function onImgChange2(e) {
-    const file = e.target.files[0];
-    if (file && file.size < 1024 * 1024) {
-      const reader = new FileReader();
-      reader.onload = evt => setEditData(prev => ({ ...prev, image2: file, imageUrl2: evt.target.result }));
-      reader.readAsDataURL(file);
-    } else {
-      alert("Max image size: 1MB");
+      if (editData.image instanceof File) {
+        formData.append("image", editData.image);
+      }
+      if (editData.image2 instanceof File) {
+        formData.append("image2", editData.image2);
+      }
+
+      if (editId === null) {
+        await dispatch(createProduct(formData)).unwrap();
+      } else {
+        await dispatch(editProduct({ id: editId, formData })).unwrap();
+      }
+      onCancelEdit();
+    } catch (err) {
+      alert("Failed to save product: " + err.message);
     }
-  }
+  };
 
   // Open delete modal
-  function onDelete(row) {
-    setDeleteId(row.id);
+  const onDelete = (product) => {
+    setDeleteId(product._id);
     setIsDeleteModalOpen(true);
-  }
+  };
 
-  // Confirm delete in modal
-  function confirmDelete() {
-    setJourneys(journeys.filter(j => j.id !== deleteId));
+  // Close delete modal
+  const cancelDelete = () => {
     setIsDeleteModalOpen(false);
     setDeleteId(null);
-  }
+  };
 
-  // Cancel delete modal
-  function cancelDelete() {
-    setIsDeleteModalOpen(false);
-    setDeleteId(null);
-  }
+  // Confirm delete product
+  const confirmDelete = async () => {
+    try {
+      await dispatch(removeProduct(deleteId)).unwrap();
+      cancelDelete();
+    } catch (err) {
+      alert("Failed to delete product: " + err.message);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-blue-50 flex flex-col">
       <Header />
       <div className="flex flex-1 min-h-0">
-        <LeftsideNavbar />
-
+        <LeftsideNavbar user={user} />
         <main className="flex flex-col md:px-10 px-4 py-8 bg-blue-50 min-h-0 w-full">
-          <h1 className="text-2xl md:text-3xl font-bold text-black mb-6">Dream Trip Slide</h1>
-          <div className="flex justify-start items-center px-5 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 max-w-32 md:max-w-36 mb-2 gap-1">
+          <h1 className="text-2xl md:text-3xl font-bold text-black mb-6">
+            Dream Trip Slide
+          </h1>
+
+          <div
+            onClick={onAddNew}
+            className="flex justify-start items-center cursor-pointer px-5 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 max-w-32 md:max-w-36 mb-2 gap-1"
+          >
             <IoIosAddCircleOutline className="w-5 h-5" />
-            <button onClick={onAddNew} className="text-sm md:text-base">Add Field</button>
+            <button className="text-sm md:text-base">Add Field</button>
           </div>
 
-          <div className="w-full overflow-x-auto">
-            <table className="min-w-full border text-sm bg-white rounded shadow overflow-x-auto">
-              <thead>
-                <tr className="bg-gray-100 text-sm md:text-base">
-                  <th className="p-3 text-left">Name</th>
-                  <th className="p-3 text-left">Image1</th>
-                  <th className="p-3 text-left">Image2</th>
-                  <th className="p-3 text-left">Content</th>
-                  <th className="p-3 text-left">Edit</th>
-                  <th className="p-3 text-left">Delete</th>
-                </tr>
-              </thead>
-              <tbody>
-                {journeys.map(row => (
-                  <tr key={row.id} className="border-t hover:bg-gray-50 ">
-                    <td className="md:p-3 p-2">{row.name}</td>
-                    <td className="md:p-3 p-2">
-                      {row.imageUrl && (
-                        <img src={row.imageUrl} alt={row.name} className="md:w-12 md:h-12 w-10 h-10 object-cover rounded" />
-                      )}
-                    </td>
-                    <td className="md:p-3 p-2">
-                      {row.imageUrl2 && (
-                        <img src={row.imageUrl2} alt={row.name + " 2"} className="md:w-12 md:h-12 w-10 h-10 object-cover rounded" />
-                      )}
-                    </td>
-                    <td className="p-3 max-w-md truncate text-sm md:text-base">{row.content}</td>
-                    <td className="p-3 space-x-1">
-                      <button
-                        onClick={() => onEdit(row)}
-                        className="text-blue-600 hover:underline bg-yellow-100 px-2 py-1"
-                      >
-                        Edit
-                      </button>
-                    </td>
-                    <td className="p-3 space-x-1 ">
-                      <button
-                        onClick={() => onDelete(row)}
-                        className="text-red-600 hover:underline bg-red-100 px-2 py-1"
-                      >
-                        Delete
-                      </button>
-                    </td>
+          {productsLoading ? (
+            <p>Loading contents...</p>
+          ) : productsError ? (
+            <p className="text-red-500 text-center">Error loading products: { productsError}</p>
+          ) : (
+            <div className="w-full overflow-x-auto">
+              <table className="min-w-full border text-sm bg-white rounded shadow overflow-x-auto">
+                <thead>
+                  <tr className="bg-gray-100 text-sm md:text-base">
+                    <th className="p-3 text-left">Name</th>
+                    <th className="p-3 text-left">Image1</th>
+                    <th className="p-3 text-left">Image2</th>
+                    <th className="p-3 text-left">Content</th>
+                    <th className="p-3 text-left">Edit</th>
+                    <th className="p-3 text-left">Delete</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {products.map((product) => (
+                    <tr key={product._id} className="border-t hover:bg-gray-50 ">
+                      <td className="md:p-3 p-2">{product.name}</td>
+                      <td className="md:p-3 p-2">
+                        {product.image && (
+                          <img
+                            src={product.image}
+                            alt={product.name}
+                            className="md:w-12 md:h-12 w-10 h-10 object-cover rounded"
+                          />
+                        )}
+                      </td>
+                      <td className="md:p-3 p-2">
+                        {product.image2 && (
+                          <img
+                            src={product.image2}
+                            alt={`${product.name} 2`}
+                            className="md:w-12 md:h-12 w-10 h-10 object-cover rounded"
+                          />
+                        )}
+                      </td>
+                      <td className="p-3 max-w-md truncate text-sm md:text-base">{product.content}</td>
+                      <td className="p-3 space-x-1">
+                        <button
+                          onClick={() => onEdit(product)}
+                          className="text-blue-600 hover:underline bg-yellow-100 px-2 py-1"
+                        >
+                          Edit
+                        </button>
+                      </td>
+                      <td className="p-3 space-x-1 ">
+                        <button
+                          onClick={() => onDelete(product)}
+                          className="text-red-600 hover:underline bg-red-100 px-2 py-1"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
 
-          {/* Edit Modal */}
+          {/* Edit/Add Modal */}
           {isEditModalOpen && (
             <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
               <div className="bg-white rounded shadow-lg p-3 md:p-6 md:w-full w-[90%] max-w-md relative overflow-auto max-h-[90vh]">
@@ -215,9 +253,11 @@ export default function DreamTrip() {
                 >
                   ×
                 </button>
-                <h2 className="text-xl font-semibold mb-4">{editId === null ? "Add Journey" : "Edit Journey"}</h2>
+                <h2 className="text-xl font-semibold mb-4">
+                  {editId === null ? "Add Journey" : "Edit Journey"}
+                </h2>
                 <form
-                  onSubmit={e => {
+                  onSubmit={(e) => {
                     e.preventDefault();
                     onConfirmEdit();
                   }}
@@ -226,9 +266,10 @@ export default function DreamTrip() {
                   <div>
                     <label className="block mb-1 font-medium">Name</label>
                     <input
+                      name="name"
                       type="text"
                       value={editData.name}
-                      onChange={e => setEditData(prev => ({ ...prev, name: e.target.value }))}
+                      onChange={onFormChange}
                       required
                       className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
                     />
@@ -237,29 +278,39 @@ export default function DreamTrip() {
                   <div>
                     <label className="block mb-1 font-medium">Image 1</label>
                     {editData.imageUrl && (
-                      <img src={editData.imageUrl} alt="Preview" className="w-24 h-24 object-cover rounded mb-2" />
+                      <img
+                        src={editData.imageUrl}
+                        alt="Preview"
+                        className="w-24 h-24 object-cover rounded mb-2"
+                      />
                     )}
-                    <input type="file" accept="image/*" onChange={onImgChange} />
+                    <input name="image" type="file" accept="image/*" onChange={onFormChange} />
                   </div>
 
                   <div>
                     <label className="block mb-1 font-medium">Image 2</label>
                     {editData.imageUrl2 && (
-                      <img src={editData.imageUrl2} alt="Preview 2" className="w-24 h-24 object-cover rounded mb-2" />
+                      <img
+                        src={editData.imageUrl2}
+                        alt="Preview 2"
+                        className="w-24 h-24 object-cover rounded mb-2"
+                      />
                     )}
-                    <input type="file" accept="image/*" onChange={onImgChange2} />
+                    <input name="image2" type="file" accept="image/*" onChange={onFormChange} />
                   </div>
 
                   <div>
                     <label className="block mb-1 font-medium">Content</label>
                     <textarea
+                      name="content"
                       value={editData.content}
-                      onChange={e => setEditData(prev => ({ ...prev, content: e.target.value }))}
+                      onChange={onFormChange}
                       required
                       rows={4}
                       className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
                     />
                   </div>
+
                   <div className="flex justify-end space-x-3">
                     <button
                       type="submit"
@@ -280,7 +331,7 @@ export default function DreamTrip() {
             </div>
           )}
 
-          {/* Delete Modal */}
+          {/* Delete Confirmation Modal */}
           {isDeleteModalOpen && (
             <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
               <div className="bg-white rounded shadow-lg md:p-6 p-3 md:w-full w-[90%] max-w-sm">

@@ -2,7 +2,24 @@ import { Home, Search, ShoppingCart, Bell, User, ChevronDown, LogOut, Users, Fil
 import Header from '../../components/dashboardComponent/Header';
 import LeftsideNavbar from '../../components/dashboardComponent/LeftsideNavbar';
 
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { fetchProfile } from '../../features/auth/authUserSlice';
+
 export default function Dashboard() {
+
+    const dispatch = useDispatch();
+  
+  const { user, loading, isInitialized } = useSelector(state => state.auth);
+
+
+  useEffect(() => {
+    if (isInitialized && !user && !loading) {
+      console.log('Retrying user profile fetch...');
+      dispatch(fetchProfile());
+    }
+  }, [isInitialized, user, loading, dispatch]);
+  
   return (
     <div className="min-h-screen bg-blue-50 flex flex-col">
       <Header />
@@ -10,7 +27,7 @@ export default function Dashboard() {
       <div className="flex flex-1 min-h-0">
 
         {/* sidebar navigation */}
-        <LeftsideNavbar />
+        <LeftsideNavbar  user={user}/>
 
         {/* Main Content */}
         <main className="flex flex-col md:px-10 px-4 py-8 bg-blue-50 min-h-0 w-full">

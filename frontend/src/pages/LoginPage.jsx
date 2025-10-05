@@ -15,16 +15,21 @@ const LoginPage = () => {
     const navigate = useNavigate();
     
     const { loading , error, user} = useSelector(state => state.auth);
+    const client = user && user.role === 'client';
+    const admin = user && (user.role === 'admin' || user.role === 'superadmin' || user.role === 'content-creator') ;
 
   useEffect(() => {
-    if (user) {  
+    if (client) {  
+      navigate('/')
+    }
+    else if(admin) {
       navigate('/dashboard')
     }
      else {
        navigate('/login')
       }
     
-  }, [user, navigate]);
+  }, [client, admin , navigate]);
 
   useEffect(() => {
     if (error) {
@@ -114,30 +119,3 @@ const LoginPage = () => {
   );
 };
 export default LoginPage;
-
-// <div className="mt-8">
-//   <p className="text-sm text-gray-600 text-center mb-4">Demo Accounts:</p>
-//   <div className="space-y-2">
-//     <button
-//       type="button"
-//       onClick={() => handleDemoLogin('superadmin@example.com', 'admin123')}
-//       className="w-full text-left px-3 py-2 text-xs bg-purple-50 text-purple-700 rounded border hover:bg-purple-100 transition-colors"
-//     >
-//       🔑 Super Admin: superadmin@example.com / admin123
-//     </button>
-//     <button
-//       type="button"
-//       onClick={() => handleDemoLogin('admin@example.com', 'admin123')}
-//       className="w-full text-left px-3 py-2 text-xs bg-blue-50 text-blue-700 rounded border hover:bg-blue-100 transition-colors"
-//     >
-//       👨‍💼 Admin: admin@example.com / admin123
-//     </button>
-//     <button
-//       type="button"
-//       onClick={() => handleDemoLogin('creator@example.com', 'creator123')}
-//       className="w-full text-left px-3 py-2 text-xs bg-green-50 text-green-700 rounded border hover:bg-green-100 transition-colors"
-//     >
-//       ✍️ Content Creator: creator@example.com / creator123
-//     </button>
-//   </div>
-// </div>
