@@ -14,7 +14,7 @@ const TicketSchema = new mongoose.Schema({
   category: {
     type: String,
     enum: ['event', 'offer'],
-    required: true
+    
   },
   ticket: {
     type: Number,
@@ -37,7 +37,7 @@ const TicketSchema = new mongoose.Schema({
   status: {
     type: String,
     enum: ['publish', 'archived'],
-    required: true
+    
   }
 }, { timestamps: true });
 
