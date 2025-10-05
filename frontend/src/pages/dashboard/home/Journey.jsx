@@ -232,7 +232,7 @@ const { tickets = [], loading, error } = useSelector(state => state.tickets || {
           <table className="min-w-full border border-gray-300 rounded overflow-hidden">
             <thead className="bg-gray-100">
               <tr>
-                {["Trip", "Tickets", "Price", "Description", "Image", "Date", "Edit" , "Delete"].map(col => (
+                {["Trip", "Tickets", "Price", "Description", "Image", "Draw-Date", "Edit" , "Delete"].map(col => (
                   <th key={col} className="text-left p-3 border-b border-gray-300 whitespace-nowrap">{col}</th>
                 ))}
               </tr>
@@ -251,7 +251,7 @@ const { tickets = [], loading, error } = useSelector(state => state.tickets || {
                       "-"
                     )}
                   </td>
-                  <td className="p-3 border-b border-gray-300">{date}</td>
+                  <td className="p-3 border-b border-gray-300">{new Date(date).toLocaleDateString()}</td>
                   <td className="p-3 border-b border-gray-300">
                     <button onClick={() => openEditModal(tickets.find(c => c._id === _id))} className="text-blue-600 ">Edit</button>
                   </td>

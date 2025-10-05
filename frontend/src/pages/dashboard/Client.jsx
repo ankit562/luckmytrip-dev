@@ -106,26 +106,45 @@ export default function Client() {
   };
 
   // Submit add or update
+  // const onConfirmEdit = async () => {
+  //   try {
+  //     if (editId === null) { 
+
+  //       await dispatch(signupUser(editData)).unwrap();
+  //       toast.success("Client added successfully!");
+  //       // As createUser thunk is not provided, you can implement similarly
+  //     } else {
+  //       ;
+  //       await dispatch(UpdateProfile({ id: editId, userData: editData })).unwrap();
+
+  //       toast.success("Client updated successfully!");
+  //     }
+  //     onCancelEdit();
+  //     dispatch(getAllProfile());
+  //     console.log(user)
+  //   } catch (err) {
+  //     toast("Failed to save: " + err.message);
+  //   }
+  // };
+
   const onConfirmEdit = async () => {
-    try {
-      if (editId === null) { 
-
-        await dispatch(signupUser(editData)).unwrap();
-        toast.success("Client added successfully!");
-        // As createUser thunk is not provided, you can implement similarly
-      } else {
-        ;
-        await dispatch(UpdateProfile({ id: editId, userData: editData })).unwrap();
-
-        toast.success("Client updated successfully!");
-      }
-      onCancelEdit();
-      dispatch(getAllProfile());
-      console.log(user)
-    } catch (err) {
-      toast("Failed to save: " + err.message);
+  try {
+    if (editId === null) {
+      await dispatch(signupUser(editData)).unwrap();
+      toast.success("Client added successfully!");
+    } else {
+      await dispatch(UpdateProfile({ id: editId, userData: editData })).unwrap();
+      console.log("Update confirmed1")
+      toast.success("Client updated successfully!");
+      console.log("Update confirmed2")
     }
-  };
+    console.log("Update confirmed..."); // Add this
+    onCancelEdit();
+    dispatch(getAllProfile());
+  } catch (err) {
+    toast.error("Failed to save: " + err.message);
+  }
+};
 
   // Open delete modal
   const onDelete = (client) => {

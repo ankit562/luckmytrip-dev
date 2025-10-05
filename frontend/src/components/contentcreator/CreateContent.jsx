@@ -219,7 +219,7 @@ const { tickets = [], loading, error } = useSelector(state => state.tickets || {
           <table className="min-w-full border border-gray-300 rounded overflow-hidden">
             <thead className="bg-gray-100">
               <tr>
-                {["Name", "Tickets", "Price", "Description", "Image", "Date", "Status", "Category", "Edit" , "Delete"].map(col => (
+                {["Name", "Tickets", "Price", "Description", "Image", "Darw-Date", "Status", "Category", "Edit" , "Delete"].map(col => (
                   <th key={col} className="text-left p-3 border-b border-gray-300 whitespace-nowrap">{col}</th>
                 ))}
               </tr>
@@ -238,7 +238,7 @@ const { tickets = [], loading, error } = useSelector(state => state.tickets || {
                       "-"
                     )}
                   </td>
-                  <td className="p-3 border-b border-gray-300">{date}</td>
+                  <td className="p-3 border-b border-gray-300">{new Date(date).toLocaleDateString()}</td>
                   <td className="p-3 border-b border-gray-300">{status}</td>
                   <td className="p-3 border-b border-gray-300">{category}</td>
                   <td className="p-3 border-b border-gray-300">

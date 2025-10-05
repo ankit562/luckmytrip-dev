@@ -37,7 +37,7 @@ export const Register = async (req, res) => {
   try {
     const { fullName, email, password, phone, role , address ,ticket } = req.body;
     
-    if (!(fullName && email && password && phone && role)) { // require role too
+    if (!(fullName && email && password && phone )) { // require role too
       return res.status(400).send("All inputs and role are required");
     }
     

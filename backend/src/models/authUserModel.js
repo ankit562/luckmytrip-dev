@@ -41,11 +41,20 @@ const clientSchema = new mongoose.Schema({
     twitter: { id: String, token: String },
   },ticket:{
     type:Number,
+    required:false,
     default:0
   },
   refreshToken: {
     type: String,  // for JWT refresh token management
   },
+  ticket: [
+            {
+                type: Number,
+                required: false,
+                default: 0
+            }
+        ],
+  
   // Email verification
   verifyToken: String,
   verifyTokenExpiry: Date,

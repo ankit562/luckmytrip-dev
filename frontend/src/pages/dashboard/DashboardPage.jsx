@@ -19,6 +19,7 @@ export default function Dashboard() {
       dispatch(fetchProfile());
     }
   }, [isInitialized, user, loading, dispatch]);
+  
   return (
     <div className="min-h-screen bg-blue-50 flex flex-col">
       <Header />
