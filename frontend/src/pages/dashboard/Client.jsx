@@ -3,17 +3,20 @@ import Header from "../../components/dashboardComponent/Header";
 import LeftsideNavbar from "../../components/dashboardComponent/LeftsideNavbar";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { useSelector, useDispatch } from "react-redux";
+import { Search } from "lucide-react";
 
 import {
   fetchProfile,
   getAllProfile,
   deleteUser,
   UpdateProfile,
-  signupUser
+  signupUser,
+  searchUser,
 } from "../../features/auth/authUserSlice";
 import toast from "react-hot-toast";
 
 export default function Client() {
+  const [input, setInput] = useState("");
   const dispatch = useDispatch();
   const {
     user,
@@ -22,16 +25,20 @@ export default function Client() {
     users,
     loading,
     error,
+    searchLoading,
+    searchResult,
+    searchError,
   } = useSelector((state) => state.auth);
 
   const [editId, setEditId] = useState(null);
   const [editData, setEditData] = useState({
     fullName: "",
     email: "",
-    password: "",   // ✅ required for signup
+    password: "",
     phone: "",
     address: "",
     ticket: "",
+    win: 0,              // Added win field default 0
     role: "client",
   });
 
@@ -51,8 +58,30 @@ export default function Client() {
     }
   }, [user, dispatch]);
 
-  // Filter for clients only
+  // Debounce search input and dispatch searchUser action
+  useEffect(() => {
+    if (!input) return;
+
+    const handler = setTimeout(() => {
+      dispatch(searchUser(input));
+    }, 3500);
+
+    return () => clearTimeout(handler);
+  }, [input, dispatch]);
+
+  // Clients list filtered by role
   const clientUsers = users?.filter((u) => u.role === "client") || [];
+
+  // Display either search results or full client list
+  const displayedClients = input
+    ? searchResult
+      ? [searchResult] // single search result inside array
+      : []
+    : clientUsers;
+
+  // Loading and error state depending on context
+  const isLoading = input ? searchLoading : loading;
+  const errorMessage = input ? searchError : error;
 
   // Open Add Modal
   const onAddNew = () => {
@@ -63,28 +92,28 @@ export default function Client() {
       phone: "",
       address: "",
       ticket: "",
-      role: "", // ✅ added
+      win: 0,          // initialize to zero on add
+      role: "",
     });
-
     setIsEditModalOpen(true);
   };
 
-  // Open Edit Modal and populate data
+  // Open Edit Modal
   const onEdit = (client) => {
     setEditId(client._id);
     setEditData({
-      fullname: client.fullName || "",
+      fullName: client.fullName || "",
       email: client.email || "",
       phone: client.phone || "",
       address: client.address || "",
       ticket: client.ticket || "",
-      role: client.role || "client", // ✅ added
+      win: client.win ?? 0,   // include win field (default 0 if null)
+      role: client.role || "client",
     });
     setIsEditModalOpen(true);
   };
 
-
-  // Close modal & reset
+  // Cancel Edit Modal
   const onCancelEdit = () => {
     setIsEditModalOpen(false);
     setEditData({
@@ -92,73 +121,70 @@ export default function Client() {
       email: "",
       phone: "",
       address: "",
-      ticket: "",
-      role: "", 
+      ticket: 0,
+      win: 0,
+      role: "",
     });
-
     setEditId(null);
   };
 
-  // Handle input field change
+  // Handle form input changes with validation for phone, ticket, and win
   const onInputChange = (e) => {
     const { name, value } = e.target;
+
+    if (name === "phone") {
+      const digitsOnly = value.replace(/\D/g, "");
+      if (digitsOnly.length > 10) return;
+      setEditData((prev) => ({ ...prev, [name]: digitsOnly }));
+      return;
+    }
+
+    if (name === "ticket" || name === "win") {
+      if (value === "") {
+        setEditData((prev) => ({ ...prev, [name]: "" }));
+        return;
+      }
+      const num = Number(value);
+      if (num < 0) return;
+      if (!Number.isNaN(num)) {
+        setEditData((prev) => ({ ...prev, [name]: num }));
+      }
+      return;
+    }
+
     setEditData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Submit add or update
-  // const onConfirmEdit = async () => {
-  //   try {
-  //     if (editId === null) { 
-
-  //       await dispatch(signupUser(editData)).unwrap();
-  //       toast.success("Client added successfully!");
-  //       // As createUser thunk is not provided, you can implement similarly
-  //     } else {
-  //       ;
-  //       await dispatch(UpdateProfile({ id: editId, userData: editData })).unwrap();
-
-  //       toast.success("Client updated successfully!");
-  //     }
-  //     onCancelEdit();
-  //     dispatch(getAllProfile());
-  //     console.log(user)
-  //   } catch (err) {
-  //     toast("Failed to save: " + err.message);
-  //   }
-  // };
-
+  // Confirm add or update client
   const onConfirmEdit = async () => {
-  try {
-    if (editId === null) {
-      await dispatch(signupUser(editData)).unwrap();
-      toast.success("Client added successfully!");
-    } else {
-      await dispatch(UpdateProfile({ id: editId, userData: editData })).unwrap();
-      console.log("Update confirmed1")
-      toast.success("Client updated successfully!");
-      console.log("Update confirmed2")
+    try {
+      // Ensure win is set to 0 if empty
+      if (editData.win === "") {
+        editData.win = 0;
+      }
+      if (editId === null) {
+        await dispatch(signupUser(editData)).unwrap();
+        toast.success("Client added successfully!");
+      } else {
+        await dispatch(UpdateProfile({ id: editId, userData: editData })).unwrap();
+        toast.success("Client updated successfully!");
+      }
+      onCancelEdit();
+      dispatch(getAllProfile());
+    } catch (err) {
+      toast.error("Failed to save: " + err.message);
     }
-    console.log("Update confirmed..."); // Add this
-    onCancelEdit();
-    dispatch(getAllProfile());
-  } catch (err) {
-    toast.error("Failed to save: " + err.message);
-  }
-};
+  };
 
-  // Open delete modal
+  // Delete handlers
   const onDelete = (client) => {
     setDeleteId(client._id);
     setIsDeleteModalOpen(true);
   };
-
-  // Cancel delete modal
   const cancelDelete = () => {
     setDeleteId(null);
     setIsDeleteModalOpen(false);
   };
-
-  // Confirm delete
   const confirmDelete = async () => {
     try {
       await dispatch(deleteUser(deleteId)).unwrap();
@@ -176,20 +202,34 @@ export default function Client() {
         <LeftsideNavbar user={user} />
         <main className="flex flex-col md:px-10 px-4 py-8 bg-blue-50 min-h-0 w-full">
           <h1 className="text-xl md:text-3xl font-bold text-black mb-6">Client Information</h1>
+          <div className="flex-col md:flex-row justify-between items-center mb-5 ">
+            <div
+              className="flex justify-start items-center px-5 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 md:max-w-36 max-w-32 mb-2 gap-1 cursor-pointer order-2 md:order-none"
+              onClick={onAddNew}
+            >
+              <IoIosAddCircleOutline className="w-5 h-5" />
+              <span className="text-sm md:text-base">Add Field</span>
+            </div>
 
-          <div
-            className="flex justify-start items-center px-5 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 md:max-w-36 max-w-32 mb-2 gap-1 cursor-pointer"
-            onClick={onAddNew}
-          >
-            <IoIosAddCircleOutline className="w-5 h-5" />
-            <span className="text-sm md:text-base">Add Field</span>
+            <div className="flex justify-end items-center gap-2 order-1 md:order-none">
+              <input
+                type="text"
+                placeholder="Phone or Email"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                className="border border-gray-300 rounded-md md:w-60 w-full h-8 p-2"
+              />
+              <button className="">
+                <Search className="w-5 h-5 hover:text-blue-500" />
+              </button>
+            </div>
           </div>
 
-          {loading ? (
+          {isLoading ? (
             <p>Loading clients...</p>
-          ) : error ? (
-            <p className="text-red-600">Error: {error}</p>
-          ) : clientUsers.length === 0 ? (
+          ) : errorMessage ? (
+            <p className="text-red-600">Error: {errorMessage}</p>
+          ) : displayedClients.length === 0 ? (
             <p>No data</p>
           ) : (
             <div className="w-full overflow-x-auto">
@@ -201,19 +241,21 @@ export default function Client() {
                     <th className="p-3 text-left">Phone No.</th>
                     <th className="p-3 text-left">Address</th>
                     <th className="p-3 text-left">Tickets</th>
+                    <th className="p-3 text-left">Win</th> {/* Added Win header */}
                     <th className="p-3 text-left">Role</th>
                     <th className="p-3 text-left">Edit</th>
                     <th className="p-3 text-left">Delete</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {clientUsers.map((c) => (
+                  {displayedClients.map((c) => (
                     <tr key={c._id} className="border-t hover:bg-gray-50">
                       <td className="md:p-3 p-2">{c.fullName}</td>
                       <td className="md:p-3 p-2">{c.email}</td>
                       <td className="md:p-3 p-2">{c.phone}</td>
                       <td className="md:p-3 p-2">{c.address}</td>
                       <td className="md:p-3 p-2">{c.ticket}</td>
+                      <td className="md:p-3 p-2">{c.win ?? 0}</td> {/* Show Win or 0 */}
                       <td className="md:p-3 p-2">{c.role}</td>
 
                       <td className="p-3 space-x-1">
@@ -260,8 +302,7 @@ export default function Client() {
                   }}
                   className="space-y-4"
                 >
-                  {/* Auto-generated input fields */}
-                  {["fullName", "email", "phone", "address", "ticket"].map((field) => (
+                  {["fullName", "email", "phone", "address", "ticket", "win"].map((field) => (
                     <div key={field}>
                       <label className="block mb-1 font-medium">
                         {field.charAt(0).toUpperCase() + field.slice(1)}
@@ -271,13 +312,13 @@ export default function Client() {
                         type={
                           field === "email"
                             ? "email"
-                            : field === "ticket"
-                              ? "number"
-                              : "text"
+                            : field === "ticket" || field === "win"
+                            ? "number"
+                            : "text"
                         }
                         value={editData[field]}
                         onChange={onInputChange}
-                        min={field === "tickets" ? 0 : undefined}
+                        min={field === "ticket" || field === "win" ? 0 : undefined}
                         className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
                       />
                     </div>
@@ -295,7 +336,6 @@ export default function Client() {
                     </div>
                   )}
 
-                  {/* ✅ Add this Role Select field here */}
                   <div>
                     <label className="block mb-1 font-medium">Role</label>
                     <select
@@ -312,7 +352,6 @@ export default function Client() {
                     </select>
                   </div>
 
-                  {/* Submit / Cancel buttons */}
                   <div className="flex justify-end space-x-3">
                     <button
                       type="submit"
@@ -329,7 +368,6 @@ export default function Client() {
                     </button>
                   </div>
                 </form>
-
               </div>
             </div>
           )}

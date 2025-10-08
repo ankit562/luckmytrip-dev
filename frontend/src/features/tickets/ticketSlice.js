@@ -11,9 +11,9 @@ import {
 export const fetchTickets = createAsyncThunk(
     'tickets/fetchTickets',
     async () => {
-        const res = await listTickets();
-        console.log('fetchTickets response data:', res.data);  // log response data
+        const res = await listTickets();  
         return res.data;
+          // log response data
     }
 );
 

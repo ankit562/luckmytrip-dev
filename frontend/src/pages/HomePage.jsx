@@ -1,72 +1,9 @@
-import React, { useState, useRef } from "react";
-import logo from "../../public/images/luckmytrip-logo.png";
-import confetti from "../../public/images/gold-confetti.png";
-import globe from "../../public/images/Header-Globe.png";
-import girl from "../../public/images/Home-page-Girl.png";
-import shanghai from "../../public/images/shanghai-urban-architecture-1.png";
-import poolWoman from "../../public/images/portrait-beautiful-young-asian-woman-relaxing-around-outdoor-swimming-pool-with-city-view.jpg";
-import jackpot from "../../public/images/jackpot.png";
-import dubaiWoman from "../../public/images/portrait-woman-visiting-luxurious-city-dubai-2.png";
-import spinToWin from "../../public/images/Spin-to-win.png";
-import bardiaAdibi from "../../public/images/bardia-adibi.jpg";
+import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { OfferCard } from "../components/TripDetailsComponents";
+import { fetchTickets } from '../features/tickets/ticketSlice'
+import { useDispatch, useSelector } from 'react-redux'
 
-const offers = [
-  {
-    id: 1,
-    title: "Beach Getaway",
-    description: "Relax at a luxury beach resort for 7 nights!",
-    status: "Active",
-    createdAt: new Date(),
-    image: poolWoman,
-    category: "offers",
-  },
-  {
-    id: 2,
-    title: "Mountain Adventure",
-    description: "Escape to the mountains for trekking & fun.",
-    status: "Upcoming",
-    createdAt: new Date(),
-    image: poolWoman,
-    category: "offers",
-  },
-  {
-    id: 3,
-    title: "City Lights",
-    description: "Explore world-famous cities in style.",
-    status: "Closed",
-    createdAt: new Date(),
-    image: poolWoman,
-    category: "offers",
-  },
-    {
-    id: 4,
-    title: "City Lights",
-    description: "Explore world-famous cities in style.",
-    status: "Closed",
-    createdAt: new Date(),
-    image: poolWoman,
-    category: "offers",
-  },
-    {
-    id: 5,
-    title: "City Lights",
-    description: "Explore world-famous cities in style.",
-    status: "Closed",
-    createdAt: new Date(),
-    image: poolWoman,
-    category: "offers",
-  },
-    {
-    id: 6,
-    title: "City Lights",
-    description: "Explore world-famous cities in style.",
-    status: "Closed",
-    createdAt: new Date(),
-    image: poolWoman,
-    category: "offers",
-  },
-];
 
 const jackpotData = {
   id: "jackpot-id",
@@ -84,83 +21,85 @@ const testimonials = [
     name: "Bardia Adibi",
     country: "India",
     text: "I still can't believe I won! The Dubai trip exceeded all my expectations...",
-    img: bardiaAdibi,
+    img: "/images/bardia-adibi.jpg",
   },
   {
     id: "content2",
     name: "Amit Sharma",
     country: "India",
     text: "A fantastic experience from start to finish. Highly recommended!",
-    img: bardiaAdibi,
+    img: "/images/bardia-adibi.jpg",
   },
   {
     id: "content3",
     name: "Pooja Rani",
     country: "India",
     text: "The trip was a dream. Everything was perfectly organized. Thank you!",
-    img: bardiaAdibi,
+    img: "/images/bardia-adibi.jpg",
   },
+
 ];
 
 const HomePage = () => {
-  const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const [isRegisterOpen, setIsRegisterOpen] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
+
+  const dispatch = useDispatch();
+
+
+  useEffect(() => {
+    dispatch(fetchTickets());
+  }, [dispatch]);
+
+
+  const { tickets, loading, error } = useSelector((state) => state.tickets);
+
   const [activeTestimonial, setActiveTestimonial] = useState("content1");
+
   const [menuOpen, setMenuOpen] = useState(false);
+
+
+
+
   const sliderTrackRef = useRef(null);
-
-  const openLogin = () => setIsLoginOpen(true);
-  const closeLogin = () => setIsLoginOpen(false);
-  const openRegister = () => setIsRegisterOpen(true);
-  const closeRegister = () => setIsRegisterOpen(false);
-
-  const handleLoginFormSubmit = (e) => {
-    e.preventDefault();
-    alert(`Logged in as: ${e.target.loginEmail.value}`);
-    closeLogin();
-  };
-
-  const handleRegisterFormSubmit = (e) => {
-    e.preventDefault();
-    alert(
-      `Registered successfully:\nName: ${e.target.name.value}\nEmail: ${e.target.email.value}`
-    );
-    closeRegister();
-  };
-
   const slideJourney = (direction) => {
-    if (sliderTrackRef.current) {
-      const slideWidth =
-        sliderTrackRef.current.querySelector(".slide").offsetWidth + 40;
-      sliderTrackRef.current.scrollBy({
-        left: direction * slideWidth,
-        behavior: "smooth",
-      });
-    }
+    if (!sliderTrackRef.current) return;
+    const cardWidth = 550 + 40; 
+    sliderTrackRef.current.scrollBy({
+      left: direction * cardWidth,
+      behavior: 'smooth',
+    });
   };
+
 
   return (
     <div className="bg-gradient-to-b from-blue-100 to-blue-10 min-h-screen">
+
+      {/* navbar */}
       <nav className="w-full p-4">
         <div className="container mx-auto flex items-center justify-between uppercase">
-          <div className="text-xl font-bold">
-            <img src={logo} alt="Luckymytrip Logo" className="w-24 sm:w-28" />
+
+          <img src={'/images/luckmytrip-logo.png'} alt="Luckymytrip Logo" className="w-24 sm:w-28" />
+
+          <div className="flex items-center space-x-4">
+            <ul className="hidden md:flex space-x-6 lg:space-x-12 font-semibold">
+              <li><Link className="active" to="/">Home</Link></li>
+              <li><Link to="/explore">Explore</Link></li>
+              <li><Link to="/tickets">Tickets</Link></li>
+              <li><Link to="/contact">Contact</Link></li>
+            </ul>
           </div>
-          <ul className="hidden md:flex space-x-6 lg:space-x-12 font-semibold">
-            <li><Link className="active" to="/">Home</Link></li>
-            <li><Link to="/explore">Explore</Link></li>
-            <li><Link to="/tickets">Tickets</Link></li>
-            <li><Link to="/contact">Contact</Link></li>
-          </ul>
+
           <div className="flex space-x-4 font-semibold items-center">
-            <button onClick={openLogin} className="hidden md:block">Login</button>
-            <a href="#" onClick={(e) => { e.preventDefault(); openRegister(); }} className="hidden md:block text-blue-600 hover:underline text-lg font-semibold">Register</a>
+            <Link href={"/login"} className="hidden md:block hover:underline">Login</Link>
+
+            <Link href="/signup" className="hidden md:block hover:underline text-lg font-semibold
+              bg-red-500 text-white px-4 py-2 rounded-md">Register</Link>
+
             <button className="md:hidden text-2xl focus:outline-none" onClick={() => setMenuOpen(!menuOpen)}>
               {menuOpen ? "✖" : "☰"}
             </button>
           </div>
         </div>
+
         {menuOpen && (
           <div className="md:hidden mt-2 bg-white shadow-md rounded-md p-4 space-y-4 font-semibold flex flex-col">
             <Link to="/" onClick={() => setMenuOpen(false)} className="block">Home</Link>
@@ -177,66 +116,94 @@ const HomePage = () => {
         )}
       </nav>
       {/* Hero */}
-      <section className="py-4 relative overflow-hidden">
-        <div className="container mx-auto px-4 relative z-10">
-          <h1 className="text-center text-4xl md:text-7xl font-bold mb-12">
+      <section className="py-4 relative overflow-hidden md:mb-4 ">
+        <div className="container mx-auto px-4 relative z-10 mb-20">
+          <h1 className="text-center text-2xl md:text-7xl  font-bold mb-12">
             <span className="text-red-500">WIN</span>
             <span className="text-blue-900">&nbsp;YOUR DREAM&nbsp;</span>
             <span className="text-red-500">TRIP</span>
           </h1>
-          <div className="flex flex-col md:flex-row justify-center items-center relative mt-12 pt-12">
+          <div className="flex flex-col md:flex-row justify-center items-center relative mt-16 md:pt-12 pt-6">
             <div className="relative mx-auto max-h-[28rem] z-20">
               <div className="absolute inset-0 z-10 h-84 pointer-events-none overflow-hidden">
-                <img src={confetti} alt="Celebration confetti" className="w-full h-84 object-cover opacity-80" />
+                <img src={"/images/gold-confetti.png"} alt="Celebration confetti" className="w-full h-84 object-cover opacity-80" />
               </div>
-              <img src={globe} alt="Travel Map" className="rounded-full mx-auto absolute" />
-              <img src={girl} alt="Person with arms spread" className="relative transform translate-y-1/4 z-10" />
-              <div className="absolute w-32 h-42 md:w-64 top-1/2 left-14 md:left-32 transform -translate-x-1/2 bg-white rounded-lg shadow-lg p-2 z-30">
-                <img src={shanghai} alt="Baku" className="rounded-lg w-32 h-42 md:w-64 object-cover" />
+              <img src={"/images/Header-Globe.png"} alt="Travel Map" className="rounded-full mx-auto absolute" />
+              <img src={"/images/Home-page-Girl.png"} alt="Person with arms spread" className="relative transform translate-y-[10%] z-40" />
+
+              <div className="absolute w-32 h-42 md:w-64 top-[27%] left-14 md:left-32 transform -translate-x-1/2 bg-white rounded-lg shadow-lg p-2 z-30">
+                <img src={"/images/shanghai-urban-architecture-1.png"} alt="Baku" className="rounded-lg w-32 h-42 md:w-64 object-cover" />
                 <div className="text-red-500 text-center font-bold py-1">BAKU</div>
               </div>
-              <div className="absolute w-32 h-42 md:w-64 bottom-3/4 right-1/3 transform translate-x-1/2 bg-white rounded-lg shadow-lg p-2 z-30">
-                <img src={shanghai} alt="Dubai" className="rounded-lg w-32 h-42 md:w-64 object-cover" />
+
+              <div className="absolute w-32 h-42 md:w-64 bottom-[70%] right-1/3 transform translate-x-1/2 bg-white rounded-lg shadow-lg p-2 z-30">
+                <img src={"/images/shanghai-urban-architecture-1.png"} alt="Dubai" className="rounded-lg w-32 h-42 md:w-64 object-cover" />
                 <div className="text-green-500 text-center font-bold py-1">DUBAI</div>
               </div>
-              <div className="absolute w-32 h-42 md:w-64 top-1/2 right-20 md:right-48 translate-x-3/4 translate-y-1/4 bg-white rounded-lg shadow-lg p-2 z-30">
-                <img src={shanghai} alt="Thailand" className="rounded-lg w-32 h-42 md:w-64 object-cover" />
+
+              <div className="absolute w-32 h-42 md:w-64 top-[55%] right-20 md:right-48 translate-x-3/4 translate-y-1/4 bg-white rounded-lg shadow-lg p-2 z-30">
+                <img src={"/images/shanghai-urban-architecture-1.png"} alt="Thailand" className="rounded-lg w-32 h-42 md:w-64 object-cover" />
                 <div className="text-yellow-500 text-center font-bold py-1">THAILAND</div>
               </div>
             </div>
           </div>
         </div>
       </section>
-      {/* Offers Carousel */}
-      <section className="py-4 bg-[#E9F2FF]">
-        <div className="relative">
-          <div ref={sliderTrackRef} className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth px-8 gap-10" style={{ scrollbarWidth: 'none' }}>
-            {offers.map(item => (
-              <div key={item.id} className="slide snap-center flex-shrink-0 w-[500px]  grid lg:grid-3 md:grid-2 grid-1 rounded-lg shadow-lg relative text-white overflow-hidden">
-                <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-black bg-opacity-40"></div>
-                <div className="absolute inset-0 p-4 flex flex-col justify-between">
-                  <div>
-                    <span className="text-xs bg-red-500 text-white font-bold py-1 px-2 rounded-full uppercase">{item.category}</span>
-                    <h3 className="text-3xl font-bold mt-2">{item.title}</h3>
-                    <p className="text-sm mt-1">{item.description}</p>
-                  </div>
-                  <div className="text-xs text-right">
-                    <p>Status: {item.status}</p>
-                    <p>Created: {item.createdAt.toLocaleDateString()}</p>
-                  </div>
-                </div>
+
+      {/* Journey */}
+      <section className="py-4 bg-[#E9F2FF] relative">
+        <div className="relative max-w-[90vw] mx-auto">
+          <div className="text-center mb-12">
+            <h1 className="text-5xl font-extrabold mb-4 text-red-500">Start Your Journey</h1>
+            <p className="text-xl font-medium">Get ready for the adventure of a lifetime!</p>
+          </div>
+
+          {/* Loading and error states */}
+          {loading && <div>Loading offers...</div>}
+          {error && <div className="text-red-600">Error: {error}</div>}
+
+          <div
+            ref={sliderTrackRef}
+            className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth md:px-8 px-1 gap-10 w-full max-w-full"
+            style={{ scrollbarWidth: 'none' }}
+          >
+            {(tickets || []).map(item => (
+              <div key={item._id} className="slide snap-center flex-shrink-0 w-[550px]">
+                <OfferCard
+                  mainImage={item.image}
+                  shadeImage={"/images/shade.png"}
+                  mainText="WIN"
+                  location={item.name}
+                  subtitle={item.description}
+                  price={item.price}
+                  currency={item.currency}
+                  fromLocation={item.fromLocation}
+                  drawDate={new Date(item.date).toLocaleDateString()}   //new Date(date).toLocaleDateString()
+                  totalTickets={item.ticket}
+                  
+                />
               </div>
             ))}
           </div>
-          <div className="absolute top-1/2 -translate-y-1/2 w-full flex justify-between px-2">
-            <button onClick={() => slideJourney(-1)} className="slider-btn prev bg-white/50 hover:bg-white rounded-full w-10 h-10 text-2xl">‹</button>
-            <button onClick={() => slideJourney(1)} className="slider-btn next bg-white/50 hover:bg-white rounded-full w-10 h-10 text-2xl">›</button>
-          </div>
+          <button
+            onClick={() => slideJourney(-1)}
+            className="absolute md:top-[60%] top-[65%] md:left-7 left-0 -translate-y-1/2 z-40 bg-white/50 hover:bg-white rounded-full w-10 h-10 text-2xl"
+            aria-label="Previous Slide"
+          >
+            ‹
+          </button>
+          <button
+            onClick={() => slideJourney(1)}
+            className="absolute top-[65%] md:top-[60%] right-0 -translate-y-1/2 z-40 bg-white/50 hover:bg-white rounded-full w-10 h-10 text-2xl"
+            aria-label="Next Slide"
+          >
+            ›
+          </button>
         </div>
       </section>
+
       {/* Jackpot CTA */}
-      <section className="py-8 relative overflow-hidden">
+      <section className="py-8 relative overflow-hidden bg-[#E9F2FF]">
         <div className="container mx-auto px-4 relative z-10">
           <div className="mb-12">
             <p className="text-4xl text-center font-bold py-2">
@@ -250,7 +217,7 @@ const HomePage = () => {
             <div className="hero-container bg-blue-900 rounded-lg flex flex-col md:flex-row items-center justify-between overflow-hidden relative">
               <div className="hero-text px-8 md:px-16 z-10 py-8">
                 <img
-                  src={jackpot}
+                  src={"/images/Jackpot.png"}
                   alt="Jackpot Logo"
                   className="w-48 mb-4"
                 />
@@ -263,7 +230,7 @@ const HomePage = () => {
                 </button>
               </div>
               <img
-                src={dubaiWoman}
+                src={"/images/portrait-woman-visiting-luxurious-city-dubai-2.png"}
                 alt={jackpotData.title}
                 className="relative md:bottom-0 md:right-0 max-h-96 lady-image"
               />
@@ -271,30 +238,57 @@ const HomePage = () => {
           </div>
         </div>
       </section>
+
       {/* Testimonials */}
-      <section id="testimonials" className="py-8">
+      <section id="testimonials" className="py-8 bg-[#E9F2FF]">
         <div className="container mx-auto px-4">
-          <h2 className="text-2xl sm:text-3xl md:text-6xl text-red-500 text-center mb-5 py-8 font-semibold">Feedback From Our Prize Winners</h2>
-          <div className="flex flex-col items-center flex-wrap justify-evenly md:flex-row gap-6 md:gap-8">
-            <div className="grid grid-cols-3 gap-4">
-              {testimonials.map(t => (
-                <div key={t.id} className={`w-24 h-24 rounded-lg overflow-hidden cursor-pointer border-4 transition-all ${activeTestimonial === t.id ? 'border-blue-500 scale-110' : 'border-transparent'}`} onClick={() => setActiveTestimonial(t.id)}>
-                  <img src={t.img} alt={t.name} className="w-full h-full object-cover" />
+          <h2 className="text-2xl sm:text-3xl md:text-6xl text-red-500 text-center mb-5 py-8 font-semibold">
+            Feedback From Our Prize Winners
+          </h2>
+
+          <div className="flex flex-col items-center flex-wrap justify-center md:flex-row gap-3 md:gap-8">
+
+
+            <div className="grid grid-cols-3 gap-2">
+              {testimonials.map((t) => (
+                <div
+                  key={t.id}
+                  className={`w-24 h-24 rounded-lg overflow-hidden cursor-pointer border-4 transition-all ${activeTestimonial === t.id
+                    ? "border-blue-500 scale-110"
+                    : "border-transparent"
+                    }`}
+                  onClick={() => setActiveTestimonial(t.id)}
+                >
+                  <img
+                    src={t.img}
+                    alt={t.name}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover"
+                    width="96"
+                    height="96"
+                  />
                 </div>
               ))}
             </div>
-            <div className="bg-gray-50 p-6 md:p-8 rounded-lg min-h-[150px] relative">
-              {testimonials.map(t => (
-                <div key={t.id} className={`transition-opacity duration-300 ${activeTestimonial === t.id ? 'opacity-100' : 'opacity-0 absolute'}`}>
-                  <h4 className="font-bold text-lg sm:text-xl md:text-2xl">{t.name}</h4>
-                  <p className="text-gray-500 text-sm sm:text-base">{t.country}</p>
-                  <p className="text-justify mt-2 text-sm sm:text-base md:text-lg">{t.text}</p>
-                </div>
-              ))}
+
+            {/* ✅ Render only active testimonial (not all) */}
+            <div className=" p-6 md:p-8 rounded-lg min-h-[150px] relative w-full md:w-[40%] ">
+              {testimonials
+                .filter((t) => t.id === activeTestimonial)
+                .map((t) => (
+                  <div key={t.id} className="transition-opacity duration-300 opacity-100 bg-[#E9F2FF] p-4">
+                    <h4 className="font-bold text-lg sm:text-xl md:text-2xl">{t.name}</h4>
+                    <p className="text-gray-500 text-sm sm:text-base">{t.country}</p>
+                    <p className="text-justify mt-2 text-sm sm:text-base md:text-lg">{t.text}</p>
+                  </div>
+                ))}
             </div>
           </div>
         </div>
       </section>
+
+
       {/* Spin Luck */}
       <section className="md:py-8 py-4 min-h-96 ">
         <div className="container md:mx-auto  md:px-16 px-5 flex flex-col md:flex-row justify-start md:justify-center items-center ">
@@ -314,14 +308,22 @@ const HomePage = () => {
             </div>
           </div>
           <div className="relative mt-8 md:mt-0 flex justify-center items-center ">
-            <img src={spinToWin} alt="Gift Box" className="mx-auto lg:max-h-[30rem] md:max-h-[25rem] w-full " />
+            <img
+              src="/images/Spin-to-win.webp"
+              alt="Gift Box"
+              loading="lazy"
+              width="480"
+              height="480"
+              className="mx-auto lg:max-h-[30rem] md:max-h-[25rem] w-full object-contain"
+            />
           </div>
         </div>
       </section>
+
       {/* Footer */}
       <footer className="py-8 bg-[#E9F2FF]">
         <div className="container mx-auto px-4 flex justify-center flex-col items-center">
-          <div><img src={logo} alt="Logo" className="w-28" /></div>
+          <div><img src={'/images/luckmytrip-logo.png'} alt="Logo" className="w-28" /></div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 text-xl text-black">
             <div>
               <ul className="space-y-2">
@@ -360,57 +362,7 @@ const HomePage = () => {
           </p>
         </div>
       </footer>
-      {/* LOGIN MODAL */}
-      {isLoginOpen && (
-        <>
-          <div className="fixed inset-0 bg-black bg-opacity-50 z-40" onClick={closeLogin}></div>
-          <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
-            <div className="bg-white w-full max-w-md p-8 rounded-2xl shadow-xl">
-              <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">Welcome Back</h2>
-              <form onSubmit={handleLoginFormSubmit} className="space-y-4">
-                <div>
-                  <label className="block text-gray-700 mb-1">Email</label>
-                  <input type="email" id="loginEmail" className="w-full px-4 py-2 border border-gray-300 rounded-lg" required />
-                </div>
-                <div className="relative">
-                  <label className="block text-gray-700 mb-1">Password</label>
-                  <input type={showPassword ? 'text' : 'password'} id="loginPassword" className="w-full px-4 py-2 border border-gray-300 rounded-lg" required />
-                  <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-9 text-sm text-gray-500">{showPassword ? 'Hide' : 'Show'}</button>
-                </div>
-                <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg">Login</button>
-              </form>
-              <button onClick={closeLogin} className="mt-4 text-sm text-gray-500 w-full text-center">Cancel</button>
-            </div>
-          </div>
-        </>
-      )}
-      {/* REGISTER MODAL */}
-      {isRegisterOpen && (
-        <>
-          <div className="fixed inset-0 bg-black bg-opacity-50 z-40" onClick={closeRegister}></div>
-          <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
-            <div className="bg-white w-full max-w-md p-8 rounded-2xl shadow-xl">
-              <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">Create an Account</h2>
-              <form onSubmit={handleRegisterFormSubmit} className="space-y-4">
-                <div>
-                  <label className="block text-gray-700 mb-1">Full Name</label>
-                  <input type="text" id="name" className="w-full px-4 py-2 border border-gray-300 rounded-lg" required />
-                </div>
-                <div>
-                  <label className="block text-gray-700 mb-1">Email</label>
-                  <input type="email" id="email" className="w-full px-4 py-2 border border-gray-300 rounded-lg" required />
-                </div>
-                <div>
-                  <label className="block text-gray-700 mb-1">Password</label>
-                  <input type="password" id="password" className="w-full px-4 py-2 border border-gray-300 rounded-lg" required />
-                </div>
-                <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg">Register</button>
-              </form>
-              <button onClick={closeRegister} className="mt-4 text-sm text-gray-500 w-full text-center">Cancel</button>
-            </div>
-          </div>
-        </>
-      )}
+
     </div>
   );
 };

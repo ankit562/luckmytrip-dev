@@ -38,7 +38,7 @@ const Home = () => {
     closeLogin();
   };
   const jackpotData = content.find(data => data.category == "jackpot")
-  console.log(jackpotData, "-------------------------------")
+  
   const handleRegisterFormSubmit = (e) => {
     e.preventDefault();
     alert(`Registered successfully:\nName: ${e.target.name.value}\nEmail: ${e.target.email.value}`);

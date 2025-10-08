@@ -18,7 +18,7 @@ export const logoutUser = createAsyncThunk('auth/logoutUser', async () => {
 
 export const fetchProfile = createAsyncThunk('auth/fetchProfile', async () => {
   const response = await authAPI.getProfile();
-  return response.data; 
+  return response.data;
 });
 
 export const verifyOtpUser = createAsyncThunk('auth/verifyOtpUser', async (otpData) => {
@@ -40,6 +40,11 @@ export const UpdateProfile = createAsyncThunk('auth/UpdateProfile', async ({ id,
   const response = await authAPI.UpdateProfile(id, userData);
   return response.data;
 });
+export const searchUser = createAsyncThunk('auth/searchUser', async (query) => {
+  const response = await authAPI.searchUser(query);
+  return response.data;
+});
+
 
 const authSlice = createSlice({
   name: 'auth',
@@ -50,6 +55,9 @@ const authSlice = createSlice({
     error: null,
     isAuthenticated: false,
     isInitialized: false,
+    searchLoading: false,
+    searchError: null,
+    searchResult: null,
   },
   reducers: {
     clearError(state) {
@@ -153,9 +161,20 @@ const authSlice = createSlice({
       })
       .addCase(UpdateProfile.rejected, (state) => {
         state.loading = false;
-      })  
+      })
+      .addCase(searchUser.pending, (state) => {
+        state.searchLoading = true;
+        state.searchError = null;
+      })
+      .addCase(searchUser.fulfilled, (state, action) => {
+        state.searchLoading = false;
+        state.searchResult = action.payload;
+      })
+      .addCase(searchUser.rejected, (state, action) => {
+        state.searchLoading = false;
+        state.searchError = action.error.message;
+      })
   }
-
 });
 
 export const { clearError } = authSlice.actions;

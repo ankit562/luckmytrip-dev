@@ -34,6 +34,11 @@ const clientSchema = new mongoose.Schema({
     enum: ['client', 'admin', 'content-creator', 'superadmin'],
     default: 'client',
   },
+  win:{
+      type:Number,
+      required:false,
+      default:0
+  },
   socialLogins: {
     facebook: { id: String, token: String },
     gmail: { id: String, token: String },

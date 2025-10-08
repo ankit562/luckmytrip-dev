@@ -41,7 +41,7 @@ const LeftsideNavbar = ({user}) => {
     };
     return (
         <>
-            <nav className=" bg-white shodow-lg w-auto min-h-full  flex-col  sidebar-responsive px-2 hidden md:flex">
+            <nav className=" bg-white shodow-lg w-80 min-h-full  flex-col  sidebar-responsive px-2 hidden md:flex">
                 <div className='flex items-center px-5 py-2  font-semibold text-lg  '>
                     <MenuIcon className='w-5 h-5 mr-2' />
                     <span>Navigation</span>
@@ -72,20 +72,20 @@ const LeftsideNavbar = ({user}) => {
                         <div className={`gap-2 flex items-center justify-start  px-6 rounded-lg mt-1
             ${pagesOpen === "home" ? "bg-blue-200 font-semibold" : ""}`}
                             onClick={() => handlePages("home")}>
-                            <Home className="w-5 h-5" />
+                            <ChevronRight className="w-5 h-5" />
                             <button className={`text-left  py-2 `}> Home</button>
                         </div>
                         {pagesOpen === "home" && (
                             <div className="flex flex-col  border-gray-100">
-                                <div className="flex items-center justify-start py-1 px-6">
-                                    <ChevronRight className="w-5 h-5" />
+                                <div className="flex items-center justify-start py-1 px-8">
+                                    <ChevronRight className="w-5 h-5 " />
                                     <button className="text-left px-4 py-2 "><Link to={'/home/journey'}>Journey</Link></button>
                                 </div >
-                                <div className="flex items-center justify-start py-1 px-6">
+                                <div className="flex items-center justify-start py-1 px-8">
                                     <ChevronRight className="w-5 h-5" />
                                     <button className="text-left px-4 py-2 "><Link to={'/home/jackpot'}>Jackpot</Link></button>
                                 </div>
-                                <div className="flex items-center justify-start py-1 px-6">
+                                <div className="flex items-center justify-start py-1 px-8">
                                     <ChevronRight className="w-5 h-5" />
                                     <button className="text-left px-4 py-2 "><Link to={'/home/spinluck'}>SpinLuck offers</Link></button>
                                 </div>
@@ -95,21 +95,21 @@ const LeftsideNavbar = ({user}) => {
                         <div className={`gap-2 flex items-center justify-start  px-6 rounded-lg 
             ${pagesOpen === "explore" ? "bg-blue-200 font-semibold" : ""}`}
                             onClick={() => handlePages("explore")}>
-                            <MdOutlineExplore className="w-5 h-5" />
+                            <ChevronRight className="w-5 h-5" />
                             <button className={`text-left  py-2 `}>Explore</button>
                         </div>
 
                         {pagesOpen === "explore" && (
                             <div className="flex flex-col   border-gray-100">
-                                <div className="flex items-center justify-start py-1 px-6">
+                                <div className="flex items-center justify-start py-1 px-8">
                                     <ChevronRight className="w-5 h-5" />
                                     <button className="text-left px-4 py-2 "><Link to={'/explore/dreamtrip'}>DreamTrip Slide</Link></button>
                                 </div >
-                                <div className="flex items-center justify-start py-1 px-6">
+                                <div className="flex items-center justify-start py-1 px-8">
                                     <ChevronRight className="w-5 h-5" />
                                     <button className="text-left px-4 py-2 "><Link to={'/explore/tripinfo'}>TripInfo Slide</Link></button>
                                 </div>
-                                <div className="flex items-center justify-start py-1 px-6">
+                                <div className="flex items-center justify-start py-1 px-8">
                                     <ChevronRight className="w-5 h-5" />
                                     <button className="text-left px-4 py-2 "><Link to={'/explore/goldenwinner'}>Golden winner</Link></button>
                                 </div>
@@ -200,20 +200,20 @@ const LeftsideNavbar = ({user}) => {
                                 <div className={`gap-2 flex items-center justify-start  px-6 rounded-lg mt-1
             ${pagesOpen === "home" ? "bg-blue-200 font-semibold" : ""}`}
                                     onClick={() => handlePages("home")}>
-                                    <Home className="w-5 h-5" />
+                                    <ChevronRight className="w-5 h-5" />
                                     <button className={`text-left  py-2 `}> Home</button>
                                 </div>
                                 {pagesOpen === "home" && (
                                     <div className="flex flex-col  border-gray-100">
-                                        <div className="flex items-center justify-start py-1 px-6">
+                                        <div className="flex items-center justify-start py-1 px-8">
                                             <ChevronRight className="w-5 h-5" />
                                             <button className="text-left px-4 py-2 "><Link to={'/home/journey'}>Journey</Link></button>
                                         </div >
-                                        <div className="flex items-center justify-start py-1 px-6">
+                                        <div className="flex items-center justify-start py-1 px-8">
                                             <ChevronRight className="w-5 h-5" />
                                             <button className="text-left px-4 py-2 "><Link to={'/home/jackpot'}>Jackpot</Link></button>
                                         </div>
-                                        <div className="flex items-center justify-start py-1 px-6">
+                                        <div className="flex items-center justify-start py-1 px-8">
                                             <ChevronRight className="w-5 h-5" />
                                             <button className="text-left px-4 py-2 "><Link to={'/home/spinluck'}>SpinLuck offers</Link></button>
                                         </div>
@@ -223,21 +223,21 @@ const LeftsideNavbar = ({user}) => {
                                 <div className={`gap-2 flex items-center justify-start  px-6 rounded-lg 
             ${pagesOpen === "explore" ? "bg-blue-200 font-semibold" : ""}`}
                                     onClick={() => handlePages("explore")}>
-                                    <MdOutlineExplore className="w-5 h-5" />
+                                    <ChevronRight className="w-5 h-5" />
                                     <button className={`text-left  py-2 `}>Explore</button>
                                 </div>
 
                                 {pagesOpen === "explore" && (
                                     <div className="flex flex-col   border-gray-100">
-                                        <div className="flex items-center justify-start py-1 px-6">
+                                        <div className="flex items-center justify-start py-1 px-8">
                                             <ChevronRight className="w-5 h-5" />
                                             <button className="text-left px-4 py-2 "><Link to={'/explore/dreamtrip'}>DreamTrip Slide</Link></button>
                                         </div >
-                                        <div className="flex items-center justify-start py-1 px-6">
+                                        <div className="flex items-center justify-start py-1 px-8">
                                             <ChevronRight className="w-5 h-5" />
                                             <button className="text-left px-4 py-2 "><Link to={'/explore/tripinfo'}>TripInfo Slide</Link></button>
                                         </div>
-                                        <div className="flex items-center justify-start py-1 px-6">
+                                        <div className="flex items-center justify-start py-1 px-8">
                                             <ChevronRight className="w-5 h-5" />
                                             <button className="text-left px-4 py-2 "><Link to={'/explore/goldenwinner'}>Golden winner</Link></button>
                                         </div>

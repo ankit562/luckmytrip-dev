@@ -57,7 +57,7 @@ export const addTicket = async (req, res) => {
 
     res.status(201).json({ message: 'Ticket created successfully', ticket });
   } catch (error) {
-    console.error(error);
+    error(error);
     res.status(500).json({ error: 'Server error' });
   }
 };
