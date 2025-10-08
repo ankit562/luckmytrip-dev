@@ -137,11 +137,9 @@ const handleSubmit = (e) => {
 export default function Journey() {
   const dispatch = useDispatch();
 
-const { tickets = [], loading, error } = useSelector(state => state.tickets || {});
+const { tickets = [], loading, } = useSelector(state => state.tickets || {});
  const { user, isInitialized } = useSelector(state => state.auth);
-  console.log(tickets);
-
-
+ 
 
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [editModalData, setEditModalData] = useState(null);

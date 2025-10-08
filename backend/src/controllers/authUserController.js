@@ -35,7 +35,7 @@ const getModelByRole = (role) => {
 
 export const Register = async (req, res) => {
   try {
-    const { fullName, email, password, phone, role , address ,ticket } = req.body;
+    const { fullName, email, password, phone, role , address ,ticket  , win} = req.body;
     
     if (!(fullName && email && password && phone )) { // require role too
       return res.status(400).send("All inputs and role are required");
@@ -302,7 +302,7 @@ export const ForgotPassword = async (req, res) => {
 export const deleteUser = async (req, res) => {
   try {
     const { userId } = req.params;
-    console.log(userId)
+   
     if (!userId) return res.status(400).json({ message: "User ID is required" });
     
 
@@ -329,5 +329,23 @@ export const deleteUser = async (req, res) => {
     res.json({ message: "User deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: "Failed to delete user", error: error.message });
+  }
+};
+
+
+export const SearchUser = async (req, res) => {
+const { query } = req.query;
+  if (!query) return res.status(400).json({ error: "Missing query" });
+
+  try {
+    const users = await Client.aggregate([
+      { $match: { $or: [ { email: query }, { phone: query } ] } }
+      // Optionally $project or other stages
+    ]);
+    if (users.length === 0) return res.status(404).json({ error: "User not found" });
+    res.json(users[0]);
+  } catch (error) {
+    console.error("Search user error:", error);
+    res.status(500).json({ error: "Server error" });
   }
 };

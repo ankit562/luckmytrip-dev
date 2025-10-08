@@ -135,9 +135,7 @@ const handleSubmit = (e) => {
 export default function MyContentEmpty() {
   const dispatch = useDispatch();
 
-const { tickets = [], loading, error } = useSelector(state => state.tickets || {});
-  console.log(tickets);
-
+const { tickets = [], loading,  } = useSelector(state => state.tickets || {});
 
 
   const [createModalOpen, setCreateModalOpen] = useState(false);

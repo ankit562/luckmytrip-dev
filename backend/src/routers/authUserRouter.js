@@ -10,7 +10,8 @@ import {
   ForgotPassword,
   ForgotPasswordRequest,   
   GetAllUsers ,
-  deleteUser
+  deleteUser,
+  SearchUser
 } from '../controllers/authUserController.js';
 
 import { authMiddleware } from '../middleware/authUserMiddleware.js';
@@ -28,6 +29,8 @@ router.route("/update-profile/:id").patch(authMiddleware(), UpdateProfile);
 router.route("/update-password").patch(authMiddleware(), ForgotPassword);
 router.route("/forgot-password").post(ForgotPasswordRequest);
 router.route("/:userId").delete(authMiddleware(), deleteUser);
+router.route("/search-user").get(SearchUser);
+
 
 
 export default router;
