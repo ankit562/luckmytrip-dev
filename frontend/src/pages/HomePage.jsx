@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { OfferCard } from "../components/TripDetailsComponents";
 import { fetchTickets } from '../features/tickets/ticketSlice'
 import { useDispatch, useSelector } from 'react-redux'
+import Footer from "../components/commonComponent/Footer";
+import Header from "../components/commonComponent/Header";
 
 
 const jackpotData = {
@@ -54,10 +56,6 @@ const HomePage = () => {
 
   const [activeTestimonial, setActiveTestimonial] = useState("content1");
 
-  const [menuOpen, setMenuOpen] = useState(false);
-
-
-
 
   const sliderTrackRef = useRef(null);
   const slideJourney = (direction) => {
@@ -72,76 +70,34 @@ const HomePage = () => {
 
   return (
     <div className="bg-gradient-to-b from-blue-100 to-blue-10 min-h-screen">
-
-      {/* navbar */}
-      <nav className="w-full p-4">
-        <div className="container mx-auto flex items-center justify-between uppercase">
-
-          <img src={'/images/luckmytrip-logo.png'} alt="Luckymytrip Logo" className="w-24 sm:w-28" />
-
-          <div className="flex items-center space-x-4">
-            <ul className="hidden md:flex space-x-6 lg:space-x-12 font-semibold">
-              <li><Link className="active" to="/">Home</Link></li>
-              <li><Link to="/explore">Explore</Link></li>
-              <li><Link to="/tickets">Tickets</Link></li>
-              <li><Link to="/contact">Contact</Link></li>
-            </ul>
-          </div>
-
-          <div className="flex space-x-4 font-semibold items-center">
-            <Link href={"/login"} className="hidden md:block hover:underline">Login</Link>
-
-            <Link href="/signup" className="hidden md:block hover:underline text-lg font-semibold
-              bg-red-500 text-white px-4 py-2 rounded-md">Register</Link>
-
-            <button className="md:hidden text-2xl focus:outline-none" onClick={() => setMenuOpen(!menuOpen)}>
-              {menuOpen ? "✖" : "☰"}
-            </button>
-          </div>
-        </div>
-
-        {menuOpen && (
-          <div className="md:hidden mt-2 bg-white shadow-md rounded-md p-4 space-y-4 font-semibold flex flex-col">
-            <Link to="/" onClick={() => setMenuOpen(false)} className="block">Home</Link>
-            <Link to="/explore" onClick={() => setMenuOpen(false)} className="block">Explore</Link>
-            <Link to="/tickets" onClick={() => setMenuOpen(false)} className="block">Tickets</Link>
-            <Link to="/contact" onClick={() => setMenuOpen(false)} className="block">Contact</Link>
-            <div className="flex flex-col space-y-2 pt-2 border-t">
-              <button onClick={openLogin} className="w-full text-left">Login</button>
-              <a href="#" onClick={(e) => { e.preventDefault(); openRegister(); setMenuOpen(false); }} className="text-blue-600 hover:underline">
-                Register
-              </a>
-            </div>
-          </div>
-        )}
-      </nav>
-      {/* Hero */}
+      <Header/>
+      
       <section className="py-4 relative overflow-hidden md:mb-4 ">
         <div className="container mx-auto px-4 relative z-10 mb-20">
-          <h1 className="text-center text-2xl md:text-7xl  font-bold mb-12">
+          <h1 className="text-center text-[3rem] md:text-[7rem] font-bold mb-12 pb-22">
             <span className="text-red-500">WIN</span>
             <span className="text-blue-900">&nbsp;YOUR DREAM&nbsp;</span>
             <span className="text-red-500">TRIP</span>
           </h1>
-          <div className="flex flex-col md:flex-row justify-center items-center relative mt-16 md:pt-12 pt-6">
+          <div className="flex flex-col md:flex-row justify-center items-center relative mt-12 md:pt-12 pt-6">
             <div className="relative mx-auto max-h-[28rem] z-20">
               <div className="absolute inset-0 z-10 h-84 pointer-events-none overflow-hidden">
                 <img src={"/images/gold-confetti.png"} alt="Celebration confetti" className="w-full h-84 object-cover opacity-80" />
               </div>
               <img src={"/images/Header-Globe.png"} alt="Travel Map" className="rounded-full mx-auto absolute" />
-              <img src={"/images/Home-page-Girl.png"} alt="Person with arms spread" className="relative transform translate-y-[10%] z-40" />
+              <img src={"/images/Home-page-Girl.png"} alt="Person with arms spread" className=" relative lg:top-1 top-20 transform translate-y-[10%] z-40" />
 
-              <div className="absolute w-32 h-42 md:w-64 top-[27%] left-14 md:left-32 transform -translate-x-1/2 bg-white rounded-lg shadow-lg p-2 z-30">
+              <div className="absolute w-32 h-42 md:w-64 md:top-[27%] top-[40%] left-14 md:left-32 transform -translate-x-1/2 bg-white rounded-lg shadow-lg p-2 z-30">
                 <img src={"/images/shanghai-urban-architecture-1.png"} alt="Baku" className="rounded-lg w-32 h-42 md:w-64 object-cover" />
                 <div className="text-red-500 text-center font-bold py-1">BAKU</div>
               </div>
 
-              <div className="absolute w-32 h-42 md:w-64 bottom-[70%] right-1/3 transform translate-x-1/2 bg-white rounded-lg shadow-lg p-2 z-30">
+              <div className="absolute w-32 h-42 md:w-64 md:bottom-[70%]  bottom-[60%] right-1/3 transform translate-x-1/2 bg-white rounded-lg shadow-lg p-2 z-30">
                 <img src={"/images/shanghai-urban-architecture-1.png"} alt="Dubai" className="rounded-lg w-32 h-42 md:w-64 object-cover" />
                 <div className="text-green-500 text-center font-bold py-1">DUBAI</div>
               </div>
 
-              <div className="absolute w-32 h-42 md:w-64 top-[55%] right-20 md:right-48 translate-x-3/4 translate-y-1/4 bg-white rounded-lg shadow-lg p-2 z-30">
+              <div className="absolute w-32 h-42 md:w-64 top-[60%] md:top-[55%] right-20 md:right-48 translate-x-3/4 translate-y-1/4 bg-white rounded-lg shadow-lg p-2 z-30">
                 <img src={"/images/shanghai-urban-architecture-1.png"} alt="Thailand" className="rounded-lg w-32 h-42 md:w-64 object-cover" />
                 <div className="text-yellow-500 text-center font-bold py-1">THAILAND</div>
               </div>
@@ -153,9 +109,9 @@ const HomePage = () => {
       {/* Journey */}
       <section className="py-4 bg-[#E9F2FF] relative">
         <div className="relative max-w-[90vw] mx-auto">
-          <div className="text-center mb-12">
-            <h1 className="text-5xl font-extrabold mb-4 text-red-500">Start Your Journey</h1>
-            <p className="text-xl font-medium">Get ready for the adventure of a lifetime!</p>
+          <div className="text-center mb-10">
+            <h1 className="text-4xl md:text-5xl font-extrabold mb-4 text-red-500">Start Your Journey</h1>
+            <p className="text-base md:text-xl font-medium">Get ready for the adventure of a lifetime!</p>
           </div>
 
           {/* Loading and error states */}
@@ -215,7 +171,7 @@ const HomePage = () => {
               </button>
             </div>
             <div className="hero-container bg-blue-900 rounded-lg flex flex-col md:flex-row items-center justify-between overflow-hidden relative">
-              <div className="hero-text px-8 md:px-16 z-10 py-8">
+              <div className="hero-text px-8 md:px-16 z-10 md:py-8 py-2">
                 <img
                   src={"/images/Jackpot.png"}
                   alt="Jackpot Logo"
@@ -232,7 +188,8 @@ const HomePage = () => {
               <img
                 src={"/images/portrait-woman-visiting-luxurious-city-dubai-2.png"}
                 alt={jackpotData.title}
-                className="relative md:bottom-0 md:right-0 max-h-96 lady-image"
+                className="relative felx justify-end items-end bottom-0 lg:right-0  
+                md:right-6 right-0 lg:max-h-[390px] md:max-h-[425px] lady-image max-h-72"
               />
             </div>
           </div>
@@ -242,7 +199,7 @@ const HomePage = () => {
       {/* Testimonials */}
       <section id="testimonials" className="py-8 bg-[#E9F2FF]">
         <div className="container mx-auto px-4">
-          <h2 className="text-2xl sm:text-3xl md:text-6xl text-red-500 text-center mb-5 py-8 font-semibold">
+          <h2 className="text-4xl md:text-6xl text-red-500 text-center mb-5 py-8 font-semibold">
             Feedback From Our Prize Winners
           </h2>
 
@@ -288,7 +245,6 @@ const HomePage = () => {
         </div>
       </section>
 
-
       {/* Spin Luck */}
       <section className="md:py-8 py-4 min-h-96 ">
         <div className="container md:mx-auto  md:px-16 px-5 flex flex-col md:flex-row justify-start md:justify-center items-center ">
@@ -320,49 +276,7 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-8 bg-[#E9F2FF]">
-        <div className="container mx-auto px-4 flex justify-center flex-col items-center">
-          <div><img src={'/images/luckmytrip-logo.png'} alt="Logo" className="w-28" /></div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 text-xl text-black">
-            <div>
-              <ul className="space-y-2">
-                <li><Link to="/">Home</Link></li>
-                <li><Link to="/AboutUs">About Us</Link></li>
-                <li><Link to="/Howtoplay">How to Play</Link></li>
-                <li><Link to="/Faqs">Frequently Asked Questions</Link></li>
-              </ul>
-            </div>
-            <div>
-              <ul className="space-y-2">
-                <li><Link to="/TermsConditions">Terms and Conditions</Link></li>
-                <li><Link to="/Support">Support</Link></li>
-                <li><Link to="/PrivacyPolicy">Privacy Policy</Link></li>
-              </ul>
-            </div>
-            <div>
-              <p className="font-bold mb-2">Get in touch</p>
-              <a href="https://wa.me/YOUR_PHONE_NUMBER" className="text-sm flex items-center mb-2">Chat with us</a>
-              <a href="tel:+97112345678" className="text-sm mb-2 block">Call us: +971 1 234 5678</a>
-              <a href="mailto:support@luckmytrip.com" className="text-sm block">Email us: support@luckmytrip.com</a>
-            </div>
-            <div>
-              <p className="font-bold mb-2">Download our App</p>
-              <div className="flex items-center mt-4">
-                <div className="border-2 border-red-600 text-red-600 rounded-full w-10 h-10 flex items-center justify-center font-bold mr-3">18+</div>
-                <div>
-                  <p className="text-red-600 font-semibold">Play Right</p>
-                  <p className="text-red-600 font-semibold">Play Responsibly</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <p className="text-sm text-gray-600 text-center mt-8">
-            * You must be 18 years or older to register and use this platform. Individuals from restricted jurisdictions are not permitted to register or use this platform.
-          </p>
-        </div>
-      </footer>
-
+     <Footer/>
     </div>
   );
 };

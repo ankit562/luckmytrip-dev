@@ -1,3 +1,114 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.text-stroke-red {
+  -webkit-text-stroke: 2px #ff446c;
+  color: #ff446c; /* 👈 add this line */
+}
+/* 
+.how-it-works h2 {
+  color: #6bc04b;
+  margin-bottom: 40px;
+}
+
+.steps {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  border-radius: 40px;
+  padding: 20px 30px;
+  color: white;
+  font-size: 1.2rem;
+  min-width: 200px;
+  position: relative;
+  text-align: left;
+  flex: 1 1 200px;
+  max-width: 250px;
+}
+
+.step .number1 {
+    font-size: 10rem;
+	font-weight: bold;
+    color: #6a1b9a;
+    line-height: 1;
+    -webkit-text-stroke: 1px white;
+}
+.step .number2 {
+    font-size: 10rem;
+	font-weight: bold;
+    color: #009688;
+    line-height: 1;
+	    margin-right: -46px;
+    -webkit-text-stroke: 1px white;
+}
+.step .number3 {
+    font-size: 10rem;
+	font-weight: bold;
+    color: #0d47a1;
+    line-height: 1;
+	margin-right: -46px;
+    -webkit-text-stroke: 1px white;
+}
+
+.step .purple {
+  background-color: #6a1b9a;
+  z-index: -1;
+}
+
+.step .green {
+  background-color: #009688;
+      z-index: -1;
+}
+
+.step .blue {
+  background-color: #0d47a1;
+  z-index: -1;
+}
+
+.step p {
+    display: flex;
+    align-items: center;
+    border-radius: 0 40px 40px 0;
+    padding: 20px 44px;
+    color: white;
+    font-size: 1.30rem;
+    min-width: 200px;
+    position: relative;
+    text-align: left;
+	margin-top: 10px;
+}
+
+
+.about-section {
+  padding: 0 20px;
+  text-align: center;
+}
+
+.about-heading {
+  color: #74b816;
+  margin-bottom: 30px;
+}
+
+.about-text {
+  font-size: 2rem;
+    line-height: 1.8;
+    text-align: justify;
+	color: #333;
+}
+.slider-container {
+  position: relative;
+  width: 100%;
+  max-width: 1040px;
+  margin: auto;
+  overflow: hidden;
+  padding: 40px 0;
+}
+ */

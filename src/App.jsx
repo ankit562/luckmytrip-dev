@@ -16,6 +16,7 @@ import Faqs from './pages/Faqs.jsx';
 import TermsConditions from './pages/TermsConditions.jsx';
 import Support from './pages/Support.jsx';
 import PrivacyPolicy from './pages/PrivacyPolicy.jsx';
+import Homes from './pages/Homes.jsx';
 
 function AppContent() {
   const { user } = useAuth();
@@ -41,6 +42,7 @@ function App() {
               <Routes>
                 <Route path="/dashboard" element={<AppContent />} />
                 <Route path="/" element={<Home/>} />
+                <Route path="/homes" element={<Homes />} />
 
                 <Route path="/explore" element={<ExploreNow />} />
                 <Route path="/Tickets" element={<Tickets />} />
