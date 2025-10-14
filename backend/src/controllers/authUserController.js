@@ -119,15 +119,13 @@ export const Login = async (req, res) => {
 
     res.cookie("accessToken", accessToken, {  
       httpOnly: true,
-      secure: true,
-      sameSite: "Strict",
+      secure: process.env.NODE_ENV === "production",
       maxAge: 15 * 60 * 1000  
     });
 
     res.cookie("refreshToken", refreshToken, {  
       httpOnly: true,
-      secure: true,
-      sameSite: "Strict",
+      secure: process.env.NODE_ENV === "production",
       maxAge: 7 * 24 * 60 * 60 * 1000
     });
 
@@ -152,7 +150,7 @@ export const ForgotPasswordRequest = async (req, res) => {
     await user.save();
 
     // Construct your frontend reset URL including token as param
-    const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}&email=${email}`;
+    const resetLink = `${process.env.CORS_ORIGIN}/reset-password?token=${resetToken}&email=${email}`;
 
     await sendForgotPasswordEmail(email, resetLink);
 
@@ -185,8 +183,7 @@ export const RefreshToken = async (req, res) => {
 
     res.cookie("jwt", newRefreshToken, {
       httpOnly: true,
-      secure: true,
-      sameSite: "Strict",
+      secure: process.env.NODE_ENV === "production",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
