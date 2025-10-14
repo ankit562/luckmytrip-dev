@@ -1,22 +1,33 @@
 import dotenv from 'dotenv';
-import {app} from './app.js'
-import {connectDB} from '../src/config/db.js';
+import { app } from './app.js';
+import { connectDB } from './config/db.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-dotenv.config({ path: path.resolve(__dirname, '.env') });
+// Load local .env if present (Vercel provides env vars in production)
+dotenv.config();
 
-const PORT = process.env.PORT || 3000;
+// In serverless environments (like Vercel) you must NOT call app.listen().
+// Instead export a handler that reuses the Express app to handle each request.
 
- connectDB()
- .then(() =>{
-     app.listen(PORT, () => {
-       console.log(`⚙️ Server is running at port :  http://localhost:${process.env.PORT}`);
-    })
-})
-.catch((err) => {
-     console.log("MONGO db connection failed !!! ", err);
-});
+let dbConnected = false;
+async function ensureDB() {
+  if (dbConnected) return;
+  await connectDB();
+  dbConnected = true;
+}
+
+export default async function handler(req, res) {
+  try {
+    await ensureDB();
+    // Express apps are callable as handlers
+    return app(req, res);
+  } catch (err) {
+    console.error('Server handler error:', err);
+    res.statusCode = 500;
+    res.end('Internal Server Error');
+  }
+}
