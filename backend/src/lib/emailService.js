@@ -9,8 +9,8 @@ const smtpPass = process.env.SMTP_PASS;
 const transporter = nodemailer.createTransport({
   service: "gmail", // or use 'smtp.gmail.com' with host and port
   auth: {
-    user: smtpUser,// "kesarwaniraj11@gmail.com",
-    pass: smtpPass,//"boqotceupbyjvhit",
+    user: smtpUser, 
+    pass: smtpPass,
   },
 });
 
