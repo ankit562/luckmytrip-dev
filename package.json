@@ -32,7 +32,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+  "build": "cd frontend && (pnpm install --frozen-lockfile || npm ci) && (pnpm run build || npm run build)",
     "preview": "vite preview"
   },
   "eslintConfig": {
