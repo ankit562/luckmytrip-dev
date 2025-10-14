@@ -10,6 +10,7 @@ import {
   removeProduct,
 } from "../../../features/products/productSlice"; 
 import { fetchProfile } from "../../../features/auth/authUserSlice"; 
+import toast from "react-hot-toast";
 
 export default function Jackpot() {
   const dispatch = useDispatch();
@@ -76,13 +77,13 @@ export default function Jackpot() {
     const { name, value, files, type } = e.target;
     if (type === "file") {
       const file = files[0];
-      if (file && file.size < 1024 * 1024) {
+      if (file && file.size < 2 * 1024 * 1024) {
         const reader = new FileReader();
         reader.onload = (ev) =>
           setFormData((prev) => ({ ...prev, image: file, imageUrl: ev.target.result }));
         reader.readAsDataURL(file);
       } else {
-        alert("Max image size: 1MB");
+        toast.error("Max image size: 2MB");
       }
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
@@ -109,8 +110,11 @@ export default function Jackpot() {
         await dispatch(editProduct({ id: editId, formData: data })).unwrap();
       }
       closeModal();
+      
+      toast.success(`Product ${editId === null ? "added" : "updated"} successfully`);
+
     } catch (err) {
-      alert("Error saving product: " + err.message);
+      toast("Error saving product: " + err.message);
     }
   };
 
@@ -128,6 +132,8 @@ export default function Jackpot() {
     try {
       await dispatch(removeProduct(deleteId)).unwrap();
       closeDeleteModal();
+      dispatch(fetchProducts());
+      toast.success("Product deleted successfully");
     } catch (err) {
       alert("Error deleting product: " + err.message);
     }
@@ -168,9 +174,10 @@ export default function Jackpot() {
                   </tr>
                 </thead>
                 <tbody>
-                  {products.map((prod) => (
+                  {products.filter((prod) => prod.name === "jackpot")
+                  .map((prod) => (
                     <tr key={prod._id} className="border-t hover:bg-gray-50">
-                      <td className="p-3">{prod.name}</td>
+                      <td className="p-3">{ prod.name}</td>
                       <td className="p-3">
                         {prod.image && (
                           <img

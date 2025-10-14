@@ -3,6 +3,7 @@ import Header from '../components/commonComponent/Header'
 import Footer from '../components/commonComponent/Footer'
 import TripCarosel from '../components/expolorePageComponents/TripCarosel'
 import TravelCard from '../components/expolorePageComponents/TripInfo'
+import { useRef } from 'react';
 
 const options = [
   "VIP AIRPORT PICKUP",
@@ -14,10 +15,12 @@ const options = [
 
 const ExplorePage = () => {
   const [selected, setSelected] = useState(1);
+  
+  
   const Logo = (
-    <span className="font-bold text-red-500 text-2xl">WIN</span>
+    "WIN"
   );
-
+  
   const features = [
     "Return Ticket from India to Dubai",
     "3 Star hotel for 2 nights",
@@ -27,6 +30,20 @@ const ExplorePage = () => {
   ];
 
   const restrictions = ["VISA", "Lunch & Dinner", "Alcohol"];
+
+  const scrollRef = useRef(null);
+
+  const slideLeft = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: -300, behavior: 'smooth' });
+    }
+  };
+
+  const slideRight = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: 300, behavior: 'smooth' });
+    }
+  };
 
   return (
     <div className="bg-[#eaf8fd] min-h-screen">
@@ -112,35 +129,44 @@ const ExplorePage = () => {
         </div>
       </section>
 
-      <section className='md:max-w-[80%] w-full px-2 mx-auto    flex flex-col'>
-        <div className=' grid  lg:grid-cols-2 grid-cols-1 space-y-5 '>
-          <div className='flex  w-full justify-center items-center md:flex-row flex-col gap-2'>
+      <section className='md:max-w-[80%] w-full px-2 mx-auto flex flex-col'>
+      <div
+        ref={scrollRef}
+        className='md:px-0 px-2 flex md:space-x-20 space-x-3 overflow-x-auto no-scrollbar'
+        style={{ scrollSnapType: 'x mandatory' }} 
+      >
+         
+          <TravelCard
+            title={<span className="text-blue-900">DUBAI</span>}
+            logo={Logo}
+            features={features}
+            restrictions={restrictions}
+            buttonText="LEARN MORE"/>
+       
+          <TravelCard
+            title={<span className="text-blue-900">DUBAI</span>}
+            logo={Logo}
+            features={features}
+            restrictions={restrictions}
+            buttonText="LEARN MORE"/>
+      </div>
 
-            <TravelCard
-              title={<span className="text-blue-900">DUBAI</span>}
-              logo={Logo}
-              features={features}
-              restrictions={restrictions}
-              buttonText="LEARN MORE"
-            />
-          </div>
-
-          <div className='flex  w-full justify-center items-center md:flex-row flex-col gap-2'>
-            <TravelCard
-              title={<span className="text-blue-900">DUBAI</span>}
-              logo={Logo}
-              features={features}
-              restrictions={restrictions}
-              buttonText="LEARN MORE"
-            />
-          </div>
-        </div>
-
-        <div class=" flex justify-end gap-3  w-full mt-5 max-w-[90%]">
-          <button className=" bg-green-300 px-5 py-2 text-lg font-bold rounded-[100%] hover:bg-green-500" onclick="slideLeft()">‹</button>
-          <button className=" bg-green-300 px-5 py-2 text-lg font-bold rounded-full hover:bg-green-500" onclick="slideRight()">›</button>
-        </div>
-      </section >
+      <div className="flex justify-end gap-3 w-full mt-5 max-w-[90%]">
+        <button
+          className="bg-green-300 px-5 py-2 text-lg font-bold rounded-full hover:bg-green-500"
+          onClick={slideLeft}
+        >
+          ‹
+        </button>
+        <button
+          className="bg-green-300 px-5 py-2 text-lg font-bold rounded-full hover:bg-green-500"
+          onClick={slideRight}
+        >
+          ›
+        </button>
+      </div>
+    </section>
+              
 
 
       <section class="flex flex-col  mx-auto mt-20">

@@ -175,7 +175,7 @@ export default function SpinLuck() {
                   </tr>
                 </thead>
                 <tbody>
-                  {products.map((product) => (
+                  {products.filter((prod) => prod.name === "spinluck").map((product) => (
                     <tr key={product._id} className="border-t hover:bg-gray-50">
                       <td className="p-3">{product.name}</td>
                       <td className="p-3">

@@ -65,6 +65,7 @@ function App() {
   return (
     <div className=''>
       <Routes>
+
         <Route path="/home/journey"
           element={
             user && ["content-creator", "admin", "superadmin"].includes(user.role.toLowerCase())
@@ -110,7 +111,6 @@ function App() {
 
 
 
-
         <Route path="/users/superadmin"
           element={
             user && ["superadmin"].includes(user.role.toLowerCase())
@@ -153,11 +153,9 @@ function App() {
               : (<Navigate to="/login" />)
           } />
         {/* dashboard end here */}
+        
 
-        <Route path="/signup" element={
-          !user 
-          ? <SignupPage /> 
-          : <Navigate to="/" />} />
+        <Route path="/signup" element={!user ? <SignupPage /> :""} />
 
         <Route path="/login" element={
           !user ? <LoginPage />
@@ -167,10 +165,10 @@ function App() {
 
         <Route path="/otp-verification" element={<OtpPage />} />
 
-        <Route path="/"  element={user ? <HomePage /> : <Navigate to="/login" />} />
-        <Route path="/explore" element={user ? <ExplorePage /> : <Navigate to="/login" />} />
+        <Route path="/"  element={  <HomePage />} />
+        <Route path="/explore" element={ <ExplorePage />} />
         <Route path="/ticket" element={user ? <TicketPage /> : <Navigate to="/login" />} />
-        <Route path="/contactus" element={user ? <ContactUsPage /> : <Navigate to="/login" />} />
+        <Route path="/contactus" element={ <ContactUsPage /> } />
         <Route path="/addtocart" element={user ? <AddToCartPage /> : <Navigate to="/login" />} />
         <Route path="*" element={<h1>404 Not Found</h1>} />
       </Routes>

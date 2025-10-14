@@ -13,6 +13,7 @@ import {
 } from "../../../features/auth/authUserSlice";
 
 import MyContentEmpty from "../../../components/contentcreator/CreateContent";
+import toast from "react-hot-toast";
 
 export default function ContentCreator() {
   const dispatch = useDispatch();
@@ -81,6 +82,7 @@ const onAddSubmit = async (e) => {
   try {
     await dispatch(signupUser(newAdmin)).unwrap();
     closeModals();
+      toast.success("Admin added successfully");
     dispatch(getAllProfile());
   } catch (err) {
     alert("Failed to add admin: " + (err.message || "Unknown error"));
@@ -105,6 +107,7 @@ const onAddSubmit = async (e) => {
     try {
       await dispatch(UpdateProfile({ id: editId, userData: updatedAdmin })).unwrap();
       closeModals();
+      toast.success("Admin updated successfully");
       dispatch(getAllProfile());
     } catch (err) {
       alert("Failed to update: " + err.message);
@@ -120,6 +123,7 @@ const onAddSubmit = async (e) => {
     try {
       await dispatch(deleteUser(editAdminData._id)).unwrap();
       closeModals();
+      toast.success("Admin deleted successfully");
       dispatch(getAllProfile());
     } catch (err) {
       alert("Failed to delete: " + err.message);
@@ -325,7 +329,8 @@ function AdminForm({ onSubmit, admin }) {
           id="phone"
           name="phone"
           defaultValue={admin?.phone || ""}
-          type="tel"
+          type="text"
+          maxLength={10}
           className="w-full px-3 py-2 border rounded"
         />
       </div>

@@ -35,7 +35,7 @@ const getModelByRole = (role) => {
 
 export const Register = async (req, res) => {
   try {
-    const { fullName, email, password, phone, role , address ,ticket  , win} = req.body;
+    const { fullName, email, password, phone, role , address ,ticket  , won} = req.body;
     
     if (!(fullName && email && password && phone )) { // require role too
       return res.status(400).send("All inputs and role are required");

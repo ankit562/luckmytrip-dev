@@ -107,6 +107,8 @@ const SignupPage = () => {
             type="text"
             placeholder="Enter your Phone no."
             value={phone}
+            maxLength={10}
+            
             onChange={(e) => setPhone(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             required
@@ -122,17 +124,18 @@ const SignupPage = () => {
             type="password"
             placeholder="Enter your password"
             value={password}
+            
             onChange={(e) => setPassword(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             required
           />
         </div>
 
-        {error && (
+        {/* {error && (
           <div className="text-sm text-red-600 bg-red-50 p-3 rounded-md">
             {error}
           </div>
-        )}
+        )} */}
 
         <button
           type="submit"

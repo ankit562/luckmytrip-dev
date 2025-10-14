@@ -5,17 +5,9 @@ import { fetchTickets } from '../features/tickets/ticketSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import Footer from "../components/commonComponent/Footer";
 import Header from "../components/commonComponent/Header";
+import { fetchProducts } from "../features/products/productSlice"
 
 
-const jackpotData = {
-  id: "jackpot-id",
-  title: "Mega Dubai Jackpot",
-  description: "Win an extravagant all-expense-paid trip to Dubai!",
-  price: 99,
-  image: "",
-  category: "jackpot",
-  createdAt: new Date(),
-};
 
 const testimonials = [
   {
@@ -42,9 +34,18 @@ const testimonials = [
 
 ];
 
+
+
 const HomePage = () => {
 
   const dispatch = useDispatch();
+  const { products } = useSelector((state) => state.products);
+  const { tickets, loading } = useSelector((state) => state.tickets);
+
+
+  useEffect(() => {
+    dispatch(fetchProducts())
+  }, [dispatch])
 
 
   useEffect(() => {
@@ -52,15 +53,12 @@ const HomePage = () => {
   }, [dispatch]);
 
 
-  const { tickets, loading, error } = useSelector((state) => state.tickets);
-
   const [activeTestimonial, setActiveTestimonial] = useState("content1");
-
 
   const sliderTrackRef = useRef(null);
   const slideJourney = (direction) => {
     if (!sliderTrackRef.current) return;
-    const cardWidth = 550 + 40; 
+    const cardWidth = 550 + 40;
     sliderTrackRef.current.scrollBy({
       left: direction * cardWidth,
       behavior: 'smooth',
@@ -70,8 +68,8 @@ const HomePage = () => {
 
   return (
     <div className="bg-gradient-to-b from-blue-100 to-blue-10 min-h-screen">
-      <Header/>
-      
+      <Header />
+
       <section className="py-4 relative overflow-hidden md:mb-4 ">
         <div className="container mx-auto px-4 relative z-10 mb-20">
           <h1 className="text-center text-[3rem] md:text-[7rem] font-bold mb-12 pb-22">
@@ -116,7 +114,7 @@ const HomePage = () => {
 
           {/* Loading and error states */}
           {loading && <div>Loading offers...</div>}
-          {error && <div className="text-red-600">Error: {error}</div>}
+
 
           <div
             ref={sliderTrackRef}
@@ -136,7 +134,7 @@ const HomePage = () => {
                   fromLocation={item.fromLocation}
                   drawDate={new Date(item.date).toLocaleDateString()}   //new Date(date).toLocaleDateString()
                   totalTickets={item.ticket}
-                  
+
                 />
               </div>
             ))}
@@ -159,42 +157,43 @@ const HomePage = () => {
       </section>
 
       {/* Jackpot CTA */}
-      <section className="py-8 relative overflow-hidden bg-[#E9F2FF]">
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="mb-12">
-            <p className="text-4xl text-center font-bold py-2">
-              Buy a ₹{jackpotData.price} ticket, win a jackpot!
-            </p>
-            <div className="text-center py-6 pb-16">
-              <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-md w-48">
-                Click Here
-              </button>
-            </div>
-            <div className="hero-container bg-blue-900 rounded-lg flex flex-col md:flex-row items-center justify-between overflow-hidden relative">
-              <div className="hero-text px-8 md:px-16 z-10 md:py-8 py-2">
-                <img
-                  src={"/images/Jackpot.png"}
-                  alt="Jackpot Logo"
-                  className="w-48 mb-4"
-                />
-                <h2 className="text-white text-3xl font-bold">{jackpotData.title}</h2>
-                <p className="text-white font-bold text-lg w-72 mb-8 mt-2">
-                  {jackpotData.description || "Enter for your chance to win this amazing prize."}
-                </p>
-                <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 mb-8 px-6 rounded-md w-48">
-                  Learn More
+      {products.filter(items => items.name === "jackpot").map( imgs=> (
+        <section key={imgs} className="max-w-7xl mx-auto py-8 relative overflow-hidden bg-[#E9F2FF]">
+          <div className="container mx-auto px-4 relative z-10">
+            <div className="mb-12">
+              <p className="text-4xl text-center font-bold py-2">
+                Buy a ₹99 ticket, win a jackpot!
+              </p>
+              <div className="text-center py-6 pb-16">
+                <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-md w-48">
+                  Click Here
                 </button>
               </div>
-              <img
-                src={"/images/portrait-woman-visiting-luxurious-city-dubai-2.png"}
-                alt={jackpotData.title}
-                className="relative felx justify-end items-end bottom-0 lg:right-0  
+              <div className="hero-container bg-blue-900 rounded-lg flex flex-col md:flex-row items-center justify-between overflow-hidden relative">
+                <div className="hero-text px-8 md:px-16 z-10 md:py-8 py-2">
+                  <img
+                    src={"/images/Jackpot.png"}
+                    alt="Jackpot Logo"
+                    className="md:w-72 w-52 mb-4"
+                  />
+                  <p className="text-white font-bold text-lg md:w-72 w-full  mt-2">
+                    {imgs.content || "Enter for your chance to win this amazing prize."}
+                  </p>
+                  <button className="bg-[#8ac43f]  hover:bg-green-600 text-white font-bold py-3 mb-8 px-3 rounded-md w-32">
+                    Learn More
+                  </button>
+                </div>
+                <img
+                  src={imgs.image}
+                  alt={"Lady with city background"}
+                  className="relative felx justify-end items-end bottom-0 lg:right-0  
                 md:right-6 right-0 lg:max-h-[390px] md:max-h-[425px] lady-image max-h-72"
-              />
+                />
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      ))}
 
       {/* Testimonials */}
       <section id="testimonials" className="py-8 bg-[#E9F2FF]">
@@ -246,37 +245,39 @@ const HomePage = () => {
       </section>
 
       {/* Spin Luck */}
-      <section className="md:py-8 py-4 min-h-96 ">
-        <div className="container md:mx-auto  md:px-16 px-5 flex flex-col md:flex-row justify-start md:justify-center items-center ">
-          <div className=" flex flex-col ">
-            <h2 className="lg:text-7xl md:text-[50px] text-4xl font-extrabold text-green-500  flex justify-start ">SPIN LUCK</h2>
-            <div className="flex justify-end items-center ">
-              <div className="md:w-40 w-[39%] flex gap-1  justify-start items-center  ">
-                <div className="flex flex-col justify-start ">
-                  <span className="text-black xl:text-2xl  lg:text-xl text-xs font-extrabold">IN</span>
-                  <span className="text-red-500 xl:text-4xl lg:text-3xl md:text-2xl text-base font-medium">Rs.</span>
+      <section className="md:py-8 py-4 min-h-96 bg-[#ffffff]">
+        {products?.filter(prod => prod?.name === "spinluck").map(pro => (
+          <div key={pro} className="container md:mx-auto md:px-16 px-5 flex flex-col md:flex-row justify-start md:justify-center items-center">
+            <div className="flex flex-col">
+              <h2 className="lg:text-7xl md:text-[50px] text-4xl font-extrabold text-green-500 flex justify-start">SPIN LUCK</h2>
+              <div className="flex justify-end items-center">
+                <div className="md:w-40 w-[39%] flex gap-1 justify-start items-center">
+                  <div className="flex flex-col justify-start">
+                    <span className="text-black xl:text-2xl lg:text-xl text-xs font-extrabold">IN</span>
+                    <span className="text-red-500 xl:text-4xl lg:text-3xl md:text-2xl text-base font-medium">Rs.</span>
+                  </div>
+                  <div><span className="xl:text-[75px] lg:text-[70px] md:text-[65px] text-[43px] font-bold text-red-500">{pro?.price || "0"}</span></div>
                 </div>
-                <div><span className="xl:text-[75px]  lg:text-[70px] md:text-[65px] text-[43px] font-bold text-red-500">49</span></div>
-              </div>
-              <div className=" md:w-[60%] w-[61%] ">
-                <p className="flex items-center justify-start lg:text-xl  text-xs   text-gray-700  font-bold leading-[1] ">iPhone 16, Premium <br />Luggage &amp; More!</p>
+                <div className="md:w-[60%] w-[61%]">
+                  <p className="flex items-center justify-start lg:text-xl text-xs text-gray-700 font-bold leading-[1]">iPhone 16, Premium <br />Luggage & More!</p>
+                </div>
               </div>
             </div>
+            <div className="relative mt-8 md:mt-0 flex justify-center items-center">
+              <img
+                src={products?.length > 0 ? pro?.image : "/images/Spin-to-win.webp"}
+                alt="Gift Box"
+                loading="lazy"
+                width="480"
+                height="480"
+                className="mx-auto lg:max-h-[30rem] md:max-h-[25rem] w-full object-contain"
+              />
+            </div>
           </div>
-          <div className="relative mt-8 md:mt-0 flex justify-center items-center ">
-            <img
-              src="/images/Spin-to-win.webp"
-              alt="Gift Box"
-              loading="lazy"
-              width="480"
-              height="480"
-              className="mx-auto lg:max-h-[30rem] md:max-h-[25rem] w-full object-contain"
-            />
-          </div>
-        </div>
+        ))}
       </section>
 
-     <Footer/>
+      <Footer />
     </div>
   );
 };

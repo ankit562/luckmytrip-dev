@@ -3,6 +3,7 @@ import Header from "../../../components/dashboardComponent/Header";
 import LeftsideNavbar from "../../../components/dashboardComponent/LeftsideNavbar";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { useSelector, useDispatch } from "react-redux";
+import toast from "react-hot-toast";
 
 import {
   fetchProfile,
@@ -12,7 +13,7 @@ import {
   signupUser
   // createUser thunk to be implemented separately for add functionality
 } from "../../../features/auth/authUserSlice";
-import toast from "react-hot-toast";
+
 
 export default function SuperAdmin() {
   const dispatch = useDispatch();
@@ -83,6 +84,7 @@ const onAddSubmit = async (e) => {
   try {
     await dispatch(signupUser(newAdmin)).unwrap();
     closeModals();
+      toast.success("Admin added successfully");
     dispatch(getAllProfile());
   } catch (err) {
     alert("Failed to add admin: " + (err.message || "Unknown error"));
@@ -108,8 +110,8 @@ const onAddSubmit = async (e) => {
     try {
       await dispatch(UpdateProfile({ id: editId, userData: updatedAdmin })).unwrap();
       closeModals();
-      dispatch(getAllProfile());
       toast("Super Admin updated successfully")
+      dispatch(getAllProfile());
     } catch (err) {
       alert("Update failed: " + err.message);
     }
@@ -124,6 +126,7 @@ const onAddSubmit = async (e) => {
     try {
       await dispatch(deleteUser(editAdminData._id)).unwrap();
       closeModals();
+      toast("Super Admin updated successfully")
       dispatch(getAllProfile());
     } catch (err) {
       alert("Delete failed: " + err.message);
@@ -337,7 +340,8 @@ function AdminForm({ onSubmit, admin }) {
           id="phone"
           name="phone"
           defaultValue={admin?.phone || ""}
-          type="tel"
+          type="text"
+          maxLength={10}
           required
           className="w-full px-3 py-2 border rounded"
         />

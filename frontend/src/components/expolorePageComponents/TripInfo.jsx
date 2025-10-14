@@ -8,11 +8,11 @@ export default function TravelCard({
     buttonText = "LEARN MORE",
 }) {
     return (
-        <div className="bg-white rounded-2xl shadow-xl px-4 py-3 max-w-xl w-full mx-auto flex flex-col justify-between min-h-[350px]">
-            <div className="flex justify-center items-center gap-4">
-                <div className="flex items-center space-x-2 mb-4">
-                    {logo}
-                    <span className="font-bold text-2xl">{title}</span>
+        <div className="bg-white rounded-2xl shadow-xl md:px-4 px-1  py-3 md:max-w-xl w-full max-w-[400px]    mx-auto flex flex-col justify-between min-h-[380px]">
+            <div className=" flex justify-center items-start gap-4 mt-4">
+                <div className="relative  left-0  mb-4">
+                    <h3 className="relative text-7xl   font-outline-red font-bold"> {logo}</h3>
+                    <h3 className="font-extrabold  absolute z-20 top-5 text-3xl left-6 ">{title}</h3>
                 </div>
                 <div>
                     <ul className="space-y-3 mb-8">
