@@ -34,7 +34,7 @@ const clientSchema = new mongoose.Schema({
     enum: ['client', 'admin', 'content-creator', 'superadmin'],
     default: 'client',
   },
-  win:{
+  won:{
       type:Number,
       required:false,
       default:0
@@ -44,7 +44,8 @@ const clientSchema = new mongoose.Schema({
     gmail: { id: String, token: String },
     instagram: { id: String, token: String },
     twitter: { id: String, token: String },
-  },ticket:{
+  },
+  ticket:{
     type:Number,
     required:false,
     default:0

@@ -38,7 +38,7 @@ export default function Client() {
     phone: "",
     address: "",
     ticket: "",
-    win: 0,              // Added win field default 0
+    won: 0,              // Added win field default 0
     role: "client",
   });
 
@@ -91,8 +91,8 @@ export default function Client() {
       email: "",
       phone: "",
       address: "",
-      ticket: "",
-      win: 0,          // initialize to zero on add
+      ticket: 0,
+      won: 0,          // initialize to zero on add
       role: "",
     });
     setIsEditModalOpen(true);
@@ -106,8 +106,8 @@ export default function Client() {
       email: client.email || "",
       phone: client.phone || "",
       address: client.address || "",
-      ticket: client.ticket || "",
-      win: client.win ?? 0,   // include win field (default 0 if null)
+      ticket: client.ticket || 0,
+      won: client.won ?? 0,   // include win field (default 0 if null)
       role: client.role || "client",
     });
     setIsEditModalOpen(true);
@@ -122,7 +122,7 @@ export default function Client() {
       phone: "",
       address: "",
       ticket: 0,
-      win: 0,
+      won: 0,
       role: "",
     });
     setEditId(null);
@@ -164,6 +164,7 @@ export default function Client() {
       }
       if (editId === null) {
         await dispatch(signupUser(editData)).unwrap();
+        dispatch(getAllProfile());
         toast.success("Client added successfully!");
       } else {
         await dispatch(UpdateProfile({ id: editId, userData: editData })).unwrap();
@@ -241,7 +242,7 @@ export default function Client() {
                     <th className="p-3 text-left">Phone No.</th>
                     <th className="p-3 text-left">Address</th>
                     <th className="p-3 text-left">Tickets</th>
-                    <th className="p-3 text-left">Win</th> {/* Added Win header */}
+                    <th className="p-3 text-left">Won</th> {/* Added Win header */}
                     <th className="p-3 text-left">Role</th>
                     <th className="p-3 text-left">Edit</th>
                     <th className="p-3 text-left">Delete</th>
@@ -255,7 +256,7 @@ export default function Client() {
                       <td className="md:p-3 p-2">{c.phone}</td>
                       <td className="md:p-3 p-2">{c.address}</td>
                       <td className="md:p-3 p-2">{c.ticket}</td>
-                      <td className="md:p-3 p-2">{c.win ?? 0}</td> {/* Show Win or 0 */}
+                      <td className="md:p-3 p-2">{c.won ?? 0}</td> {/* Show Win or 0 */}
                       <td className="md:p-3 p-2">{c.role}</td>
 
                       <td className="p-3 space-x-1">
@@ -302,7 +303,7 @@ export default function Client() {
                   }}
                   className="space-y-4"
                 >
-                  {["fullName", "email", "phone", "address", "ticket", "win"].map((field) => (
+                  {["fullName", "email", "phone", "address", "ticket", "won"].map((field) => (
                     <div key={field}>
                       <label className="block mb-1 font-medium">
                         {field.charAt(0).toUpperCase() + field.slice(1)}
@@ -327,6 +328,7 @@ export default function Client() {
                     <div>
                       <label className="block mb-1 font-medium">Password</label>
                       <input
+                      required={editId === null}
                         name="password"
                         type="password"
                         value={editData.password}

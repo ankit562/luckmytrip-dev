@@ -173,7 +173,7 @@ export default function GoldenWinner() {
               <table className="min-w-full border text-sm bg-white rounded shadow overflow-x-auto">
                 <thead>
                   <tr className="bg-gray-100 text-xs md:text-sm">
-                    <th className="p-2 md:p-3 text-left">Name</th>
+                    <th className="p-2 md:p-3 text-left">Event</th>
                     <th className="p-2 md:p-3 text-left">Image 1</th>
                     <th className="p-2 md:p-3 text-left">Image 2</th>
                     <th className="p-2 md:p-3 text-left">Content</th>
@@ -182,7 +182,7 @@ export default function GoldenWinner() {
                   </tr>
                 </thead>
                 <tbody>
-                  {products.map((prod) => (
+                  {products.filter((prod) => prod.name === "goldenwinner").map((prod) => (
                     <tr key={prod._id} className="border-t hover:bg-gray-50 text-xs md:text-sm">
                       <td className="p-2 md:p-3">{prod.name}</td>
                       <td className="p-2 md:p-3">

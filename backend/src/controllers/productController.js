@@ -5,7 +5,7 @@ import { uploadOnCloudinary } from '../lib/cloudinary.js';
 export const productValidationRules = () => [
   body('name').notEmpty().withMessage('Name is required').isLength({ min: 2 }),
   body('price').optional().isFloat({ min: 0 }),
-  body('content').notEmpty().withMessage('Content is required').isLength({ min: 10 }),
+  body('content').notEmpty().withMessage('Content is required').isLength({ min: 5 }),
 ];
 
 export const listProducts = async (req, res) => {

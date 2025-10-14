@@ -52,7 +52,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="w-full max-w-lg mx-auto bg-white rounded-lg shadow-lg p-8 mt-5">
+    <div className="w-full max-w-lg mx-auto bg-white rounded-lg shadow-lg px-8 py-10 md:mt-40 mt-12">
       <div className="text-center mb-8">
         <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-blue-100">
           <span className="text-blue-600 font-bold text-xl">🔐</span>

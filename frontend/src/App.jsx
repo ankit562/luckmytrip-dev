@@ -6,8 +6,8 @@ import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage';
 import ExplorePage from './pages/ExplorePage';
 import TicketPage from './pages/TicketPage';
-import ContactUsPage from './pages/ContactUsPage';
-import AddToCartPage from './pages/AddToCartPage';
+import ContactUsPage from './pages/ContactUsPage'
+import AddToCartPage from './pages/AddToCartPage'
 import Dashboard from './pages/dashboard/DashboardPage';
 import OtpPage from './pages/OtpPage';
 import { Toaster } from "react-hot-toast";
@@ -65,6 +65,7 @@ function App() {
   return (
     <div className=''>
       <Routes>
+
         <Route path="/home/journey"
           element={
             user && ["content-creator", "admin", "superadmin"].includes(user.role.toLowerCase())
@@ -110,7 +111,6 @@ function App() {
 
 
 
-
         <Route path="/users/superadmin"
           element={
             user && ["superadmin"].includes(user.role.toLowerCase())
@@ -153,18 +153,22 @@ function App() {
               : (<Navigate to="/login" />)
           } />
         {/* dashboard end here */}
+        
 
+        <Route path="/signup" element={!user ? <SignupPage /> :""} />
 
+        <Route path="/login" element={
+          !user ? <LoginPage />
+           : (user && ["client"].includes(user.role.toLowerCase()) 
+           ? <Navigate to="/" /> 
+           : <Navigate to="/dashboard" />)} />
 
-        <Route path="/signup" element={!user ? <SignupPage /> : <Navigate to="/" />} />
-        <Route path="/login" element={!user ? <LoginPage /> : (user && ["client"].includes(user.role.toLowerCase()) ? <Navigate to="/" /> : <Navigate to="/dashboard" />)} />
         <Route path="/otp-verification" element={<OtpPage />} />
 
-
-        <Route path="/" element={user ? <HomePage /> : <Navigate to="/login" />} />
-        <Route path="/explore" element={user ? <ExplorePage /> : <Navigate to="/login" />} />
+        <Route path="/"  element={  <HomePage />} />
+        <Route path="/explore" element={ <ExplorePage />} />
         <Route path="/ticket" element={user ? <TicketPage /> : <Navigate to="/login" />} />
-        <Route path="/contactus" element={user ? <ContactUsPage /> : <Navigate to="/login" />} />
+        <Route path="/contactus" element={ <ContactUsPage /> } />
         <Route path="/addtocart" element={user ? <AddToCartPage /> : <Navigate to="/login" />} />
         <Route path="*" element={<h1>404 Not Found</h1>} />
       </Routes>
@@ -174,8 +178,3 @@ function App() {
 }
 
 export default App;
-
-
-
-// {/* <Route path="/signup" element={<SignupPage />} />
-// <Route path="/login" element={<LoginPage />} /> */}

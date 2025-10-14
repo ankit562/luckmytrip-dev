@@ -197,7 +197,8 @@ export default function DreamTrip() {
                   </tr>
                 </thead>
                 <tbody>
-                  {products.map((product) => (
+                  {products.filter((prod) => prod.name === "dreamtripslider")
+                  .map((product) => (
                     <tr key={product._id} className="border-t hover:bg-gray-50 ">
                       <td className="md:p-3 p-2">{product.name}</td>
                       <td className="md:p-3 p-2">
