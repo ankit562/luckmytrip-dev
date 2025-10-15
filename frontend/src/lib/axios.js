@@ -1,6 +1,6 @@
 import axios from "axios";
-// import store from '../store/store'; // your redux store
-// import { logoutUser, fetchProfile } from '../features/auth/authUserSlice';
+// // import store from '../store/store'; // your redux store
+// // import { logoutUser, fetchProfile } from '../features/auth/authUserSlice';
 
 const getBaseURL = () => {
   if (import.meta.env.PROD) {
@@ -13,6 +13,7 @@ const instance = axios.create({
   baseURL: getBaseURL(),
   withCredentials: true,
 });
+
 
 // Response interceptor to catch 401 errors
 // instance.interceptors.response.use(
