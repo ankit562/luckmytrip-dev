@@ -119,17 +119,19 @@ export const Login = async (req, res) => {
 
     res.cookie("accessToken", accessToken, {  
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: true,
+      sameSite: "Strict",
       maxAge: 15 * 60 * 1000  
     });
 
     res.cookie("refreshToken", refreshToken, {  
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: true,
+      sameSite: "Strict",
       maxAge: 7 * 24 * 60 * 60 * 1000
     });
 
-    res.json({ message: "Logged in successfully" });
+  
 
     res.json({ message: "Logged in successfully", accessToken });
   } catch (error) {
@@ -150,7 +152,7 @@ export const ForgotPasswordRequest = async (req, res) => {
     await user.save();
 
     // Construct your frontend reset URL including token as param
-    const resetLink = `${process.env.CORS_ORIGIN}/reset-password?token=${resetToken}&email=${email}`;
+    const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}&email=${email}`;
 
     await sendForgotPasswordEmail(email, resetLink);
 
@@ -183,7 +185,8 @@ export const RefreshToken = async (req, res) => {
 
     res.cookie("jwt", newRefreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: true,
+      sameSite: "Strict",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
