@@ -167,9 +167,9 @@ function App() {
 
         <Route path="/"  element={  <HomePage />} />
         <Route path="/explore" element={ <ExplorePage />} />
-        <Route path="/ticket" element={user ? <TicketPage /> : <Navigate to="/login" />} />
+        <Route path="/ticket" element={ <TicketPage /> } />
         <Route path="/contactus" element={ <ContactUsPage /> } />
-        <Route path="/addtocart" element={user ? <AddToCartPage /> : <Navigate to="/login" />} />
+        <Route path="/addtocart" element={ <AddToCartPage /> } />
         <Route path="*" element={<h1>404 Not Found</h1>} />
       </Routes>
       <Toaster />
