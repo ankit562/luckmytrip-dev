@@ -113,6 +113,13 @@ export default function Tickets() {
     navigator('/addtocart')
   }
 
+const options = [
+  "VIP AIRPORT PICKUP",
+  "PREMIUM LUXURY HOTEL",
+  "CITY TOUR WITH MODEL",
+  "RE-TURN TICKET",
+  "DINNER WITH MODEL",
+];
   return (
     <div className="bg-gradient-to-b from-blue-100 to-blue-10 min-h-screen">
       <Header />
@@ -452,23 +459,32 @@ export default function Tickets() {
         <div className="container mx-auto px-4">
           <h2 className="text-6xl font-bold text-red-500 text-center mb-12">Monthly Winner</h2>
           <div className="relative max-w-4xl mx-auto rounded-3xl overflow-hidden shadow-2xl h-[450px]">
-            <img src={"/images/beautifulview.jpg"} alt="Desert" className="absolute inset-0 w-full h-full object-cover" />
-            <div className="relative z-10 h-full flex items-end justify-between p-12">
-              <div className="text-white">
+            <img src={"/images/beautifulview.jpg"} alt="Desert" className="absolute inset-0 w-full h-full object-cover " />
+            <div className="relative  h-full flex items-end justify-between p-12 ">
+              <div className="text-white z-30">
                 <h3 className="text-8xl font-bold text-yellow-400 mb-2">Jackpot</h3>
                 <p className="text-4xl font-bold mb-6">VIP TICKET</p>
                 <button className="bg-green-500 hover:bg-green-600 text-white font-bold px-8 py-3 rounded-lg">Click Here</button>
               </div>
-              <img src={"/images/104-copy-3.png"} alt="Winner" className="absolute right-0 bottom-0 h-full object-contain" />
+              <img src={"/images/104-copy-3.png"} alt="Winner" className="absolute right-0 bottom-0 h-full object-contain z-10" />
             </div>
           </div>
-          <div className="flex flex-wrap justify-center gap-4 mt-12 max-w-5xl mx-auto">
-            {['VIP AIRPORT PICKUP', 'Premium Luxury Hotel', 'City Tour with Model', 'Return Ticket', 'Dinner with Model'].map((f, i) => (
-              <div key={i} className="border-2 border-cyan-400 rounded-lg px-4 py-3">
-                <p className="text-blue-900 font-bold text-sm uppercase">{f}</p>
-              </div>
-            ))}
-          </div>
+          <div className="w-full max-w-[96%] sm:max-w-[90%] md:max-w-[90%] lg:max-w-[85%] xl:max-w-[80%] mx-auto px-2 sm:px-4 md:px-4 md:py-4 lg:p-4 mt-4 sm:mt-6 md:mt-6 lg:mt-8 xl:mt-10 mb-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3 md:gap-3 lg:gap-3 xl:gap-4">
+          {options.map((option, idx) => (
+            <button
+              key={option}
+              
+              className={`
+              border-2 border-teal-500 rounded-lg px-1.5 sm:px-3 md:px-3 lg:px-4 py-3 sm:py-6 md:py-6 lg:py-7 xl:py-8 text-[10px] sm:text-sm md:text-xs lg:text-sm xl:text-base font-bold text-teal-900 text-center transition leading-tight font-montserrat
+             hover:bg-teal-100 
+            `}
+            >
+              {option}
+            </button>
+          ))}
+        </div>
+      </div>
         </div>
       </section>
 

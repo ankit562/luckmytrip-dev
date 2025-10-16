@@ -54,3 +54,39 @@
 
 
 
+.hero-container {
+  position: relative;
+    width: 100%;
+    margin: 0 auto;
+    height: 450px;
+    background-image: url(../public/images/beautifulview.jpg);
+    background-size: cover;
+    background-position: top;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow: visible;
+}
+
+@media (max-width: 768px) {
+      .jackpot-img {
+max-width: 400px;
+}
+    }
+
+.hero-text {
+  color: white;
+  max-width: 50%;
+  z-index: 2;
+}
+
+.lady-image {
+  position: absolute;
+    right: 0;
+    top: -190px;
+    height: 40rem;
+    /* max-height: 100%; */
+    z-index: 1;
+}

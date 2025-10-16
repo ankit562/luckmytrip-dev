@@ -92,36 +92,33 @@ const HomePage = () => {
 
       <section className="py-4 relative overflow-hidden md:mb-4 ">
         <div className="container mx-auto px-4 relative z-10 mb-20">
-          <h1 className="text-center text-[3rem] md:text-[7rem] font-bold mb-12 pb-22 font-berlin">
+          <h1 className="text-center text-[3rem] md:text-[6rem] font-bold mb-3 md:mb-12 pb-22 font-berlin">
             <span className="text-red-500">WIN</span>
             <span className="text-blue-900">&nbsp;YOUR DREAM&nbsp;</span>
             <span className="text-red-500">TRIP</span>
           </h1>
-          <div className="flex flex-col md:flex-row justify-center items-center relative mt-12 md:pt-12 pt-6">
-            <div className="relative mx-auto max-h-[49rem] z-20">
+          <div className="flex flex-col md:flex-row justify-center items-center relative md:mt-12 mt-2 md:pt-12 pt-6">
+            <div className="relative mx-auto max-h-[28rem] z-20">
               <div className="absolute inset-0 z-10 h-84 pointer-events-none overflow-hidden">
-                <img src={"/images/gold-confetti.png"} alt="Celebration confetti" className="w-full h-84 object-cover opacity-80" />
+                <img src={"/images/gold-confetti.png"} alt="Celebration confetti" className="w-full h-84 md:top-0 top-24 object-cover opacity-80" />
               </div>
-              <img src={"/images/Header-Globe.png"} alt="Travel Map" className="rounded-full mx-auto absolute" />
+              <img src={"/images/Header-Globe.png"} alt="Travel Map" className="rounded-full mx-auto absolute md:top-0 top-24" />
               <img src={"/images/Home-page-Girl.png"} alt="Person with arms spread" className=" relative lg:top-1 top-20 transform translate-y-[10%] z-40" />
 
-              <div className="absolute w-40 h-52 md:w-72 md:h-80 md:top-[27%] top-[40%] left-14 md:left-32 transform -translate-x-1/2 bg-white rounded-lg shadow-lg p-3 z-30">
-                <img src={"/images/shanghai-urban-architecture-1.png"} alt="Baku" className="rounded-lg w-full h-40 md:h-64 object-cover" />
-                <div className="text-red-500 text-center font-bold py-2 font-berlin text-base md:text-xl">BAKU</div>
+              <div className="absolute w-32 h-42 md:w-64 md:top-[27%] top-[40%] left-14 md:left-32 transform -translate-x-1/2 bg-white rounded-lg shadow-lg p-2 z-30">
+                <img src={"/images/shanghai-urban-architecture-1.png"} alt="Baku" className="rounded-lg w-32 h-42 md:w-64 object-cover" />
+                <div className="text-red-500 text-center font-bold py-1 font-berlin">BAKU</div>
               </div>
 
-              <div className="absolute w-40 h-52 md:w-72 md:h-80 md:bottom-[70%] bottom-[60%] right-1/3 transform translate-x-1/2 bg-white rounded-lg shadow-lg p-3 z-30">
-                <img src={"/images/shanghai-urban-architecture-1.png"} alt="Dubai" className="rounded-lg w-full h-40 md:h-64 object-cover" />
-                <div className="text-green-500 text-center font-bold py-2 font-berlin text-base md:text-xl">DUBAI</div>
+              <div className="absolute w-32 h-42 md:w-64 md:bottom-[70%]  bottom-[40%] right-1/3 transform translate-x-1/2 bg-white rounded-lg shadow-lg p-2 z-30">
+                <img src={"/images/shanghai-urban-architecture-1.png"} alt="Dubai" className="rounded-lg w-32 h-42 md:w-64 object-cover" />
+                <div className="text-green-500 text-center font-bold py-1 font-berlin">DUBAI</div>
               </div>
 
-              <div className="absolute w-40 h-52 md:w-72 md:h-80 top-[60%] md:top-[45%] right-20 md:right-48 translate-x-3/4 translate-y-1/4 bg-white rounded-lg shadow-lg p-3 z-30">
-                <img src={"/images/shanghai-urban-architecture-1.png"} alt="Thailand" className="rounded-lg w-full h-40 md:h-64 object-cover" />
-                <div className="text-yellow-500 text-center font-bold py-2 font-berlin text-base md:text-xl">THAILAND</div>
+              <div className="absolute w-32 h-42 md:w-64 top-[60%] md:top-[55%] right-20 md:right-48 translate-x-3/4 translate-y-1/4 bg-white rounded-lg shadow-lg p-2 z-30">
+                <img src={"/images/shanghai-urban-architecture-1.png"} alt="Thailand" className="rounded-lg w-32 h-42 md:w-64 object-cover" />
+                <div className="text-yellow-500 text-center font-bold py-1 font-berlin">THAILAND</div>
               </div>
-              
-              {/* Bottom gradient fade overlay positioned at photo cut line */}
-              <div className="absolute bottom-0 left-[4.5rem] right-[9rem] top-[50rem] h-20 md:h-24 bg-gradient-to-t from-blue-100 via-blue-100/60 to-transparent z-50 pointer-events-none"></div>
             </div>
           </div>
         </div>
@@ -162,7 +159,7 @@ const HomePage = () => {
               </div>
             ))}
           </div>
-          
+
           {/* Navigation buttons below cards on the right */}
           <div className="flex justify-end gap-3 mt-6 pr-8">
             <button
@@ -185,64 +182,36 @@ const HomePage = () => {
 
       {/* Jackpot CTA */}
       {products.filter(items => items.name === "jackpot").map( imgs=> (
-        <section key={imgs._id} className="w-full py-8 bg-[#E9F2FF]">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="mb-8">
-              <h2 className="text-3xl md:text-4xl text-center font-bold py-2 font-berlin">
+        <section key={imgs} className="py-8 relative overflow-hidden bg-[#E9F2FF]">
+          <div className="container mx-auto px-4 relative z-10">
+            <div className="mb-12">
+              <p className="text-4xl text-center font-bold py-2">
                 Buy a ₹99 ticket, win a jackpot!
-              </h2>
-              <div className="text-center py-6">
-                <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-8 rounded-lg text-base md:text-lg font-montserrat transition-colors duration-200 shadow-lg">
+              </p>
+              <div className="text-center py-6 pb-16">
+                <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-md w-48">
                   Click Here
                 </button>
               </div>
-              
-              {/* Jackpot VIP Card with SVG assets */}
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl min-h-[400px] md:min-h-[500px]">
-                
-                {/* Rectangle SVG Background Overlay */}
-                <div className="absolute inset-0 z-10">
+              <div className="hero-container rounded-lg">
+                <div className="hero-text px-16">
                   <img
-                    src="/images/beautifulview.jpg"
-                    alt="Background overlay"
-                    className="w-full h-full object-cover"
-                    style={{ objectFit: 'cover' }}
+                    src={"/images/Jackpot.png"}
+                    alt="Jackpot Logo"
+                    className="md:w-72 w-52 mb-4 jackpot-img"
                   />
+                  <p className="text-white font-bold text-lg w-72 mb-8">
+                    {imgs.content || "Enter for your chance to win this amazing prize."}
+                  </p>
+                  <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 mb-12 px-6 rounded-md w-48">
+                    Learn More
+                  </button>
                 </div>
-                
-                {/* Woman Image - Positioned on the right, above background */}
-                <div className="absolute right-0 top-0 bottom-0 w-1/2 md:w-5/6 z-20 flex items-end justify-end">
-                  <img
-                    src={imgs.image}
-                    alt="VIP Experience"
-                    className="h-full w-full object-contain object-right"
-                  />
-                </div>
-                
-                {/* Content Container */}
-                <div className="relative z-30 h-full flex items-center">
-                  <div className="px-8 md:px-16 py-10 md:py-16 max-w-xl">
-                    
-                    {/* VIP Jackpot SVG Logo */}
-                    <div className="mb-6 md:mb-8">
-                      <img
-                        src="/images/Jackpot.png"
-                        alt="Jackpot VIP Ticket"
-                        className="w-64 md:w-[30rem] h-auto drop-shadow-2xl"
-                      />
-                    </div>
-                    
-                    {/* Description */}
-                    <p className="text-white text-base md:text-xl font-bold font-montserrat mb-6 md:mb-8 drop-shadow-lg leading-relaxed max-w-md">
-                      {imgs.content || "Enjoy a dinner experience with a international model in Dubai"}
-                    </p>
-                    
-                    {/* Click Here Button */}
-                    <button className="bg-[#8ac43f] hover:bg-[#7ab52f] text-white font-bold py-3 md:py-4 px-8 md:px-10 rounded-lg text-base md:text-lg font-montserrat transition-all duration-200 shadow-xl hover:shadow-2xl">
-                      Click Here
-                    </button>
-                  </div>
-                </div>
+                <img
+                  src={imgs.image}
+                  alt={"Lady with city background"}
+                  className="lady-image"
+                />
               </div>
             </div>
           </div>
@@ -257,17 +226,16 @@ const HomePage = () => {
           </h2>
 
           <div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12 max-w-6xl mx-auto">
-            
+
             {/* Person Images Grid */}
             <div className="grid grid-cols-3 gap-4 lg:gap-6">
               {testimonials.map((t) => (
                 <div
                   key={t.id}
-                  className={`w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-xl overflow-hidden cursor-pointer border-4 transition-all duration-300 ${
-                    activeTestimonial === t.id
-                      ? "border-blue-500 scale-110 shadow-lg"
-                      : "border-gray-300 opacity-75 blur-[1px] hover:opacity-90"
-                  }`}
+                  className={`w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-xl overflow-hidden cursor-pointer border-4 transition-all duration-300 ${activeTestimonial === t.id
+                    ? "border-blue-500 scale-110 shadow-lg"
+                    : "border-gray-300 opacity-75 blur-[1px] hover:opacity-90"
+                    }`}
                   onClick={() => setActiveTestimonial(t.id)}
                 >
                   <img
@@ -304,64 +272,36 @@ const HomePage = () => {
       </section>
 
       {/* Spin Luck */}
-      <section className="py-8 md:py-12 bg-[#ffffff] relative overflow-hidden">
+      <section className="md:py-8 py-4 min-h-96 bg-[#ffffff]">
         {products?.filter(prod => prod?.name === "spinluck").map(pro => (
-          <div key={pro} className="container mx-auto px-4 max-w-6xl">
-            <div className="bg-white rounded-3xl  p-8 md:p-12">
-              <div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-16">
-                
-                {/* Left Content */}
-                <div className="flex flex-col items-start">
-                  {/* SPIN LUCK Title */}
-                  <div className="mb-4">
-                    <h2 className="font-montserrat text-[#8AC43F]  origin-bottom scale-y-150 text-4xl md:text-6xl lg:text-7xl font-black  leading-none tracking-tight">
-                      SPIN LUCK
-                    </h2>
+          <div key={pro} className="container md:mx-auto md:px-16 px-5 flex flex-col md:flex-row justify-start md:justify-center items-center">
+            <div className="flex flex-col">
+              <h2 className="lg:text-7xl md:text-[50px] font-montserrat text-4xl font-extrabold text-green-500 flex justify-start">SPIN LUCK</h2>
+              <div className="flex justify-end items-center">
+                <div className="md:w-40 w-[39%] flex gap-1 justify-start items-center">
+                  <div className="flex flex-col justify-start">
+                    <span className="text-black font-montserrat xl:text-2xl lg:text-xl text-xs font-extrabold">IN</span>
+                    <span className="text-red-500 font-montserrat xl:text-4xl lg:text-3xl md:text-2xl text-base font-medium">Rs.</span>
                   </div>
-                  
-                  {/* Price Section with Description beside it */}
-                  <div className="flex items-center gap-6 mb-6">
-                    <div className="flex items-center gap-3">
-                      <div className="flex flex-col items-start">
-                        <span className="font-montserrat text-black text-lg md:text-xl font-bold leading-none">IN</span>
-                        <span className="font-montserrat text-red-500 text-2xl md:text-3xl font-bold leading-none">Rs.</span>
-                      </div>
-                      <span className="font-berlin text-red-500 text-5xl md:text-7xl font-black">
-                        {pro?.price || "49"}
-                      </span>
-                    </div>
-                    
-                    {/* Description right beside the price */}
-                    <div>
-                      <p className="font-montserrat text-lg md:text-xl text-black font-bold leading-snug">
-                        iPhone 16, Premium<br />
-                        Luggage & More!
-                      </p>
-                    </div>
-                  </div>
+                  <div><span className="xl:text-[75px] lg:text-[70px] font-berlin md:text-[65px] text-[43px] font-bold text-red-500">{pro?.price || "0"}</span></div>
                 </div>
-
-                {/* Right Image */}
-                <div className="flex-shrink-0">
-                  <div className="relative">
-                    <img
-                      src={products?.length > 0 ? pro?.image : "/images/Spin-to-win.webp"}
-                      alt="Prize Box with iPhone and Gifts"
-                      loading="lazy"
-                      className="w-full max-w-[350px] md:max-w-[450px] lg:max-w-[500px] h-auto object-contain"
-                    />
-                  </div>
+                <div className="md:w-[60%] w-[61%]">
+                  <p className="flex items-center justify-start lg:text-xl  text-xs text-gray-700 font-bold leading-[1] font-montserrat">iPhone 16, Premium <br />Luggage & More!</p>
                 </div>
               </div>
             </div>
+            <div className="relative mt-8 md:mt-0 flex justify-center items-center">
+              <img
+                src={products?.length > 0 ? pro?.image : "/images/Spin-to-win.webp"}
+                alt="Gift Box"
+                loading="lazy"
+                width="480"
+                height="480"
+                className="mx-auto lg:max-h-[30rem] md:max-h-[25rem] w-full object-contain"
+              />
+            </div>
           </div>
         ))}
-        
-        {/* Floating confetti elements */}
-        <div className="absolute top-20 left-1/4 w-3 h-3 bg-yellow-400 transform rotate-45 opacity-80"></div>
-        <div className="absolute top-40 right-1/3 w-2 h-2 bg-orange-400 rounded-full opacity-70"></div>
-        <div className="absolute bottom-32 left-1/3 w-4 h-1 bg-yellow-500 opacity-60"></div>
-        <div className="absolute bottom-20 right-1/4 w-2 h-2 bg-yellow-400 transform rotate-45 opacity-80"></div>
       </section>
 
       <Footer />
