@@ -156,15 +156,15 @@ const TripCarosel = () => {
                 <div className="w-full md:w-[70%] flex flex-col items-center lg:gap-6 relative hidden lg:block">
                     <div className="absolute top-0 lg:left-[-85px] left-[20px] w-full z-20">
                         <h1 className="font-bold text-5xl leading-[1] mt-3">
-                            <span className="font-poppins text-stroke-red text-[30px] lg:text-[62px]">
+                            <span className="font-berlin text-stroke-red text-[30px] lg:text-[62px]">
                                 Win Your
                             </span>
                             <br />
-                            <span className="text-[#19c6b2] font-poppins text-[30px] lg:text-[60px]">
+                            <span className="text-[#19c6b2] font-berlin text-[30px] lg:text-[60px]">
                                 Dream
                             </span>
                             <br />
-                            <span className="text-[#19c6b2] font-poppins text-[30px] lg:text-[50px]">
+                            <span className="text-[#19c6b2] font-berlin text-[30px] lg:text-[50px]">
                                 Trip
                             </span>
                         </h1>
