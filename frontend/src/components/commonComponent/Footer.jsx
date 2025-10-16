@@ -4,7 +4,7 @@ const Footer = () => {
   return (
          
       <footer className="py-8 bg-[#E9F2FF]">
-        <div className="container mx-auto px-4 flex justify-center flex-col items-center">
+        <div className=" mx-auto px-4 flex flex-col items-center">
           <div><img src={'/images/luckmytrip-logo.png'} alt="Logo" className="w-28" /></div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 text-xl text-black">
             <div>
@@ -48,3 +48,4 @@ const Footer = () => {
 }
 
 export default Footer
+
