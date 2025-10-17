@@ -160,20 +160,20 @@ const HomePage = () => {
       {products.filter(items => items.name === "jackpot").map( imgs=> (
         <section key={imgs} className="max-w-7xl mx-auto py-8 relative overflow-hidden bg-[#E9F2FF]">
           <div className="container mx-auto px-4 relative z-10">
-            <div className="mb-12">
+            <div className="mb-4">
               <p className="text-4xl text-center font-bold py-2">
               </p>
-              <div className="text-center py-6 pb-16">
+              <div className="text-center py-6 pb-4">
                 <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-md w-48">
                   Click Here
                 </button>
               </div>
               <div className="hero-container bg-blue-900 rounded-lg flex flex-col md:flex-row items-center justify-between overflow-hidden relative">
-                <div className="hero-text px-8 md:px-16 z-10 md:py-8 py-2">
+                <div className="hero-text px-8 md:px-4 z-10 md:py-8 py-2">
                   <img
                     src={"/images/Jackpot.png"}
                     alt="Jackpot Logo"
-                    className="md:w-72 w-52 mb-4"
+                    className="md:w-72 w-48 mb-4"
                   />
                   <p className="text-white font-bold text-lg md:w-72 w-full  mt-2">
                     {imgs.content || "Enter for your chance to win this amazing prize."}
