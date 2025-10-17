@@ -5,7 +5,7 @@ import { logoutUser } from '../../features/auth/authUserSlice';
 
 
 const linkClasses = "transition-colors duration-300";
-const activeNavClass = "text-red-600 underline"; // Change to your preferred active color
+const activeNavClass = "text-red-600 no-underline"; // Active link styling without underline
 const inactiveNavClass = "text-gray-700";
 
 import { useSelector, useDispatch } from 'react-redux';
@@ -27,7 +27,7 @@ const Header = () => {
         <img src={'/images/luckmytrip-logo.png'} alt="Luckymytrip Logo" className="w-24 sm:w-28" />
 
         <div className="flex items-center space-x-4">
-          <ul className="hidden md:flex space-x-6 lg:space-x-12 font-semibold">
+          <ul className="hidden md:flex space-x-6 lg:space-x-12 font-semibold font-montserrat">
             <li>
               <NavLink
                 to="/"
@@ -72,7 +72,7 @@ const Header = () => {
           </ul>
         </div>
 
-        <div className="flex md:space-x-4 space-x-2 font-semibold items-center">
+        <div className="flex md:space-x-4 space-x-2 font-semibold items-center font-montserrat">
 
           {user 
             ? (<button onClick={handlelogout} className="hidden md:block w-full text-left text-lg hover:underline hover:text-blue-500">Logout</button>)
@@ -90,7 +90,7 @@ const Header = () => {
       </div>
 
       {menuOpen && (
-        <div className="md:hidden mt-2 bg-white shadow-md rounded-md p-4 space-y-4 font-semibold flex flex-col">
+        <div className="md:hidden mt-2 bg-white shadow-md rounded-md p-4 space-y-4 font-semibold flex flex-col font-montserrat">
           <NavLink to="/" onClick={() => setMenuOpen(false)} className={({ isActive }) =>
             `${linkClasses} ${isActive ? activeNavClass : inactiveNavClass} block`
           } end>

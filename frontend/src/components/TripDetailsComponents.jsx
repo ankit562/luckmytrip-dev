@@ -15,7 +15,7 @@ export
 
   }) {
   return (
-    <div className="relative bg-white rounded-3xl overflow-hidden shadow-md md:w-full w-[350px] h-[320px] flex items-end mb-7 lg:mb-0">
+    <div className="relative font-montserrat bg-white rounded-3xl overflow-hidden shadow-md md:w-full w-[350px] h-[320px] flex items-end mb-7 lg:mb-0">
       <img
         src={mainImage}
         alt={location}
@@ -26,16 +26,17 @@ export
         alt={`${location} shade`}
         className="absolute inset-0 w-full max-w-full block h-full object-cover rounded-3xl z-20"
       />
+      
       <div className="absolute z-30 p-4 w-full flex flex-col h-full justify-between">
         <div className="flex justify-between w-full h-[50%] items-center mt-5">
           <div className="flex justify-start items-end">
-            <span className="md:ml-3 text-white font-bold text-[70px] md:text-[105px] leading-[0.9] tracking-tight">
+            <span className="md:ml-3 font-berlin text-white font-bold text-[70px] md:text-[105px] leading-[0.9] tracking-tight">
               {mainText}
             </span>
           </div>
           <div className="flex flex-col items-end space-y-4">
             <span className="text-white font-bold md:text-[60px] text-[30px] leading-[0.9] tracking-tight">
-              {location}
+              {location[0].toUpperCase() + location.slice(1)}
             </span>
 
           </div>
