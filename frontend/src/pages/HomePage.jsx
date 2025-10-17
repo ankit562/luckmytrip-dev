@@ -202,8 +202,7 @@ const HomePage = () => {
                   <p className="text-white font-bold md:text-lg text-sm w-72 mb-3 md:mb-8 ml-0 md:ml-10">
                     {imgs.content || "Enter for your chance to win this amazing prize."}
                   </p>
-                  <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 md:mb-12  
-                  px-6 rounded-md w-48 ml-0 md:ml-10 ">
+                  <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 md:mb-2 px-6 rounded-md w-48 ml-0 md:ml-10">
                     Learn More
                   </button>
                 </div>
