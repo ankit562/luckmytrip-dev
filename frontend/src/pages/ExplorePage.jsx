@@ -51,7 +51,7 @@ const ExplorePage = () => {
       <Header />
       <TripCarosel />
 
-      <section className="relative overflow-hidden mt-[-45%] sm:mt-0 md:mt-0 lg:mt-0 xl:mt-[-10%]">
+      <section className="relative overflow-hidden mt-[-15%] sm:mt-0 md:mt-0 lg:mt-0 xl:mt-[-10%]">
         <div className="container mx-auto px-3 sm:px-6 md:px-8 lg:px-10 xl:px-8 py-2 md:py-3 lg:py-4 relative z-10">
           <h2 className="text-[1.80rem] sm:text-3xl md:text-3xl lg:text-4xl xl:text-6xl font-berlin font-extrabold text-[#FF1744] text-center mb-1 md:mb-1.5 lg:mb-2 pt-4 sm:pt-8 md:pt-4 lg:pt-6 xl:pt-12 leading-tight">
             Explore The Possibilities!
