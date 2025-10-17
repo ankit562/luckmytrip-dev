@@ -185,8 +185,7 @@ const HomePage = () => {
         <section key={imgs} className="py-8 relative overflow-hidden bg-[#E9F2FF]">
           <div className="container mx-auto md:px-4 px-2 relative z-10">
             <div className="mb-12">
-              <p className="text-sm md:text-2xl text-center font-bold py-2">
-                Buy a ₹99 ticket, win a jackpot!Buy a ₹599 ticket, win a luxury holiday to Dubai or Thailand
+              <p className="text-4xl text-center font-bold py-2">
               </p>
               <div className="text-center py-6 pb-16">
                 <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-md w-56">
