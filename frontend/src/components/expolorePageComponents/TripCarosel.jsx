@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const TripCarosel = () => {
+    const navigator = useNavigate();
     useEffect(() => {
-        const btn = document.getElementById("myButton");
-        if (btn) btn.addEventListener("click", () => alert("Button clicked!"));
-
+        
         function setupCarousel(trackId, leftBtnId, rightBtnId, numberEl = null, syncTrack = null) {
             const track = document.getElementById(trackId);
             if (!track) return;
@@ -149,6 +150,11 @@ const TripCarosel = () => {
         setupCarousel("smTrack", "scrollLeftBtn", "scrollRightBtn");
     }, []);
 
+    const handledubai=()=>{
+        toast.success("Redirecting to Ticket Page");
+        navigator("/ticket", { state: { ticketType: "dubai", qty: 1 } }); 
+    }
+
     return (
         <div className="bg-[#edf8fd] flex justify-center items-center min-h-screen lg:mt-[-70px] md:mt-0  mt-[-15%]">
             <div className="max-w-7xl w-full flex flex-col lg:flex-row lg:px-32 px-5 mx-auto ">
@@ -262,8 +268,10 @@ const TripCarosel = () => {
                             </span>
                         </h2>
                         <button
-                            id="myButton"
-                            className="lg:mt-7 mt-2 bg-[#8ac541] text-white lg:py-5 lg:px-6 py-2 px-3 text-sm lg:text-2xl rounded-[100%] shadow-lg hover:bg-[#3d660b] transition font-bold"
+                             onClick={handledubai} 
+                            className="lg:mt-7 mt-2 bg-[#8ac541] text-white 
+                            lg:py-5 lg:px-6 py-2 px-3 text-sm lg:text-2xl rounded-[100%] 
+                            shadow-lg hover:bg-[#3d660b] transition font-bold"
                         >
                             ➜
                         </button>

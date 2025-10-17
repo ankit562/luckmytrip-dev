@@ -56,25 +56,47 @@
 
 .hero-container {
   position: relative;
-    width: 100%;
-    margin: 0 auto;
-    height: 450px;
-    background-image: url(../public/images/beautifulview.jpg);
-    background-size: cover;
-    background-position: top;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    padding: 20px;
-    box-sizing: border-box;
-    overflow: visible;
+  width: 100%;
+  margin: 0 auto;
+  height: 450px;
+  background-image: url(/images/beautifulview.jpg);
+  background-size: cover;
+  background-position: top;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+@media(max-width:330px) {
+  .hero-container {
+    height: 360px;
+  }
+
+  .hero-text {
+  margin-left: 0px;
+  color: white;
+  max-width: 70%;
+  z-index: 2;
+}
+
+  .lady-image {
+    position: absolute;
+    right: 0;
+    top: -120px;
+    height: 30rem;
+    z-index: 1;
+  }
 }
 
 @media (max-width: 768px) {
-      .jackpot-img {
-max-width: 400px;
+  .jackpot-img {
+    max-width: 400px;
+  }
+
 }
-    }
 
 .hero-text {
   color: white;
@@ -84,9 +106,9 @@ max-width: 400px;
 
 .lady-image {
   position: absolute;
-    right: 0;
-    top: -190px;
-    height: 40rem;
-    /* max-height: 100%; */
-    z-index: 1;
+  right: 0;
+  top: -190px;
+  height: 40rem;
+  /* max-height: 100%; */
+  z-index: 1;
 }

@@ -106,7 +106,7 @@ const ContactUsPage = () => {
                   <p>Safdarjung enclave</p>
                   <p>New Delhi</p>
                   <p>110029</p>
-                  <p>Phone: +9711 234 5678</p>
+                  <p>Phone: +919891344354</p>
                   <p>Email: support@luckmytrip.com</p>
                 </div>
               </div>

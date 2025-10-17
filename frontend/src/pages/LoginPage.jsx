@@ -1,6 +1,6 @@
 
 import { ArrowRight } from 'lucide-react';
-import React, { useState, useEffect  } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../features/auth/authUserSlice';
@@ -11,25 +11,25 @@ const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    
-    const { loading , error, user} = useSelector(state => state.auth);
-    const client = user && user.role === 'client';
-    const admin = user && (user.role === 'admin' || user.role === 'superadmin' || user.role === 'content-creator') ;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { loading, error, user } = useSelector(state => state.auth);
+  const client = user && user.role === 'client';
+  const admin = user && (user.role === 'admin' || user.role === 'superadmin' || user.role === 'content-creator');
 
   useEffect(() => {
-    if (client) {  
+    if (client) {
       navigate('/')
     }
-    else if(admin) {
+    else if (admin) {
       navigate('/dashboard')
     }
-     else {
-       navigate('/login')
-      }
-    
-  }, [client, admin , navigate]);
+    else {
+      navigate('/login')
+    }
+
+  }, [client, admin, navigate]);
 
   useEffect(() => {
     if (error) {
@@ -39,7 +39,7 @@ const LoginPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(loginUser({  email , password }))
+    dispatch(loginUser({ email, password }))
       .unwrap()
       .then(() => {
         setEmail('');
@@ -106,11 +106,17 @@ const LoginPage = () => {
           {loading ? 'Signing in...' : 'Sign In'}
         </button>
       </form>
-      
+
       <p className='mt-8 text-center text-sm text-gray-400'>
         Not a member?{" "}
         <Link to='/signup' className='font-medium text-blue-400 hover:text-blue-500'>
           Sign up now <ArrowRight className='inline h-4 w-4' />
+        </Link>
+      </p>
+      <p className='mt-1 text-center text-sm text-gray-400'>
+        go back to{" "}
+        <Link to='/' className='font-medium text-blue-400 hover:text-blue-500'>
+          homepage <ArrowRight className='inline h-4 w-4 ' />
         </Link>
       </p>
 

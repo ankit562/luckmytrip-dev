@@ -183,35 +183,38 @@ const HomePage = () => {
       {/* Jackpot CTA */}
       {products.filter(items => items.name === "jackpot").map( imgs=> (
         <section key={imgs} className="py-8 relative overflow-hidden bg-[#E9F2FF]">
-          <div className="container mx-auto px-4 relative z-10">
+          <div className="container mx-auto md:px-4 px-2 relative z-10">
             <div className="mb-12">
-              <p className="text-4xl text-center font-bold py-2">
-                Buy a ₹99 ticket, win a jackpot!
+              <p className="text-sm md:text-2xl text-center font-bold py-2">
+                Buy a ₹99 ticket, win a jackpot!Buy a ₹599 ticket, win a luxury holiday to Dubai or Thailand
               </p>
               <div className="text-center py-6 pb-16">
-                <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-md w-48">
+                <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-md w-56">
                   Click Here
                 </button>
               </div>
               <div className="hero-container rounded-lg">
-                <div className="hero-text px-16">
+                <div className="hero-text md:px-16 md:mb-0  mb-[95px]">
                   <img
                     src={"/images/Jackpot.png"}
                     alt="Jackpot Logo"
-                    className="md:w-72 w-52 mb-4 jackpot-img"
+                    className="md:w-96 w-52  "
                   />
-                  <p className="text-white font-bold text-lg w-72 mb-8">
+                  <p className="text-white font-bold md:text-lg text-sm w-72 mb-3 md:mb-8 ml-0 md:ml-10">
                     {imgs.content || "Enter for your chance to win this amazing prize."}
                   </p>
-                  <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 mb-12 px-6 rounded-md w-48">
+                  <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 md:mb-12  
+                  px-6 rounded-md w-48 ml-0 md:ml-10 ">
                     Learn More
                   </button>
                 </div>
+                <div className="">
                 <img
                   src={imgs.image}
                   alt={"Lady with city background"}
-                  className="lady-image"
+                  className="lady-image "
                 />
+                </div>
               </div>
             </div>
           </div>
