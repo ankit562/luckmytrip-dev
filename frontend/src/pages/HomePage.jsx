@@ -182,22 +182,22 @@ const HomePage = () => {
 
       {/* Jackpot CTA */}
       {products.filter(items => items.name === "jackpot").map( imgs=> (
-        <section key={imgs} className="py-8 relative overflow-hidden bg-[#E9F2FF]">
-          <div className="container mx-auto md:px-4 px-2 relative z-10">
-            <div className="mb-12">
+        <section key={imgs} className="max-w-7xl mx-auto py-8 relative overflow-hidden bg-[#E9F2FF]">
+          <div className="container mx-auto px-4 relative z-10">
+            <div className="mb-4">
               <p className="text-4xl text-center font-bold py-2">
               </p>
-              <div className="text-center py-6 pb-16">
-                <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-md w-56">
+              <div className="text-center py-6 pb-4">
+                <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-md w-48">
                   Click Here
                 </button>
               </div>
-              <div className="hero-container rounded-lg">
-                <div className="hero-text md:px-16 md:mb-0  mb-[95px]">
+              <div className="hero-container bg-blue-900 rounded-lg flex flex-col md:flex-row items-center justify-between overflow-hidden relative">
+                <div className="hero-text px-8 md:px-4 z-10 md:py-8 py-2">
                   <img
                     src={"/images/Jackpot.png"}
                     alt="Jackpot Logo"
-                    className="md:w-96 w-52  "
+                    className="md:w-72 w-48 mb-4"
                   />
                   <p className="text-white font-bold md:text-lg text-sm w-72 mb-3 md:mb-8 ml-0 md:ml-10">
                     {imgs.content || "Enter for your chance to win this amazing prize."}
