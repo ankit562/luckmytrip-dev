@@ -153,6 +153,12 @@ const SignupPage = () => {
           Login here <ArrowRight className='inline h-4 w-4 ' />
         </Link>
       </p>
+      <p className='mt-1 text-center text-sm text-gray-400'>
+        go back to {" "}
+        <Link to='/' className='font-medium text-blue-400 hover:text-blue-500'>
+          homepage <ArrowRight className='inline h-4 w-4 ' />
+        </Link>
+      </p>
 
     </div>
   );

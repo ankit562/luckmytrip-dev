@@ -102,16 +102,14 @@ const ContactUsPage = () => {
               <div className="flex flex-col h-full justify-between">
                 <h1 className="text-gray-700 font-semibold block md:text-3xl text-2xl mb-4" htmlFor="address">Address</h1>
                 <div className="flex flex-col md:text-lg text-base mb-16 font-semibold">
-                  <p>456 Oak Drive</p>
-                  <p>Building 2, Room 210</p>
-                  <p>Midtown Manhattan</p>
-                  <p>New York, NY 10001</p>
-                  <p>USA</p>
-                  <p>Phone: +9711 234 5678</p>
+                  <p>B-1/31/2</p>
+                  <p>Safdarjung enclave</p>
+                  <p>New Delhi</p>
+                  <p>110029</p>
+                  <p>Phone: +919891344354</p>
                   <p>Email: support@luckmytrip.com</p>
                 </div>
               </div>
-
             </div>
           </form>
         </div>

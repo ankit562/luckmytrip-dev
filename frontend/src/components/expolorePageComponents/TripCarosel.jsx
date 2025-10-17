@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const TripCarosel = () => {
+    const navigator = useNavigate();
     useEffect(() => {
-        const btn = document.getElementById("myButton");
-        if (btn) btn.addEventListener("click", () => alert("Button clicked!"));
-
+        
         function setupCarousel(trackId, leftBtnId, rightBtnId, numberEl = null, syncTrack = null) {
             const track = document.getElementById(trackId);
             if (!track) return;
@@ -149,6 +150,11 @@ const TripCarosel = () => {
         setupCarousel("smTrack", "scrollLeftBtn", "scrollRightBtn");
     }, []);
 
+    const handledubai=()=>{
+        toast.success("Redirecting to Ticket Page");
+        navigator("/ticket", { state: { ticketType: "dubai", qty: 1 } }); 
+    }
+
     return (
         <div className="bg-[#edf8fd] flex justify-center items-center min-h-screen lg:mt-[-70px] md:mt-0  mt-[-15%]">
             <div className="max-w-7xl w-full flex flex-col lg:flex-row lg:px-32 px-5 mx-auto ">
@@ -156,15 +162,15 @@ const TripCarosel = () => {
                 <div className="w-full md:w-[70%] flex flex-col items-center lg:gap-6 relative hidden lg:block">
                     <div className="absolute top-0 lg:left-[-85px] left-[20px] w-full z-20">
                         <h1 className="font-bold text-5xl leading-[1] mt-3">
-                            <span className="font-poppins text-stroke-red text-[30px] lg:text-[62px]">
+                            <span className="font-berlin text-stroke-red text-[30px] lg:text-[62px]">
                                 Win Your
                             </span>
                             <br />
-                            <span className="text-[#19c6b2] font-poppins text-[30px] lg:text-[60px]">
+                            <span className="text-[#19c6b2] font-berlin text-[30px] lg:text-[60px]">
                                 Dream
                             </span>
                             <br />
-                            <span className="text-[#19c6b2] font-poppins text-[30px] lg:text-[50px]">
+                            <span className="text-[#19c6b2] font-berlin text-[30px] lg:text-[50px]">
                                 Trip
                             </span>
                         </h1>
@@ -262,8 +268,10 @@ const TripCarosel = () => {
                             </span>
                         </h2>
                         <button
-                            id="myButton"
-                            className="lg:mt-7 mt-2 bg-[#8ac541] text-white lg:py-5 lg:px-6 py-2 px-3 text-sm lg:text-2xl rounded-[100%] shadow-lg hover:bg-[#3d660b] transition font-bold"
+                             onClick={handledubai} 
+                            className="lg:mt-7 mt-2 bg-[#8ac541] text-white 
+                            lg:py-5 lg:px-6 py-2 px-3 text-sm lg:text-2xl rounded-[100%] 
+                            shadow-lg hover:bg-[#3d660b] transition font-bold"
                         >
                             ➜
                         </button>
