@@ -86,6 +86,8 @@
 @media(max-width:768px) {
   .hero-container {
     height: 328px;
+    justify-content: center;
+    align-items: flex-start;
   }
 
   .hero-text {
@@ -96,10 +98,10 @@
 }
   .lady-image {
     position: absolute;
-        right: 0;
-        top: -120px;
-        height: 28rem;
-        z-index: 1;
+    right: 0;
+    top: -120px;
+    height: 28rem;
+    z-index: 1;
   }
   .jackpot-img {
     max-width: 400px;
