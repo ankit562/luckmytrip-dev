@@ -187,17 +187,17 @@ const HomePage = () => {
             <div className="mb-4">
               <p className="text-4xl text-center font-bold py-2">
               </p>
-              <div className="text-center py-6 pb-4">
+              <div className="text-center py-6 mb-16 pb-16">
                 <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-md w-48">
                   Click Here
                 </button>
               </div>
               <div className="hero-container bg-blue-900 rounded-lg flex flex-col md:flex-row items-center justify-between overflow-hidden relative">
-                <div className="hero-text px-8 md:px-4 z-10 md:py-8 py-2">
+                <div className="hero-text px-4 md:px-4 z-10 md:py-8 py-2">
                   <img
                     src={"/images/Jackpot.png"}
                     alt="Jackpot Logo"
-                    className="md:w-72 w-48 mb-4"
+                    className="md:w-72 w-48"
                   />
                   <p className="text-white font-bold md:text-lg text-sm w-72 mb-3 md:mb-8 ml-0 md:ml-10">
                     {imgs.content || "Enter for your chance to win this amazing prize."}
