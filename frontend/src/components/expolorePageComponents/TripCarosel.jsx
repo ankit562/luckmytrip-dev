@@ -156,7 +156,7 @@ const TripCarosel = () => {
     }
 
     return (
-        <div className="bg-[#edf8fd] flex justify-center items-center min-h-screen lg:mt-0 md:mt-0  mt-[-10%]">
+        <div className="bg-[#edf8fd] flex justify-center items-center min-h-screen lg:mt-[-70px] md:mt-0  mt-[-15%]">
             <div className="max-w-7xl w-full flex flex-col lg:flex-row lg:px-32 px-5 mx-auto ">
                 {/* Left Section */}
                 <div className="w-full md:w-[70%] flex flex-col items-center lg:gap-6 relative hidden lg:block">
