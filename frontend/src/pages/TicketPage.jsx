@@ -38,6 +38,7 @@ const previousQty = useRef(0);
       return newQty;
     });
   };
+  
 
   const handleDecrement = () => {
     setDubaiQty((qty) => {
