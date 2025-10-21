@@ -86,8 +86,8 @@
 @media(max-width:768px) {
   .hero-container {
     height: 328px;
-    justify-content: center;
-    align-items: flex-start;
+    justify-content: normal;
+    align-items: center;
   }
 
   .hero-text {
@@ -110,7 +110,7 @@
 @media (max-width: 480px) {
   .hero-container {
       height: 300px;
-      justify-content: center;
+      justify-content: end;
       align-items: flex-start;
   }
   .lady-image {
