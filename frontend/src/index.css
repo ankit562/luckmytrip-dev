@@ -107,5 +107,16 @@
     max-width: 400px;
   }
 }
+@media (max-width: 480px) {
+  .hero-container {
+      height: 300px;
+      justify-content: center;
+      align-items: flex-start;
+  }
+  .lady-image {
+	    top: -100px;
+      height: 25rem;
+  }
+}
 
 
