@@ -125,7 +125,7 @@ const HomePage = () => {
 
       {/* Journey */}
       <section className="py-4 bg-[#E9F2FF] relative">
-        <div className="relative sm:max-w-[90vw] max-w-[60vw] mx-auto">
+        <div className="relative sm:max-w-[90vw] max-w-[80vw] mx-auto">
           <div className="text-center mb-10">
             <h1 className="text-4xl md:text-5xl font-extrabold mb-4 text-red-500 font-berlin">Start Your Journey</h1>
             <p className="text-base md:text-xl font-medium font-montserrat">Get ready for the adventure of a lifetime!</p>
