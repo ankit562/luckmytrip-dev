@@ -38,7 +38,7 @@ export default function Client() {
     phone: "",
     address: "",
     ticket: "",
-    won: 0,              // Added win field default 0
+    won: 0,              
     role: "client",
   });
 
@@ -285,7 +285,8 @@ export default function Client() {
           {/* Edit Modal */}
           {isEditModalOpen && (
             <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-              <div className="bg-white rounded shadow-lg p-6 md:w-full w-[90%] max-w-md relative">
+              <div className="bg-white rounded shadow-lg p-6 md:w-full w-[90%] max-w-md relative max-h-[80vh] overflow-y-auto">
+
                 <button
                   onClick={onCancelEdit}
                   className="absolute top-2 right-2 text-gray-600 hover:text-gray-900 text-xl"
@@ -314,8 +315,8 @@ export default function Client() {
                           field === "email"
                             ? "email"
                             : field === "ticket" || field === "win"
-                            ? "number"
-                            : "text"
+                              ? "number"
+                              : "text"
                         }
                         value={editData[field]}
                         onChange={onInputChange}
@@ -328,7 +329,7 @@ export default function Client() {
                     <div>
                       <label className="block mb-1 font-medium">Password</label>
                       <input
-                      required={editId === null}
+                        required={editId === null}
                         name="password"
                         type="password"
                         value={editData.password}

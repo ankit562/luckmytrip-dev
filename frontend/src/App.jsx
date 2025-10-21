@@ -32,22 +32,19 @@ import Ticket from './pages/dashboard/Tickets';
 
 function App() {
   const user = useSelector(state => state.auth.user);
+  const loading = useSelector(state => state.auth.loading);
   const isInitialized = useSelector(state => state.auth.isInitialized);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (!isInitialized) {
-      (async () => {
-        dispatch(fetchProfile());
-
-      })();
-    }
-  }, [dispatch, isInitialized]);
-
-  // Show loading until auth check is complete
-  if (!isInitialized) {
-    return <Loading />;
+useEffect(() => {
+  if (!isInitialized && !loading) {
+    dispatch(fetchProfile());
   }
+}, [dispatch, isInitialized, loading]);
+
+if (!isInitialized) {
+  return <Loading />;
+}
 
 
   // useEffect(() => {
@@ -68,20 +65,20 @@ function App() {
 
         <Route path="/home/journey"
           element={
-            user && ["content-creator", "admin", "superadmin"].includes(user.role.toLowerCase())
+            user && ["content-creator", "admin", "superadmin"].includes(user.role?.toLowerCase())
               ? (<Journey />)
               : (<Navigate to="/login" />)
           } />
 
         <Route path="/home/jackpot"
           element={
-            user && ["content-creator", "admin", "superadmin"].includes(user.role.toLowerCase())
+            user && ["content-creator", "admin", "superadmin"].includes(user.role?.toLowerCase())
               ? (<Jackpot />)
               : (<Navigate to="/login" />)
           } />
         <Route path="/home/spinluck"
           element={
-            user && ["content-creator", "admin", "superadmin"].includes(user.role.toLowerCase())
+            user && ["content-creator", "admin", "superadmin"].includes(user.role?.toLowerCase())
               ? (<SpinLuck />)
               : (<Navigate to="/login" />)
           } />
@@ -91,19 +88,19 @@ function App() {
 
         <Route path="/explore/dreamtrip"
           element={
-            user && ["content-creator", "admin", "superadmin"].includes(user.role.toLowerCase())
+            user && ["content-creator", "admin", "superadmin"].includes(user.role?.toLowerCase())
               ? (<DreamTrip />)
               : (<Navigate to="/login" />)
           } />
         <Route path="/explore/tripinfo"
           element={
-            user && ["content-creator", "admin", "superadmin"].includes(user.role.toLowerCase())
+            user && ["content-creator", "admin", "superadmin"].includes(user.role?.toLowerCase())
               ? (<TripInfo />)
               : (<Navigate to="/login" />)
           } />
         <Route path="/explore/goldenwinner"
           element={
-            user && ["content-creator", "admin", "superadmin"].includes(user.role.toLowerCase())
+            user && ["content-creator", "admin", "superadmin"].includes(user.role?.toLowerCase())
               ? (<GoldenWinner />)
               : (<Navigate to="/login" />)
           } />
@@ -113,19 +110,19 @@ function App() {
 
         <Route path="/users/superadmin"
           element={
-            user && ["superadmin"].includes(user.role.toLowerCase())
+            user && ["superadmin"].includes(user.role?.toLowerCase())
               ? (<SuperAdmin />)
               : (<Navigate to="/login" />)
           } />
         <Route path="/users/admin"
           element={
-            user && ["admin", "superadmin"].includes(user.role.toLowerCase())
+            user && ["admin", "superadmin"].includes(user.role?.toLowerCase())
               ? (<Admin />)
               : (<Navigate to="/login" />)
           } />
         <Route path="/users/content-creator"
           element={
-            user && ["content-creator", "admin", "superadmin"].includes(user.role.toLowerCase())
+            user && ["content-creator", "admin", "superadmin"].includes(user.role?.toLowerCase())
               ? (<ContentCreator />)
               : (<Navigate to="/login" />)
           } />
@@ -136,32 +133,29 @@ function App() {
 
         <Route path="/dashboard/client"
           element={
-            user && ["admin", "superadmin"].includes(user.role.toLowerCase())
+            user && ["admin", "superadmin"].includes(user.role?.toLowerCase())
               ? (<Client />)
               : (<Navigate to="/login" />)
           } />
         <Route path="/dashboard/tickets"
           element={
-            user && ["content-creator", "admin", "superadmin"].includes(user.role.toLowerCase())
+            user && ["content-creator", "admin", "superadmin"].includes(user.role?.toLowerCase())
               ? (<Ticket />)
               : (<Navigate to="/login" />)
           } />
         <Route path="/dashboard"
           element={
-            user && ["content-creator", "admin", "superadmin"].includes(user.role.toLowerCase())
+            user && ["content-creator", "admin", "superadmin"].includes(user.role?.toLowerCase())
               ? (<Dashboard />)
               : (<Navigate to="/login" />)
           } />
         {/* dashboard end here */}
         
 
-        <Route path="/signup" element={!user ? <SignupPage /> :""} />
+        <Route path="/signup" element={ <SignupPage />} />
 
-        <Route path="/login" element={
-          !user ? <LoginPage />
-           : (user && ["client"].includes(user.role.toLowerCase()) 
-           ? <Navigate to="/" /> 
-           : <Navigate to="/dashboard" />)} />
+        <Route path="/login" element={<LoginPage />} />
+
 
         <Route path="/otp-verification" element={<OtpPage />} />
 

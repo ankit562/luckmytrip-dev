@@ -3,22 +3,22 @@ import Header from '../../components/dashboardComponent/Header';
 import LeftsideNavbar from '../../components/dashboardComponent/LeftsideNavbar';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { useEffect } from 'react';
-import { fetchProfile } from '../../features/auth/authUserSlice';
+// import { useEffect } from 'react';
+// import { fetchProfile } from '../../features/auth/authUserSlice';
 
 export default function Dashboard() {
 
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
   
-  const { user, loading, isInitialized } = useSelector(state => state.auth);
+  const { user,  } = useSelector(state => state.auth);
 
 
-  useEffect(() => {
-    if (isInitialized && !user && !loading) {
-      console.log('Retrying user profile fetch...');
-      dispatch(fetchProfile());
-    }
-  }, [isInitialized, user, loading, dispatch]);
+  // useEffect(() => {
+  //   if (isInitialized && !user && !loading) {
+  //     console.log('Retrying user profile fetch...');
+  //     dispatch(fetchProfile());
+  //   }
+  // }, [isInitialized, user, loading, dispatch]);
   
   return (
     <div className="min-h-screen bg-blue-50 flex flex-col">

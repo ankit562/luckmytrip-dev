@@ -152,7 +152,7 @@ const TripCarosel = () => {
 
     const handledubai=()=>{
         toast.success("Redirecting to Ticket Page");
-        navigator("/ticket", { state: { ticketType: "dubai", qty: 1 } }); 
+        navigator("/ticket", { state: { ticketType: "dubai", qty: 1 , fromdubaicarosel:true } }); 
     }
 
     return (

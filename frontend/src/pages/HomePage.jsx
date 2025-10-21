@@ -40,7 +40,7 @@ const testimonials = [
   },
   {
     id: "content5",
-    name: "Hrithik Kesarwani",
+    name: "dweep Kishor",
     country: "India",
     text: "Outstanding service and an incredible reward! The prize package was exactly as promised, and the execution was perfect. I'm impressed by the professionalism and genuine care shown throughout the entire process. Highly recommended!",
     img: "/images/Person5.png",
@@ -66,7 +66,6 @@ const HomePage = () => {
   useEffect(() => {
     dispatch(fetchProducts())
   }, [dispatch])
-
 
   useEffect(() => {
     dispatch(fetchTickets());
@@ -141,8 +140,8 @@ const HomePage = () => {
             className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth md:px-8 px-1 gap-10 w-full max-w-full"
             style={{ scrollbarWidth: 'none' }}
           >
-            {(tickets || []).map(item => (
-              <div key={item._id} className="slide snap-center flex-shrink-0 w-[550px]">
+            {(tickets || []).map((item ,idx )=> (
+              <div key={idx} className="slide snap-center flex-shrink-0 w-[550px]">
                 <OfferCard
                   mainImage={item.image}
                   shadeImage={"/images/shade.png"}

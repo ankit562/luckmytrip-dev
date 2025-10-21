@@ -8,8 +8,8 @@ import {
   createProduct,
   editProduct,
   removeProduct,
-} from "../../../features/products/productSlice"; 
-import { fetchProfile } from "../../../features/auth/authUserSlice"; 
+} from "../../../features/products/productSlice";
+import { fetchProfile } from "../../../features/auth/authUserSlice";
 import toast from "react-hot-toast";
 
 export default function Jackpot() {
@@ -19,7 +19,7 @@ export default function Jackpot() {
     (state) => state.auth
   );
   const {
-    products =[],
+    products = [],
     loading: productsLoading,
     error: productsError,
   } = useSelector((state) => state.products);
@@ -110,7 +110,7 @@ export default function Jackpot() {
         await dispatch(editProduct({ id: editId, formData: data })).unwrap();
       }
       closeModal();
-      
+
       toast.success(`Product ${editId === null ? "added" : "updated"} successfully`);
 
     } catch (err) {
@@ -160,7 +160,7 @@ export default function Jackpot() {
           {productsLoading ? (
             <p>Loading products...</p>
           ) : productsError ? (
-            <p className="text-red-500 text-center">Error loading products: { productsError}</p>
+            <p className="text-red-500 text-center">Error loading products: {productsError}</p>
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full border bg-white rounded shadow overflow-x-auto text-sm md:text-base">
@@ -175,46 +175,47 @@ export default function Jackpot() {
                 </thead>
                 <tbody>
                   {products.filter((prod) => prod.name === "jackpot")
-                  .map((prod) => (
-                    <tr key={prod._id} className="border-t hover:bg-gray-50">
-                      <td className="p-3">{ prod.name}</td>
-                      <td className="p-3">
-                        {prod.image && (
-                          <img
-                            src={prod.image}
-                            alt={prod.name}
-                            className="w-12 h-12 object-cover rounded"
-                          />
-                        )}
-                      </td>
-                      <td className="p-3 max-w-lg truncate">{prod.content}</td>
-                      <td className="p-3">
-                        <button
-                          onClick={() => openEditModal(prod)}
-                          className="bg-yellow-300 px-3 py-1 rounded hover:bg-yellow-400"
-                        >
-                          Edit
-                        </button>
-                      </td>
-                      <td className="p-3">
-                        <button
-                          onClick={() => openDeleteModal(prod._id)}
-                          className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
+                    .map((prod) => (
+                      <tr key={prod._id} className="border-t hover:bg-gray-50">
+                        <td className="p-3">{prod.name}</td>
+                        <td className="p-3">
+                          {prod.image && (
+                            <img
+                              src={prod.image}
+                              alt={prod.name}
+                              className="w-12 h-12 object-cover rounded"
+                            />
+                          )}
+                        </td>
+                        <td className="p-3 max-w-lg truncate">{prod.content}</td>
+                        <td className="p-3">
+                          <button
+                            onClick={() => openEditModal(prod)}
+                            className="bg-yellow-300 px-3 py-1 rounded hover:bg-yellow-400"
+                          >
+                            Edit
+                          </button>
+                        </td>
+                        <td className="p-3">
+                          <button
+                            onClick={() => openDeleteModal(prod._id)}
+                            className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>
           )}
 
+
           {/* Edit/Add Modal */}
           {modalOpen && (
             <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 p-4">
-              <div className="bg-white rounded shadow-lg max-w-md w-full p-6 relative">
+              <div className="bg-white rounded-lg shadow max-w-lg w-full p-6 relative max-h-[80vh] overflow-y-auto">
                 <button
                   onClick={closeModal}
                   className="absolute top-2 right-2 text-gray-600 hover:text-gray-900 text-xl"

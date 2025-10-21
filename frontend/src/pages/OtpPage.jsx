@@ -16,7 +16,7 @@ const OtpPage = () => {
       throw new Error("No email found for OTP verification");
     }
     await dispatch(verifyOtpUser({ email, otp })).unwrap();
-    navigate('/login');
+    navigate('/');
   };
 
   return <OtpContainer onConfirm={handleOtpConfirm} />;

@@ -165,7 +165,7 @@ export const ForgotPasswordRequest = async (req, res) => {
 // Refresh access token using stored refresh token
 export const RefreshToken = async (req, res) => {
   try {
-    const token = req.cookies?.jwt;
+    const token = req.cookies?.refreshToken;
     if (!token) return res.status(401).json({ message: "Refresh token not found" });
 
     const userData = verifyRefreshToken(token);
@@ -183,11 +183,18 @@ export const RefreshToken = async (req, res) => {
     user.refreshToken = newRefreshToken;
     await user.save();
 
-    res.cookie("jwt", newRefreshToken, {
+    res.cookie("accessToken", accessToken, {  
       httpOnly: true,
       secure: true,
       sameSite: "Strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      maxAge: 15 * 60 * 1000  
+    });
+
+    res.cookie("refreshToken", newRefreshToken, {  
+      httpOnly: true,
+      secure: true,
+      sameSite: "Strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000
     });
 
     res.json({ accessToken });
@@ -199,7 +206,7 @@ export const RefreshToken = async (req, res) => {
 // Logout user clearing refresh token cookie and DB field
 export const Logout = async (req, res) => {
   try {
-    const token = req.cookies?.jwt;
+    const token = req.cookies?.refreshToken;
     if (token) {
       const userData = verifyRefreshToken(token);
       if (userData) {

@@ -1,6 +1,6 @@
 import axios from "axios";
-// // import store from '../store/store'; // your redux store
-// // import { logoutUser, fetchProfile } from '../features/auth/authUserSlice';
+import store from '../store/store';
+import { logoutUser } from '../features/auth/authUserSlice';
 
 const getBaseURL = () => {
   if (import.meta.env.PROD) {
@@ -14,7 +14,6 @@ const instance = axios.create({
   withCredentials: true,
 });
 
-
 // Response interceptor to catch 401 errors
 // instance.interceptors.response.use(
 //   (response) => response,
@@ -24,7 +23,7 @@ const instance = axios.create({
 //       originalRequest._retry = true;
 //       try {
 //         // Call refresh token endpoint to get new access token
-//         const resp = await instance.post('/auth/refresh-token');
+//         const resp = await instance.post('/api/v1/auth/refresh-token');
 //         // Then retry original request
 //         return instance(originalRequest);
 //       } catch (refreshError) {

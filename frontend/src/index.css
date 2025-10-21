@@ -1,27 +1,27 @@
 @font-face {
   font-family: 'Berlin Sans FB Demi';
-  src: url('./assets/fonts/berlin-sans-fb-demi/BRLNSDB.TTF') format('truetype');
+  src: url('./components/assets/fonts/berlin-sans-fb-demi/BRLNSDB.TTF') format('truetype');
   font-weight: 600;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Montserrat';
-  src: url('./assets/fonts/Montserrat/static/Montserrat-Regular.ttf') format('truetype');
+  src: url('./components/assets/fonts/Montserrat/static/Montserrat-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Montserrat';
-  src: url('./assets/fonts/Montserrat/static/Montserrat-Bold.ttf') format('truetype');
+  src: url('./components/assets/fonts/Montserrat/static/Montserrat-Bold.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Montserrat';
-  src: url('./assets/fonts/Montserrat/static/Montserrat-Black.ttf') format('truetype');
+  src: url('./components/assets/fonts/Montserrat/static/Montserrat-Black.ttf') format('truetype');
   font-weight: 900;
   font-style: normal;
 }

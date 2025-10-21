@@ -65,7 +65,7 @@ const SignupPage = () => {
           <span className="text-blue-600 font-bold text-xl">🔐</span>
         </div>
         <h1 className="text-2xl font-bold text-gray-900">Welcome Back</h1>
-        <p className="text-gray-600 mt-2">Sign in to your dashboard</p>
+        <p className="text-gray-600 mt-2">Sign up to your Account</p>
       </div>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
@@ -78,7 +78,7 @@ const SignupPage = () => {
             placeholder="Enter your Fullname"
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border text-sm md:text-base border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             required
           />
         </div>
@@ -93,7 +93,7 @@ const SignupPage = () => {
             placeholder="Enter your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border text-sm md:text-base border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             required
           />
         </div>
@@ -110,7 +110,7 @@ const SignupPage = () => {
             maxLength={10}
             
             onChange={(e) => setPhone(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border text-sm md:text-base border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             required
           />
         </div>
@@ -126,7 +126,7 @@ const SignupPage = () => {
             value={password}
             
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border text-sm md:text-base border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             required
           />
         </div>
@@ -142,7 +142,7 @@ const SignupPage = () => {
           disabled={loading}
           className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
-          {loading ? 'Signing in...' : 'Sign In'}
+          {loading ? 'Signing in...' : 'Sign Up'}
         </button>
 
       </form>

@@ -1,6 +1,8 @@
 // TripSection.jsx
 import React from "react";
 import { ChevronLeft, ChevronRight, Check, X } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export default function TripSection({
   trip,
@@ -9,7 +11,12 @@ export default function TripSection({
   onDecrement,
   onAddToCart,
   onBuyMore,
-}) {
+ 
+
+}){
+
+
+
   const features = [
     { text: `Return Ticket from India to ${trip.name}`, available: true },
     { text: "Pick & drop from airport", available: true },
@@ -18,6 +25,13 @@ export default function TripSection({
     { text: "Basic City Tour", available: true },
     { text: "Lunch, Dinner and Alcohol", available: false },
   ];
+  
+  const navigator = useNavigate();
+  const handleGift = () => {
+    navigator("/addtocart", { state: { gift: "grift", giftQty: 1, isGift: true } });
+     toast.success("Gift  is added to cart");
+
+  }
 
   return (
     <section className="bg-[#edf8fd] py-10">
@@ -95,7 +109,7 @@ export default function TripSection({
                 </h3>
                 <p className="font-montserrat text-blue-900 font-bold text-xs md:text-lg lg:text-sm">{trip.name} TRIP TICKET</p>
                 <p className="font-montserrat text-blue-900 lg:text-xs text-xs md:text-base mb-2">(one person)</p>
-                <button className="font-montserrat bg-[#ef3232] hover:bg-[#d41313] text-white font-bold md:px-4 md:py-1 
+                <button onClick={handleGift} className="font-montserrat bg-[#ef3232] hover:bg-[#d41313] text-white font-bold md:px-4 md:py-1 
                 rounded lg:text-sm text-sm md:text-xl lg:mr-0 md:ml-4 lg:mt-0 md:mt-2 mt-0 px-2 py-1">
                   GIFT BUY
                 </button>

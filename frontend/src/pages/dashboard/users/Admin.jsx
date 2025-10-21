@@ -10,7 +10,6 @@ import {
   UpdateProfile,
   deleteUser,
   signupUser,
-
 } from "../../../features/auth/authUserSlice";
 import toast from "react-hot-toast";
 
@@ -26,7 +25,14 @@ export default function Admin() {
   } = useSelector((state) => state.auth);
 
   const [editId, setEditId] = useState(null);
-  const [editAdminData, setEditAdminData] = useState(null);
+  const [editAdminData, setEditAdminData] = useState({
+    fullName: "",
+    email: "",
+    password: "",
+    phone: "",
+    address: "",
+    type: "admin",
+  });
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -45,13 +51,27 @@ export default function Admin() {
 
   const openAddModal = () => {
     setEditId(null);
-    setEditAdminData(null);
+    setEditAdminData({
+      fullName: "",
+      email: "",
+      password: "",
+      phone: "",
+      address: "",
+      type: "admin",
+    });
     setShowAddModal(true);
   };
 
   const openEditModal = (admin) => {
     setEditId(admin._id);
-    setEditAdminData(admin);
+    setEditAdminData({
+      fullName: admin.fullName || "",
+      email: admin.email || "",
+      password: "",
+      phone: admin.phone || "",
+      address: admin.address || "",
+      type: admin.type || "admin",
+    });
     setShowEditModal(true);
   };
 
@@ -60,47 +80,65 @@ export default function Admin() {
     setShowEditModal(false);
     setShowDeleteModal(false);
     setEditId(null);
-    setEditAdminData(null);
+    setEditAdminData({
+      fullName: "",
+      email: "",
+      password: "",
+      phone: "",
+      address: "",
+      type: "admin",
+    });
   };
 
+  // Input change handler for controlled inputs
+  const onInputChange = (e) => {
+    const { name, value } = e.target;
 
-const onAddSubmit = async (e) => {
-  e.preventDefault();
-  const formData = new FormData(e.target);
+    // Phone number validation - digits only, max 10 chars
+    if (name === "phone") {
+      const digitsOnly = value.replace(/\D/g, "");
+      if (digitsOnly.length > 10) return;
+      setEditAdminData((prev) => ({ ...prev, [name]: digitsOnly }));
+      return;
+    }
 
-  const newAdmin = {
-    fullName: formData.get("name"),
-    email: formData.get("email"),
-    password: formData.get("password"),
-    phone: formData.get("phone"),
-    address: formData.get("address"),
-    role: "admin",
+    setEditAdminData((prev) => ({ ...prev, [name]: value }));
   };
 
-  try {
-    await dispatch(signupUser(newAdmin)).unwrap();
-    closeModals();
-    toast.success("Admin added successfully");
-    dispatch(getAllProfile());
-  } catch (err) {
-    alert("Failed to add admin: " + (err.message || "Unknown error"));
-  }
-};
+  // Add new admin submit with controlled data
+  const onAddSubmit = async (e) => {
+    e.preventDefault();
+    const newAdmin = {
+      fullName: editAdminData.fullName,
+      email: editAdminData.email,
+      password: editAdminData.password,
+      phone: editAdminData.phone,
+      address: editAdminData.address,
+      role: "admin",
+    };
+    try {
+      await dispatch(signupUser(newAdmin)).unwrap();
+      closeModals();
+      toast.success("Admin added successfully");
+      dispatch(getAllProfile());
+    } catch (err) {
+      alert("Failed to add admin: " + (err.message || "Unknown error"));
+    }
+  };
 
-
+  // Edit existing admin submit
   const onEditSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
     const updatedAdmin = {
-      fullName: formData.get("name"),
-      email: formData.get("email"),
+      fullName: editAdminData.fullName,
+      email: editAdminData.email,
       type: "admin",
-      phone: formData.get("phone"),
-      address: formData.get("address"),
+      phone: editAdminData.phone,
+      address: editAdminData.address,
     };
-    const password = formData.get("password");
-    if (password && password.trim()) updatedAdmin.password = password;
-
+    if (editAdminData.password && editAdminData.password.trim()) {
+      updatedAdmin.password = editAdminData.password;
+    }
     try {
       await dispatch(UpdateProfile({ id: editId, userData: updatedAdmin })).unwrap();
       closeModals();
@@ -111,33 +149,26 @@ const onAddSubmit = async (e) => {
     }
   };
 
-const onDeleteClick = (admin) => {
-  setEditAdminData(admin);
-  setShowDeleteModal(true);
-};
+  const onDeleteClick = (admin) => {
+    setEditAdminData(admin);
+    setShowDeleteModal(true);
+  };
 
-const onDeleteConfirm = async () => {
-  try {
-    if (!editAdminData?._id) {
-      alert("No admin selected for deletion");
-      return;
+  const onDeleteConfirm = async () => {
+    try {
+      if (!editAdminData?._id) {
+        alert("No admin selected for deletion");
+        return;
+      }
+      await dispatch(deleteUser(editAdminData._id)).unwrap();
+      closeModals();
+      toast.success("Admin deleted successfully");
+      dispatch(getAllProfile());
+    } catch (err) {
+      console.error("Delete failed:", err);
+      alert("Delete failed: " + (err.message || "Something went wrong"));
     }
-
-    // Delete the admin by ID
-    await dispatch(deleteUser(editAdminData._id)).unwrap();
-   
-
-    // Close modals and refresh user list
-    closeModals();
-     toast.success("Admin deleted successfully");
-    dispatch(getAllProfile());
-
-  } catch (err) {
-    console.error("Delete failed:", err);
-    alert("Delete failed: " + (err.message || "Something went wrong"));
-  }
-};
-
+  };
 
   return (
     <div className="min-h-screen bg-blue-50 flex flex-col">
@@ -200,21 +231,34 @@ const onDeleteConfirm = async () => {
             )}
           </section>
 
+          {/* Add Modal */}
           {showAddModal && (
             <Modal title="Add Admin" onClose={closeModals}>
-              <AdminForm onSubmit={onAddSubmit} />
+              <AdminForm
+                onSubmit={onAddSubmit}
+                admin={editAdminData}
+                onInputChange={onInputChange}
+                formData={editAdminData}
+              />
             </Modal>
           )}
 
+          {/* Edit Modal */}
           {showEditModal && editAdminData && (
             <Modal title="Edit Admin" onClose={closeModals}>
-              <AdminForm onSubmit={onEditSubmit} admin={editAdminData} />
+              <AdminForm
+                onSubmit={onEditSubmit}
+                admin={editAdminData}
+                onInputChange={onInputChange}
+                formData={editAdminData}
+              />
             </Modal>
           )}
 
+          {/* Delete Modal */}
           {showDeleteModal && editAdminData && (
             <Modal title="Confirm Delete" onClose={closeModals}>
-              <p>Are you sure you want to delete {editAdminData.name}?</p>
+              <p>Are you sure you want to delete {editAdminData.fullName}?</p>
               <div className="mt-4 flex justify-end gap-4">
                 <button
                   onClick={closeModals}
@@ -240,7 +284,7 @@ const onDeleteConfirm = async () => {
 function Modal({ title, children, onClose }) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow max-w-lg w-full p-6 relative">
+      <div className="bg-white rounded-lg shadow max-w-lg w-full p-6 relative max-h-[80vh] overflow-y-auto">
         <h3 className="text-xl font-semibold mb-4">{title}</h3>
         <button
           onClick={onClose}
@@ -255,7 +299,7 @@ function Modal({ title, children, onClose }) {
   );
 }
 
-function AdminForm({ onSubmit, admin }) {
+function AdminForm({ onSubmit, formData, onInputChange, admin }) {
   return (
     <form onSubmit={onSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div>
@@ -264,10 +308,11 @@ function AdminForm({ onSubmit, admin }) {
         </label>
         <input
           id="name"
-          name="name"
-          defaultValue={admin?.fullName || ""}
+          name="fullName"
           type="text"
           required
+          value={formData.fullName}
+          onChange={onInputChange}
           className="w-full px-3 py-2 border rounded"
         />
       </div>
@@ -278,9 +323,10 @@ function AdminForm({ onSubmit, admin }) {
         <input
           id="email"
           name="email"
-          defaultValue={admin?.email || ""}
           type="email"
           required
+          value={formData.email}
+          onChange={onInputChange}
           className="w-full px-3 py-2 border rounded"
         />
       </div>
@@ -293,8 +339,10 @@ function AdminForm({ onSubmit, admin }) {
           name="password"
           type="password"
           placeholder={admin ? "Leave blank to keep existing password" : ""}
-          className="w-full px-3 py-2 border rounded"
+          value={formData.password}
+          onChange={onInputChange}
           required={!admin}
+          className="w-full px-3 py-2 border rounded"
         />
       </div>
       <div>
@@ -304,9 +352,9 @@ function AdminForm({ onSubmit, admin }) {
         <input
           id="address"
           name="address"
-          defaultValue={admin?.address || ""}
           type="text"
-          
+          value={formData.address}
+          onChange={onInputChange}
           className="w-full px-3 py-2 border rounded"
         />
       </div>
@@ -317,10 +365,10 @@ function AdminForm({ onSubmit, admin }) {
         <select
           id="type"
           name="type"
-          defaultValue={admin?.type || "admin"}
-          required
-          className="w-full px-3 py-2 border rounded"
+          value={formData.type}
           disabled
+          className="w-full px-3 py-2 border rounded bg-gray-100 cursor-not-allowed"
+          onChange={onInputChange}
         >
           <option value="admin">Admin</option>
           <option value="superadmin">Super Admin</option>
@@ -334,10 +382,11 @@ function AdminForm({ onSubmit, admin }) {
         <input
           id="phone"
           name="phone"
-          defaultValue={admin?.phone || ""}
           type="text"
           maxLength={10}
           required
+          value={formData.phone}
+          onChange={onInputChange}
           className="w-full px-3 py-2 border rounded"
         />
       </div>

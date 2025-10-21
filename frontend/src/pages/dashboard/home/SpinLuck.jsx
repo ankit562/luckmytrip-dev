@@ -214,8 +214,8 @@ export default function SpinLuck() {
 
           {/* Edit/Add Modal */}
           {isEditModalOpen && (
-            <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-              <div className="bg-white rounded shadow-lg md:p-6 p-3 md:w-full w-[90%] max-w-md relative">
+            <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-lg shadow max-w-lg w-full p-6 relative max-h-[80vh] overflow-y-auto">
                 <button
                   onClick={onCancelEdit}
                   className="absolute top-2 right-2 text-gray-600 hover:text-gray-900 text-xl"
@@ -224,7 +224,7 @@ export default function SpinLuck() {
                   ×
                 </button>
                 <h2 className="text-xl font-semibold mb-4">
-                  {editId === null ? "Add Jackpot" : "Edit Jackpot"}
+                  {editId === null ? "Add Product" : "Edit Product"}
                 </h2>
                 <form
                   onSubmit={(e) => {

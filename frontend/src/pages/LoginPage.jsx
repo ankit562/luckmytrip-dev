@@ -15,21 +15,25 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   const { loading, error, user } = useSelector(state => state.auth);
-  const client = user && user.role === 'client';
-  const admin = user && (user.role === 'admin' || user.role === 'superadmin' || user.role === 'content-creator');
 
+  // Redirect if user is already logged in (only when component mounts)
   useEffect(() => {
-    if (client) {
-      navigate('/')
+   
+    if (user && user.role) {
+      const role = user.role.toLowerCase();
+     
+      if (role === 'client') {
+        
+        navigate('/', { replace: true });
+      } else if (['admin', 'superadmin', 'content-creator'].includes(role)) {
+       
+        navigate('/dashboard', { replace: true });
+      }
     }
-    else if (admin) {
-      navigate('/dashboard')
-    }
-    else {
-      navigate('/login')
-    }
+  }, [user, navigate]);
 
-  }, [client, admin, navigate]);
+
+
 
   useEffect(() => {
     if (error) {
@@ -41,13 +45,26 @@ const LoginPage = () => {
     e.preventDefault();
     dispatch(loginUser({ email, password }))
       .unwrap()
-      .then(() => {
+      .then((userData) => {
+        console.log('Login successful, user data:', userData);
         setEmail('');
         setPassword('');
+        
+        // Handle redirection after successful login
+        const role = userData.role?.toLowerCase();
+        console.log('User role:', role);
+        
+        if (role === 'client') {
+          console.log('Redirecting to home page');
+          navigate('/', { replace: true });
+        } else if (['admin', 'superadmin', 'content-creator'].includes(role)) {
+          console.log('Redirecting to dashboard');
+          navigate('/dashboard', { replace: true });
+        }
       })
       .catch((err) => {
-        console.error(err);
-        toast.error(err.message || 'Signup failed');
+        console.error('Login error:', err);
+        toast.error(err.message || 'Login failed');
       });
   };
 
@@ -58,7 +75,7 @@ const LoginPage = () => {
           <span className="text-blue-600 font-bold text-xl">🔐</span>
         </div>
         <h1 className="text-2xl font-bold text-gray-900">Welcome Back</h1>
-        <p className="text-gray-600 mt-2">Login to your dashboard</p>
+        <p className="text-gray-600 mt-2">Login to your Account</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -72,7 +89,7 @@ const LoginPage = () => {
             placeholder="Enter your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full text-sm md:text-base px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             required
           />
         </div>
@@ -87,7 +104,7 @@ const LoginPage = () => {
             placeholder="Enter your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border text-sm md:text-base border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             required
           />
         </div>
@@ -103,7 +120,7 @@ const LoginPage = () => {
           disabled={loading}
           className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
-          {loading ? 'Signing in...' : 'Sign In'}
+          {loading ? 'Login...' : 'LogIn'}
         </button>
       </form>
 

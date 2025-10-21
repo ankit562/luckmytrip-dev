@@ -63,6 +63,10 @@ const authSlice = createSlice({
     clearError(state) {
       state.error = null;
     },
+    forceInitialization(state) {
+      state.isInitialized = true;
+      state.loading = false;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -110,11 +114,16 @@ const authSlice = createSlice({
         state.isAuthenticated = true;
         state.isInitialized = true;
       })
-      .addCase(fetchProfile.rejected, (state) => {
+      .addCase(fetchProfile.rejected, (state, action) => {
         state.loading = false;
         state.user = null;
         state.isAuthenticated = false;
         state.isInitialized = true;
+        // Don't set error for profile fetch failures as it's expected when not logged in
+        if (action.error.message !== 'Request failed with status code 401' && 
+            action.error.message !== 'Request failed with status code 500') {
+          state.error = action.error.message;
+        }
       })
       .addCase(verifyOtpUser.pending, (state) => {
         state.loading = true;

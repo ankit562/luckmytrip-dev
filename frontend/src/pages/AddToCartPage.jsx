@@ -1,9 +1,17 @@
 import React, { useState } from 'react';
-import { Search, Minus, Plus } from 'lucide-react';
-import Header from '../components/commonComponent/Header'
-import Footer from '../components/commonComponent/Footer'
+import { useDispatch, useSelector } from 'react-redux';
+import { Minus, Plus } from 'lucide-react';
+import Header from '../components/commonComponent/Header';
+import Footer from '../components/commonComponent/Footer';
+import { createPurchase } from '../features/addtocart/addtocartSlice';
+import toast from 'react-hot-toast';
 
 export default function Cart() {
+  const dispatch = useDispatch();
+  // const { loading, error } = useSelector(state => state.cart);
+  const loading =false;
+  const error = false;
+
   const [dubaiQty, setDubaiQty] = useState(0);
   const [giftQty, setGiftQty] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState('');
@@ -48,36 +56,57 @@ export default function Cart() {
     if (!formData.phone.trim() || formData.phone.length !== 10) newErrors.phone = true;
     if (!formData.email.trim() || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(formData.email)) newErrors.email = true;
     if (!paymentMethod) newErrors.paymentMethod = true;
+    if (dubaiQty === 0) newErrors.dubaiQty = 'At least one Dubai Ticket required';
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handlePlaceOrder = () => {
+  const handlePlaceOrder = async () => {
     if (validateForm()) {
-      alert('Order placed successfully!');
-      setFormData({
-        firstName: '',
-        companyName: '',
-        address: '',
-        apartment: '',
-        city: '',
-        phone: '',
-        email: '',
-        saveInfo: false
-      });
-      setDubaiQty(0);
-      setGiftQty(0);
-      setPaymentMethod('');
+      const purchaseData = {
+        name: formData.firstName,
+        companyName: formData.companyName,
+        streetAddress: formData.address,
+        apartmentAddress: formData.apartment,
+        town: formData.city,
+        phone: formData.phone,
+        email: formData.email,
+        ticket: 'DUBAI_TICKET_ID',  // Replace with actual ticket id dynamically
+        ticketPrice: dubaiPrice,
+        quantity: dubaiQty,
+        gift: giftQty > 0 ? 'Gift Package' : '',
+        coupon: '', // Add coupon field handling if needed
+        totalPrice: total,
+      };
+
+      try {
+        await dispatch(createPurchase(purchaseData)).unwrap();
+        alert('Order placed successfully!');
+        setFormData({
+          firstName: '',
+          companyName: '',
+          address: '',
+          apartment: '',
+          city: '',
+          phone: '',
+          email: '',
+          saveInfo: false,
+        });
+        setDubaiQty(0);
+        setGiftQty(0);
+        setPaymentMethod('');
+        setErrors({});
+      } catch (err) {
+        toast('Failed to place order: ' + err);
+      }
     }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-100 to-slate-50">
-      {/* Navigation */}
-      <Header/>
+      <Header />
 
-      {/* Cart Section */}
       <section className="container mx-auto px-4 py-12 max-w-7xl">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Billing Details Form */}
@@ -208,6 +237,7 @@ export default function Cart() {
                   Rs. {dubaiQty * dubaiPrice}
                 </div>
               </div>
+              {errors.dubaiQty && <p className="text-red-600 text-sm mt-1">{errors.dubaiQty}</p>}
             </div>
 
             {/* Gifts */}
@@ -291,16 +321,18 @@ export default function Cart() {
             {/* Place Order Button */}
             <button
               onClick={handlePlaceOrder}
-              className="w-full md:w-auto bg-red-500 text-white py-3 px-8 rounded-xl font-bold hover:bg-red-600 transition uppercase text-lg shadow-lg"
+              disabled={loading}
+              className="w-full md:w-auto bg-red-500 text-white py-3 px-8 rounded-xl font-bold hover:bg-red-600 transition uppercase text-lg shadow-lg disabled:opacity-50"
             >
-              Place Order
+              {loading ? 'Placing Order...' : 'Place Order'}
             </button>
+
+            {error && <p className="text-red-600 mt-4">{error}</p>}
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <Footer/>
+      <Footer />
     </div>
   );
 }

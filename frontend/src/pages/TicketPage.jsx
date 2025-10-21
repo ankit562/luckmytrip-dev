@@ -16,25 +16,29 @@ export default function Tickets() {
 
   const { tickets } = useSelector((state) => state.tickets);
 
+
+
+const fromdubaicarosel = location.state?.fromdubaicarosel || false;
 const fromExplore = location.state?.fromExplore || false;
 const previousQty = useRef(0);
+const previousQty2 = useRef(0);
 
   useEffect(() => {
     dispatch(fetchTickets());
   }, [dispatch]);
 
-  const [dubaiQty, setDubaiQty] = useState(0);
+  const [dubaiQty, setDubaiQty] = useState(location.state?.qty || 0);
   const [thailandQty, setThailandQty] = useState(0);
  const [goldenQty, setGoldenQty] = useState(location.state?.qty || 0);
 
 
   const handleIncrement = () => {
-    setDubaiQty((qty) => {
-      const newQty = qty + 1;
-      if (qty === 0 && newQty === 1) {
+    setDubaiQty((prev) => {
+      const newQty = prev + 1;
+      if (prev === 0 && newQty === 1) {
         toast.success("Tickets added to cart");
       }
-      previousQty.current = qty;
+      previousQty2.current = prev;
       return newQty;
     });
   };
@@ -45,6 +49,9 @@ const previousQty = useRef(0);
       const newQty = Math.max(0, qty - 1);
       if (qty === 1 && newQty === 0) {
         toast.success("Ticket discarded successfully");
+        if(fromdubaicarosel){
+          navigator("/explore");
+        }
       }
       previousQty.current = qty;
       return newQty;
@@ -178,7 +185,7 @@ const previousQty = useRef(0);
             onIncrement={trip.name === "dubai" ? handleIncrement : handleIncrement2}
             onDecrement={trip.name === "dubai" ? handleDecrement : handleDecrement2}
             onAddToCart={trip.name === "dubai" ? handleAddToCart : handleAddToCart2}
-            onBuyMore={trip.name === "dubai" ? handlebuymore : handlebuymore2}        
+            onBuyMore={trip.name === "dubai" ? handlebuymore : handlebuymore2}       
           />
         ))}
 
