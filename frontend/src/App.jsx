@@ -166,9 +166,9 @@ if (!isInitialized) {
         <Route path="/ticket" element={ <TicketPage /> } />
         <Route path="/contactus" element={ <ContactUsPage /> } />
         <Route path="/addtocart" element={ <AddToCartPage /> } />
-        <Route path="*" element={<h1>404 Not Found</h1>} />
         <Route path="/payment-success" element={ <PurchaseConfirm/> }/>
-      <Route path="/payment-failure" element={ <PurchaseCancel/> }/>
+        <Route path="/payment-failure" element={ <PurchaseCancel/> }/>
+        <Route path="*" element={<h1>404 Not Found</h1>} />
 
       </Routes>
       <Toaster />

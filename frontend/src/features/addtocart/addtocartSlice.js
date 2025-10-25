@@ -5,6 +5,7 @@ import {
   updateCartItem,
   removeCartItem,
   placeOrder,
+  getPurchaseDetails,
 } from "./addtocartAPI";
 
 export const createPurchase = createAsyncThunk(
@@ -67,12 +68,27 @@ export const placeOrders = createAsyncThunk(
   }
 );
 
+// NEW: Fetch purchase by ID for success page
+export const fetchPurchaseById = createAsyncThunk(
+  "cart/fetchPurchaseById",
+  async (purchaseId, { rejectWithValue }) => {
+    try {
+      const data = await getPurchaseDetails(purchaseId);
+      return data.purchase;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+);
 
 const initialState = {
   carts: [],
   loading: false,
   error: null,
-  paymentRequest: null, // to hold PayU payment info temporarily
+  paymentRequest: null,
+  currentPurchase: null, // Stores fetched purchase details
+  purchaseLoading: false, // Separate loading for purchase fetch
+  purchaseError: null, // Separate error for purchase fetch
   cartItems: {
     dubaiQty: 0,
     thailandQty: 0,
@@ -84,7 +100,6 @@ const initialState = {
     giftPrice: 0,
   }
 };
-
 
 const addtocartSlice = createSlice({
   name: "cart",
@@ -127,83 +142,96 @@ const addtocartSlice = createSlice({
         goldenWinnerPrice: 0,
         giftPrice: 0,
       };
+    },
+
+    clearCurrentPurchase(state) {
+      state.currentPurchase = null;
+      state.purchaseError = null;
     }
   },
- extraReducers: (builder) => {
-  builder
-    .addCase(createPurchase.pending, (state) => {
-      state.loading = true;
-      state.error = null;
-    })
-    .addCase(createPurchase.fulfilled, (state, action) => {
-      state.loading = false;
-      state.carts.push(action.payload);
-    })
-    .addCase(createPurchase.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    })
+  extraReducers: (builder) => {
+    builder
+      .addCase(createPurchase.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createPurchase.fulfilled, (state, action) => {
+        state.loading = false;
+        state.carts.push(action.payload);
+      })
+      .addCase(createPurchase.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
 
-    .addCase(fetchCart.pending, (state) => {
-      state.loading = true;
-      state.error = null;
-    })
-    .addCase(fetchCart.fulfilled, (state, action) => {
-      state.loading = false;
-      state.carts = action.payload;
-    })
-    .addCase(fetchCart.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    })
+      .addCase(fetchCart.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchCart.fulfilled, (state, action) => {
+        state.loading = false;
+        state.carts = action.payload;
+      })
+      .addCase(fetchCart.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
 
-    .addCase(updateCart.pending, (state) => {
-      state.loading = true;
-      state.error = null;
-    })
-    .addCase(updateCart.fulfilled, (state, action) => {
-      state.loading = false;
-      const index = state.carts.findIndex(c => c._id === action.payload._id);
-      if (index !== -1) state.carts[index] = action.payload;
-    })
-    .addCase(updateCart.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    })
+      .addCase(updateCart.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateCart.fulfilled, (state, action) => {
+        state.loading = false;
+        const index = state.carts.findIndex(c => c._id === action.payload._id);
+        if (index !== -1) state.carts[index] = action.payload;
+      })
+      .addCase(updateCart.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
 
-    .addCase(removeItem.pending, (state) => {
-      state.loading = true;
-      state.error = null;
-    })
-    .addCase(removeItem.fulfilled, (state, action) => {
-      state.loading = false;
-      state.carts = state.carts.filter(c => c._id !== action.payload);
-    })
-    .addCase(removeItem.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    })
+      .addCase(removeItem.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(removeItem.fulfilled, (state, action) => {
+        state.loading = false;
+        state.carts = state.carts.filter(c => c._id !== action.payload);
+      })
+      .addCase(removeItem.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
 
-    // New placeOrder handler to get PayU paymentRequest
-    .addCase(placeOrders.pending, (state) => {
-      state.loading = true;
-      state.error = null;
-    })
-    .addCase(placeOrders.fulfilled, (state, action) => {
-      state.loading = false;
-      // Store paymentRequest temporarily in state if needed
-      // Or handle redirect in frontend directly after thunk resolved
-      state.paymentRequest = action.payload;
-    })
-    .addCase(placeOrders.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    });
-}
+      .addCase(placeOrders.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(placeOrders.fulfilled, (state, action) => {
+        state.loading = false;
+        state.paymentRequest = action.payload;
+      })
+      .addCase(placeOrders.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
 
+      // NEW: Fetch purchase by ID reducers
+      .addCase(fetchPurchaseById.pending, (state) => {
+        state.purchaseLoading = true;
+        state.purchaseError = null;
+      })
+      .addCase(fetchPurchaseById.fulfilled, (state, action) => {
+        state.purchaseLoading = false;
+        state.currentPurchase = action.payload;
+      })
+      .addCase(fetchPurchaseById.rejected, (state, action) => {
+        state.purchaseLoading = false;
+        state.purchaseError = action.payload;
+      });
+  }
 });
-
- 
 
 export const {
   setDubaiQtys,
@@ -215,6 +243,7 @@ export const {
   setThailandPrices,
   setGoldenWinnerPrices,
   setGiftPrices,
+  clearCurrentPurchase,
 } = addtocartSlice.actions;
 
 export default addtocartSlice.reducer;
