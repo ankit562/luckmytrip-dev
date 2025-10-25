@@ -1,8 +1,12 @@
 // TripSection.jsx
-import React from "react";
+import React, { useEffect } from "react";
 import { ChevronLeft, ChevronRight, Check, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import {
+  setGiftQtys
+} from '../../features/addtocart/addtocartSlice';
+import { useDispatch } from "react-redux";
 
 export default function TripSection({
   trip,
@@ -14,6 +18,8 @@ export default function TripSection({
  
 
 }){
+
+  const dispatch = useDispatch();
 
 
 
@@ -28,10 +34,14 @@ export default function TripSection({
   
   const navigator = useNavigate();
   const handleGift = () => {
-    navigator("/addtocart", { state: { gift: "grift", giftQty: 1, isGift: true } });
+    dispatch(setGiftQtys(1))
+    navigator("/addtocart", { state: { giftprice4: 49, giftQty: 1, isGift: true } });
      toast.success("Gift  is added to cart");
-
   }
+  // useEffect(()=>{
+  //   dispatch(setGiftQtys(1))
+
+  // },[dispatch ])
 
   return (
     <section className="bg-[#edf8fd] py-10">

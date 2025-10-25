@@ -5,6 +5,7 @@ import Footer from '../components/commonComponent/Footer'
 import TripCarosel from '../components/expolorePageComponents/TripCarosel'
 import TravelCard from '../components/expolorePageComponents/TripInfo'
 import { useRef } from 'react';
+import toast from 'react-hot-toast'
 
 const options = [
   "VIP AIRPORT PICKUP",
@@ -45,6 +46,10 @@ const ExplorePage = () => {
       scrollRef.current.scrollBy({ left: 300, behavior: 'smooth' });
     }
   };
+
+  const handlemsg= ()=>{
+    toast.success("Golden Ticket is added to the cart")
+  }
 
   return (
     <div className="bg-[#eaf8fd] min-h-screen">
@@ -197,7 +202,7 @@ const ExplorePage = () => {
           alt='beautifulView'
           className='w-full h-full object-cover rounded-2xl md:rounded-3xl' />
 
-        <Link  state={{ ticketType: "goldenwinner", qty: 1 , fromExplore: true  }}  to="/ticket"  ><div className='absolute z-20 flex justify-center items-end left-0 right-0 bottom-0 h-full px-2 sm:px-4'>
+        <Link onClick={handlemsg}  state={{ goldenqty: 1 , fromExplore: true  }}  to="/ticket"  ><div className='absolute z-20 flex justify-center items-end left-0 right-0 bottom-0 h-full px-2 sm:px-4'>
           <img
             src="/images/goldenwinner.png"
             alt="Jackpot"

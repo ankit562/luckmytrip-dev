@@ -13,6 +13,9 @@ export default defineConfig({
       '@': '/src',
     },
   },
+    server: {
+    historyApiFallback: true,
+  },
   // server: {
   //   proxy: {
   //     '/api': 'http://localhost:3000',

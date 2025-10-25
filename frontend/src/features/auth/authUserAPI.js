@@ -1,6 +1,8 @@
 import axios from '../../lib/axios';
 
 const API_URL = '/api/v1/auth';
+const API_USER_INFO = '/api/v1/auth/billing-info';
+const config = { withCredentials: true };
 
 const signup = (userData) => axios.post(`${API_URL}/register`, userData, { withCredentials: true });
 const login = (credentials) => axios.post(`${API_URL}/login`, credentials, { withCredentials: true });
@@ -13,6 +15,9 @@ const searchUser = (query) => axios.get(`${API_URL}/search-user`, { params: { qu
 
 const getAllProfile = () => axios.get(`${API_URL}/allprofiles`, { withCredentials: true });
 
+const getBillingInfo = () => axios.get(API_USER_INFO, config);
+const saveBillingInfo = (info) => axios.post(API_USER_INFO, info, config);
+
 
 export default {
 
@@ -24,6 +29,8 @@ export default {
   getAllProfile, 
   deleteUser,
   UpdateProfile,
-  searchUser
+  searchUser,
+  getBillingInfo,
+  saveBillingInfo
   
 };

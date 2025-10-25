@@ -25,8 +25,8 @@ export const removeCartItem = async (itemId) => {
   return response.data;
 };
 
-export const placeOrder = async (cartId) => {
-  // This endpoint marks the order confirmed, in real PayU flow you will get payment url or token here
-  const response = await axios.post(`${API_URL}/place-order`, { cartId }, config);
-  return response.data;
+export const placeOrder = async (purchaseId) => {
+  const response = await axios.post(`${API_URL}/place-order`, { purchaseId }, config);
+  return response.data;  // expects { success, paymentRequest }
 };
+

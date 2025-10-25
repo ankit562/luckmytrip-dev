@@ -45,10 +45,34 @@ export const searchUser = createAsyncThunk('auth/searchUser', async (query) => {
   return response.data;
 });
 
+export const fetchBillingInfo = createAsyncThunk(
+  'auth/fetchBillingInfo',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await authAPI.getBillingInfo();
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+);
+
+export const saveBillingInfoThunk = createAsyncThunk(
+  'auth/saveBillingInfo',
+  async (billingInfo, { rejectWithValue }) => {
+    try {
+      const response = await authAPI.saveBillingInfo(billingInfo);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+);
+
 
 const authSlice = createSlice({
   name: 'auth',
-  initialState: {
+ initialState: {
     user: null,
     loading: false,
     users: [],
@@ -58,6 +82,9 @@ const authSlice = createSlice({
     searchLoading: false,
     searchError: null,
     searchResult: null,
+    billingInfo: null,
+    billingLoading: false,
+    billingError: null,
   },
   reducers: {
     clearError(state) {
@@ -120,8 +147,8 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.isInitialized = true;
         // Don't set error for profile fetch failures as it's expected when not logged in
-        if (action.error.message !== 'Request failed with status code 401' && 
-            action.error.message !== 'Request failed with status code 500') {
+        if (action.error.message !== 'Request failed with status code 401' &&
+          action.error.message !== 'Request failed with status code 500') {
           state.error = action.error.message;
         }
       })
@@ -183,6 +210,31 @@ const authSlice = createSlice({
         state.searchLoading = false;
         state.searchError = action.error.message;
       })
+      .addCase(fetchBillingInfo.pending, (state) => {
+        state.billingLoading = true;
+        state.billingError = null;
+      })
+      .addCase(fetchBillingInfo.fulfilled, (state, action) => {
+        state.billingLoading = false;
+        state.billingInfo = action.payload;
+      })
+      .addCase(fetchBillingInfo.rejected, (state, action) => {
+        state.billingLoading = false;
+        state.billingInfo = null;
+        state.billingError = action.payload;
+      })
+      .addCase(saveBillingInfoThunk.pending, (state) => {
+        state.billingLoading = true;
+        state.billingError = null;
+      })
+      .addCase(saveBillingInfoThunk.fulfilled, (state, action) => {
+        state.billingLoading = false;
+        state.billingInfo = action.payload;
+      })
+      .addCase(saveBillingInfoThunk.rejected, (state, action) => {
+        state.billingLoading = false;
+        state.billingError = action.payload;
+      });
   }
 });
 

@@ -26,6 +26,8 @@ import Admin from './pages/dashboard/users/Admin';
 import ContentCreator from './pages/dashboard/users/Content-creator';
 import Client from './pages/dashboard/Client';
 import Ticket from './pages/dashboard/Tickets';
+import { PurchaseConfirm } from './pages/PurchaseConfirm';
+import {PurchaseCancel} from './pages/PurchaseCancel';
 
 
 
@@ -165,6 +167,9 @@ if (!isInitialized) {
         <Route path="/contactus" element={ <ContactUsPage /> } />
         <Route path="/addtocart" element={ <AddToCartPage /> } />
         <Route path="*" element={<h1>404 Not Found</h1>} />
+        <Route path="/payment-success" element={ <PurchaseConfirm/> }/>
+      <Route path="/payment-failure" element={ <PurchaseCancel/> }/>
+
       </Routes>
       <Toaster />
     </div>
