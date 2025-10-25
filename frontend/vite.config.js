@@ -13,9 +13,17 @@ export default defineConfig({
       '@': '/src',
     },
   },
-    server: {
-    historyApiFallback: true,
+     server: {
+    port: 5173,
+    // ✅ Add this to handle PayU redirects
+    strictPort: true,
+    hmr: {
+      overlay: false
+    }
   },
+  preview: {
+    port: 5173,
+  }
   // server: {
   //   proxy: {
   //     '/api': 'http://localhost:3000',
