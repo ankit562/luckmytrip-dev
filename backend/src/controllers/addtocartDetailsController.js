@@ -122,24 +122,99 @@ export const removeCartItem = async (req, res) => {
   }
 };
 
-// Place order: Update status and trigger payment (example just updating status here)
+// Place order: Generate PayU payment request
 export const placeOrder = async (req, res) => {
   try {
-    const { cartId } = req.body;
-    const cart = await AddToCart.findById(cartId)
-      .populate("tickets.ticket")
-      .populate("products.product");
+    const { purchaseId } = req.body;
+    const purchase = await TicketPurchase.findById(purchaseId);
 
-    if (!cart) return res.status(404).json({ success: false, message: "Cart not found" });
+    if (!purchase) return res.status(404).json({ success: false, message: "Purchase not found" });
 
-    // Here you should generate PayU order and redirect user on frontend accordingly
-    // For demo, we mark it confirmed (in real scenario - do it after successful payment callback)
-    cart.status = "confirmed";
-    await cart.save();
+    // PayU configuration - you need to add these to your environment variables
+    const PAYU_KEY = process.env.PAYU_KEY || "gtKFFx";
+    const PAYU_SALT = process.env.PAYU_SALT || "eCwWELxi";
+    const PAYU_SUCCESS_URL = process.env.PAYU_SUCCESS_URL || "http://localhost:5173/payment-success";
+    const PAYU_FAILURE_URL = process.env.PAYU_FAILURE_URL || "http://localhost:5173/payment-failure";
 
-    res.status(200).json({ success: true, message: "Order placed successfully", cart });
+    // Generate unique transaction ID
+    const txnid = `TXN_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    
+    // Calculate total amount (in paise for PayU)
+    const amount = Math.round(purchase.totalPrice * 100);
+    
+    // Product info
+    const productinfo = `Ticket: ${purchase.ticket?.name || 'Travel Ticket'}`;
+    
+    // Generate hash for PayU
+    const hashString = `${PAYU_KEY}|${txnid}|${amount}|${productinfo}|${purchase.name}|${purchase.email}|||||||||||${PAYU_SALT}`;
+    const crypto = require('crypto');
+    const hash = crypto.createHash('sha512').update(hashString).digest('hex');
+
+    // PayU payment request data
+    const paymentRequest = {
+      key: PAYU_KEY,
+      txnid: txnid,
+      amount: amount,
+      productinfo: productinfo,
+      firstname: purchase.name,
+      email: purchase.email,
+      phone: purchase.phone,
+      surl: PAYU_SUCCESS_URL,
+      furl: PAYU_FAILURE_URL,
+      hash: hash,
+      actionUrl: "https://secure.payu.in/_payment" // PayU test URL
+    };
+
+    // Update purchase with transaction ID
+    purchase.txnid = txnid;
+    purchase.status = "pending_payment";
+    await purchase.save();
+
+    res.status(200).json({ 
+      success: true, 
+      message: "Payment request generated", 
+      paymentRequest 
+    });
   } catch (error) {
+    console.error("Place order error:", error);
     res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Get purchase by ID or transaction ID (for success page)
+export const getPurchaseById = async (req, res) => {
+  try {
+    const { purchaseId } = req.params;
+    
+    // Try to find by purchaseId first, then by txnid
+    let purchase = await TicketPurchase.findById(purchaseId)
+      .populate("ticket")
+      .populate("user", "name email");
+
+    // If not found by ID, try to find by txnid
+    if (!purchase) {
+      purchase = await TicketPurchase.findOne({ txnid: purchaseId })
+        .populate("ticket")
+        .populate("user", "name email");
+    }
+
+    if (!purchase) {
+      return res.status(404).json({ 
+        success: false, 
+        message: "Purchase not found" 
+      });
+    }
+
+    res.status(200).json({ 
+      success: true, 
+      purchase 
+    });
+  } catch (error) {
+    console.error("Get purchase error:", error);
+    res.status(500).json({ 
+      success: false, 
+      message: error.message 
+    });
   }
 };
 

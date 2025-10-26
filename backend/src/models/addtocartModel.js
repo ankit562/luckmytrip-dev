@@ -37,9 +37,10 @@ const TicketPurchaseSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: ["pending", "confirmed", "cancelled"],
+      enum: ["pending", "pending_payment", "confirmed", "cancelled"],
       default: "pending",
     },
+    txnid: { type: String, trim: true }, // PayU transaction ID
   },
   { timestamps: true }
 );

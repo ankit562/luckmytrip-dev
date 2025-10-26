@@ -6,6 +6,7 @@ import {
   removeCartItem,
   placeOrder,
   payuCallback,
+  getPurchaseById,
 } from "../controllers/addtocartDetailsController.js";
 import { authMiddleware } from "../middleware/authUserMiddleware.js";
 
@@ -16,6 +17,7 @@ router.route("/").get(authMiddleware(), getCart);
 router.route("/:itemId").patch(authMiddleware(), updateCart);
 router.route("/:itemId").delete(authMiddleware(), removeCartItem);
 router.route("/place-order").post(authMiddleware(), placeOrder);
+router.route("/purchase/:purchaseId").get(getPurchaseById); // No auth needed for success page
 
 // PayU webhook (no auth needed, PayU calls this)
 router.post("/payu-callback", payuCallback);

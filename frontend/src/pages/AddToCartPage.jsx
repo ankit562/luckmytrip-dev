@@ -166,10 +166,15 @@ export default function AddToCartPage() {
       const purchase = await dispatch(createPurchase(purchaseData)).unwrap();
       const paymentRequest = await dispatch(placeOrders(purchase._id)).unwrap();
 
+      console.log("Payment Request received:", paymentRequest);
+
       // POSTing PayU redirect
       const form = document.createElement('form');
       form.action = paymentRequest.actionUrl;
       form.method = 'POST';
+      form.target = '_self'; // Submit in same window
+      
+      // Add all payment parameters as hidden inputs
       Object.entries(paymentRequest).forEach(([key, value]) => {
         if (key !== 'actionUrl') {
           const input = document.createElement('input');
@@ -177,11 +182,16 @@ export default function AddToCartPage() {
           input.name = key;
           input.value = value;
           form.appendChild(input);
+          console.log(`Added parameter: ${key} = ${value}`);
         }
       });
+      
+      // Add form to DOM and submit
       document.body.appendChild(form);
+      console.log("Submitting form to PayU...");
       form.submit();
     } catch (err) {
+      console.error("Payment error:", err);
       toast.error('Failed to place order: ' + err);
     }
   };
