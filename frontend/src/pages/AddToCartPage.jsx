@@ -12,11 +12,6 @@ import {
   setThailandQtys,
   setGoldenWinnerQtys,
   setGiftQtys,
-  setDubaiPrices,
-  setThailandPrices,
-  setGoldenWinnerPrices,
-  setGiftPrices,
-  // Note: Do NOT clearCartItems here anymore
 } from '../features/addtocart/addtocartSlice';
 
 import {
@@ -243,10 +238,6 @@ export default function AddToCartPage() {
     </div>
   );
 }
-
-// BillingForm, InputField, PaymentSelector, CouponSection, TicketRow, Totals, EmptyCart
-// can be kept as previously provided.
-
 
 const BillingForm = ({ formData, handleInputChange, errors, setToggleForm }) => (
   <div className="bg-white rounded-3xl shadow-lg px-8 py-8">

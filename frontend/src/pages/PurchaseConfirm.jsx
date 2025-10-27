@@ -6,13 +6,12 @@ import Confetti from "react-confetti";
 import toast from "react-hot-toast";
 import Header from "../components/commonComponent/Header";
 import Footer from "../components/commonComponent/Footer";
-import { fetchPurchaseById, clearCurrentPurchase } from "../features/addtocart/addtocartSlice";
+import { fetchPurchaseById, clearCurrentPurchase, clearCartItems } from "../features/addtocart/addtocartSlice";
 
 export const PurchaseConfirm = () => {
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
 
-  // Get data from Redux store
   const { 
     currentPurchase: orderDetails, 
     purchaseLoading: loading, 
@@ -27,26 +26,27 @@ export const PurchaseConfirm = () => {
     console.log("PayU Redirect Data:", { txnid, status, mihpayid });
 
     if (txnid) {
-      // Dispatch Redux thunk to fetch purchase details
+      // Fetch order details
       dispatch(fetchPurchaseById(txnid))
         .unwrap()
-        .then(() => {
-          toast.success("Order details loaded successfully!");
-        })
-        .catch((err) => {
-          toast.error(`Failed to load order: ${err}`);
-        });
+        .then(() => toast.success("Order details loaded successfully!"))
+        .catch((err) => toast.error(`Failed to load order: ${err}`));
+
+      // Clear cart only if payment success
+      if (status && status.toLowerCase() === "success") {
+        dispatch(clearCartItems());
+        localStorage.removeItem("cartItems");
+      }
     } else {
       toast.error("No transaction ID found in URL");
     }
 
-    // Cleanup: Clear purchase data when component unmounts
+    // Clean up order details on unmount
     return () => {
       dispatch(clearCurrentPurchase());
     };
   }, [dispatch, searchParams]);
 
-  // Loading State
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-teal-50 to-white">
@@ -62,7 +62,6 @@ export const PurchaseConfirm = () => {
     );
   }
 
-  // Error State
   if (error || !orderDetails) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-red-50 to-white">
@@ -90,11 +89,11 @@ export const PurchaseConfirm = () => {
     );
   }
 
-  // Success State
+  // Success state rendering
   return (
     <div className="min-h-screen bg-gradient-to-b from-teal-50 via-white to-slate-50">
       <Header />
-      
+
       <Confetti
         width={window.innerWidth}
         height={window.innerHeight}
@@ -105,7 +104,7 @@ export const PurchaseConfirm = () => {
       />
 
       <section className="container mx-auto px-4 py-12 max-w-5xl relative z-10">
-        {/* Success Header */}
+        {/* Header */}
         <div className="text-center mb-12">
           <div className="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-teal-500 to-teal-600 rounded-full shadow-2xl mb-6 animate-bounce">
             <CheckCircle className="w-14 h-14 text-white" />
@@ -118,15 +117,13 @@ export const PurchaseConfirm = () => {
           </p>
         </div>
 
-        {/* Order Summary Cards */}
+        {/* Order and Customer Info */}
         <div className="grid md:grid-cols-2 gap-8 mb-8">
-          {/* Order Information */}
           <div className="bg-white rounded-3xl shadow-lg p-8 border border-teal-100">
             <div className="flex items-center gap-3 mb-6">
               <Package className="w-6 h-6 text-teal-500" />
               <h2 className="text-2xl font-bold text-gray-800">Order Details</h2>
             </div>
-            
             <div className="space-y-4">
               <div className="flex justify-between items-center pb-3 border-b border-gray-100">
                 <span className="text-gray-600 font-medium">Order ID</span>
@@ -134,14 +131,12 @@ export const PurchaseConfirm = () => {
                   #{orderDetails._id?.slice(-8).toUpperCase()}
                 </span>
               </div>
-              
               <div className="flex justify-between items-center pb-3 border-b border-gray-100">
                 <span className="text-gray-600 font-medium">Status</span>
                 <span className="px-4 py-1.5 bg-green-100 text-green-700 rounded-full text-sm font-semibold">
                   {orderDetails.status === "confirmed" ? "Confirmed" : "Processing"}
                 </span>
               </div>
-              
               <div className="flex justify-between items-center pb-3 border-b border-gray-100">
                 <span className="text-gray-600 font-medium">Order Date</span>
                 <span className="font-semibold text-gray-800">
@@ -152,7 +147,6 @@ export const PurchaseConfirm = () => {
                   })}
                 </span>
               </div>
-              
               <div className="flex justify-between items-center pt-2">
                 <span className="text-gray-600 font-medium">Total Amount</span>
                 <span className="text-2xl font-bold text-teal-600">
@@ -162,13 +156,11 @@ export const PurchaseConfirm = () => {
             </div>
           </div>
 
-          {/* Customer Information */}
           <div className="bg-white rounded-3xl shadow-lg p-8 border border-teal-100">
             <div className="flex items-center gap-3 mb-6">
               <User className="w-6 h-6 text-teal-500" />
               <h2 className="text-2xl font-bold text-gray-800">Customer Details</h2>
             </div>
-            
             <div className="space-y-4">
               <div className="flex items-start gap-3">
                 <User className="w-5 h-5 text-gray-400 mt-1 flex-shrink-0" />
@@ -177,7 +169,6 @@ export const PurchaseConfirm = () => {
                   <p className="font-semibold text-gray-800">{orderDetails.name}</p>
                 </div>
               </div>
-              
               <div className="flex items-start gap-3">
                 <Mail className="w-5 h-5 text-gray-400 mt-1 flex-shrink-0" />
                 <div className="flex-1">
@@ -185,7 +176,6 @@ export const PurchaseConfirm = () => {
                   <p className="font-semibold text-gray-800 break-all">{orderDetails.email}</p>
                 </div>
               </div>
-              
               <div className="flex items-start gap-3">
                 <Phone className="w-5 h-5 text-gray-400 mt-1 flex-shrink-0" />
                 <div>
@@ -193,7 +183,6 @@ export const PurchaseConfirm = () => {
                   <p className="font-semibold text-gray-800">{orderDetails.phone}</p>
                 </div>
               </div>
-              
               <div className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-gray-400 mt-1 flex-shrink-0" />
                 <div className="flex-1">
@@ -213,7 +202,6 @@ export const PurchaseConfirm = () => {
         {/* Tickets Purchased */}
         <div className="bg-white rounded-3xl shadow-lg p-8 border border-teal-100 mb-8">
           <h2 className="text-2xl font-bold text-gray-800 mb-6">Tickets Purchased</h2>
-          
           <div className="space-y-4">
             {orderDetails.tickets?.map((ticket, idx) => (
               <div
@@ -297,7 +285,7 @@ export const PurchaseConfirm = () => {
             <Download className="w-5 h-5" />
             Download Receipt
           </button>
-          
+
           <Link
             to="/"
             className="flex items-center justify-center gap-2 bg-gradient-to-r from-teal-500 to-teal-600 text-white px-8 py-4 rounded-xl font-bold hover:from-teal-600 hover:to-teal-700 transition shadow-lg"
@@ -307,7 +295,6 @@ export const PurchaseConfirm = () => {
           </Link>
         </div>
       </section>
-
       <Footer />
     </div>
   );
