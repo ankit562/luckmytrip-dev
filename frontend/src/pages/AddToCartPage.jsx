@@ -8,7 +8,6 @@ import { FileText, X, Minus, Plus, ShoppingCart } from 'lucide-react';
 import {
   createPurchase,
   placeOrders,
-
   setDubaiQtys,
   setThailandQtys,
   setGoldenWinnerQtys,
@@ -17,12 +16,13 @@ import {
   setThailandPrices,
   setGoldenWinnerPrices,
   setGiftPrices,
+  // Note: Do NOT clearCartItems here anymore
 } from '../features/addtocart/addtocartSlice';
 
 import {
   fetchBillingInfo,
   saveBillingInfoThunk,
-} from "../features/auth/authUserSlice"
+} from "../features/auth/authUserSlice";
 
 export default function AddToCartPage() {
   const dispatch = useDispatch();
@@ -30,8 +30,7 @@ export default function AddToCartPage() {
   const cartItems = useSelector(state => state.addtocart?.cartItems) || {};
   const billingInfo = useSelector(state => state.auth?.billingInfo);
   const billingLoading = useSelector(state => state.auth?.billingLoading);
-  
-  
+
   const {
     dubaiQty = 0,
     thailandQty = 0,
@@ -44,15 +43,15 @@ export default function AddToCartPage() {
   } = cartItems;
 
   const hasItems = dubaiQty > 0 || thailandQty > 0 || goldenWinnerQty > 0 || giftQty > 0;
-
   const subtotal =
     dubaiQty * dubaiPrice +
     thailandQty * thailandPrice +
     goldenWinnerQty * goldenWinnerPrice +
     giftQty * giftPrice;
-
   const totalPrice = subtotal;
-  const [showForm, setShowForm] = useState(true);
+
+  const [showForm, setShowForm] = useState(!billingInfo);
+
   const [formData, setFormData] = useState({
     firstName: '',
     companyName: '',
@@ -63,29 +62,19 @@ export default function AddToCartPage() {
     email: '',
     saveInfo: false,
   });
+
   const [errors, setErrors] = useState({});
   const [paymentMethod, setPaymentMethod] = useState('');
 
-  // Redux-driven price load
-  useEffect(() => {
-    if (!dubaiPrice) dispatch(setDubaiPrices(599));
-    if (!thailandPrice) dispatch(setThailandPrices(599));
-    if (!goldenWinnerPrice) dispatch(setGoldenWinnerPrices(149));
-    if (!giftPrice) dispatch(setGiftPrices(49));
-  }, [dispatch, dubaiPrice, thailandPrice, goldenWinnerPrice, giftPrice]);
-
-  // Fetch BillingInfo
   useEffect(() => {
     dispatch(fetchBillingInfo());
   }, [dispatch]);
 
-  // When billingInfo is fetched, prefill and toggle form
   useEffect(() => {
     if (billingInfo) {
       setFormData({ ...billingInfo, saveInfo: false });
       setShowForm(false);
     } else {
-      setShowForm(true);
       setFormData({
         firstName: '',
         companyName: '',
@@ -96,13 +85,21 @@ export default function AddToCartPage() {
         email: '',
         saveInfo: false,
       });
+      setShowForm(true);
     }
-    // We do not want effect to fire on every formData change
-    // eslint-disable-next-line
   }, [billingInfo]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
+    if (name === 'phone') {
+      let digitsOnly = value.replace(/\D/g, '').slice(0, 10);
+      setFormData(prev => ({
+        ...prev,
+        phone: digitsOnly,
+      }));
+      if (errors.phone) setErrors(prev => ({ ...prev, phone: false }));
+      return;
+    }
     setFormData(prev => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : value,
@@ -123,10 +120,10 @@ export default function AddToCartPage() {
     return Object.keys(newErrors).length === 0;
   };
 
+  // NOTE: Removed immediate clearing of cart here to keep state if payment fails/cancel
   const handlePlaceOrder = async () => {
     if (!validateForm()) return;
 
-    // Save info if checked
     if (formData.saveInfo) {
       try {
         await dispatch(saveBillingInfoThunk(formData)).unwrap();
@@ -138,15 +135,15 @@ export default function AddToCartPage() {
     }
 
     const ticketsPurchased = [];
-    const giftPurchased =[];
+    const giftPurchased = [];
     if (dubaiQty > 0)
       ticketsPurchased.push({ ticket: 'DUBAI_TICKET', ticketPrice: dubaiPrice, quantity: dubaiQty });
     if (thailandQty > 0)
       ticketsPurchased.push({ ticket: 'THAILAND_TICKET', ticketPrice: thailandPrice, quantity: thailandQty });
     if (goldenWinnerQty > 0)
       ticketsPurchased.push({ ticket: 'GOLDEN_WINNER_TICKET', ticketPrice: goldenWinnerPrice, quantity: goldenWinnerQty });
-    if(giftQty>0){
-      giftPurchased.push({ gift: 'GIFT_TICKET', giftPrice: giftPrice, quantity: giftQty })}
+    if (giftQty > 0)
+      giftPurchased.push({ gift: 'GIFT_TICKET', giftPrice: giftPrice, quantity: giftQty });
 
     const purchaseData = {
       name: formData.firstName,
@@ -158,7 +155,7 @@ export default function AddToCartPage() {
       email: formData.email,
       tickets: ticketsPurchased,
       gift: giftPurchased,
-      totalPrice : totalPrice,
+      totalPrice: totalPrice,
       paymentMethod,
     };
 
@@ -166,15 +163,11 @@ export default function AddToCartPage() {
       const purchase = await dispatch(createPurchase(purchaseData)).unwrap();
       const paymentRequest = await dispatch(placeOrders(purchase._id)).unwrap();
 
-      console.log("Payment Request received:", paymentRequest);
-
-      // POSTing PayU redirect
+      // Redirect to payment gateway without clearing cart yet
       const form = document.createElement('form');
       form.action = paymentRequest.actionUrl;
       form.method = 'POST';
-      form.target = '_self'; // Submit in same window
-      
-      // Add all payment parameters as hidden inputs
+      form.target = '_self';
       Object.entries(paymentRequest).forEach(([key, value]) => {
         if (key !== 'actionUrl') {
           const input = document.createElement('input');
@@ -182,16 +175,12 @@ export default function AddToCartPage() {
           input.name = key;
           input.value = value;
           form.appendChild(input);
-          console.log(`Added parameter: ${key} = ${value}`);
         }
       });
-      
-      // Add form to DOM and submit
       document.body.appendChild(form);
-      console.log("Submitting form to PayU...");
       form.submit();
+
     } catch (err) {
-      console.error("Payment error:", err);
       toast.error('Failed to place order: ' + err);
     }
   };
@@ -201,15 +190,22 @@ export default function AddToCartPage() {
       <Header />
       <section className="container mx-auto px-4 py-12 max-w-7xl">
         {hasItems ? (
-          <div className={`grid gap-8 ${showForm ?  'grid-cols-1 lg:grid-cols-2' :'grid-cols-1' } `}>
-            {/* Left Col: Billing Details */}
+          <div className={`grid gap-8 ${showForm ? 'grid-cols-1 lg:grid-cols-2' : 'grid-cols-1'} `}>
             <div>
               {billingLoading ? (
                 <div className="text-lg">Loading billing info...</div>
               ) : (
                 <>
                   {!showForm && (
-                    <FileText className="w-6 h-6 text-teal-500 cursor-pointer" title="Edit Billing Info" onClick={() => setShowForm(true)} />
+                    <FileText
+                      className="w-6 h-6 text-teal-500 cursor-pointer"
+                      title="Edit Billing Info"
+                      onClick={() => setShowForm(true)}
+                      tabIndex={0}
+                      role="button"
+                      aria-label="Edit Billing Info"
+                      onKeyDown={e => { if (e.key === 'Enter') setShowForm(true); }}
+                    />
                   )}
                   {showForm && (
                     <BillingForm
@@ -222,13 +218,11 @@ export default function AddToCartPage() {
                 </>
               )}
             </div>
-            {/* Right Col: Cart summary, payment, coupon */}
             <div className="space-y-6">
               {dubaiQty > 0 && <TicketRow title="Dubai Ticket" qty={dubaiQty} price={dubaiPrice} setQty={q => dispatch(setDubaiQtys(q))} />}
               {thailandQty > 0 && <TicketRow title="Thailand Ticket" qty={thailandQty} price={thailandPrice} setQty={q => dispatch(setThailandQtys(q))} />}
               {goldenWinnerQty > 0 && <TicketRow title="Golden Winner Ticket" qty={goldenWinnerQty} price={goldenWinnerPrice} setQty={q => dispatch(setGoldenWinnerQtys(q))} />}
               {giftQty > 0 && <TicketRow title="Gift Package" qty={giftQty} price={giftPrice} setQty={q => dispatch(setGiftQtys(q))} />}
-
               <Totals subtotal={subtotal} total={totalPrice} />
               <PaymentSelector paymentMethod={paymentMethod} setPaymentMethod={setPaymentMethod} errors={errors} setErrors={setErrors} />
               <CouponSection />
@@ -240,7 +234,6 @@ export default function AddToCartPage() {
               </button>
               {errors.ticketQty && <p className="text-red-600 mt-4">{errors.ticketQty}</p>}
             </div>
-
           </div>
         ) : (
           <EmptyCart />
@@ -251,16 +244,15 @@ export default function AddToCartPage() {
   );
 }
 
-const BillingForm = ({
-  formData,
-  handleInputChange,
-  errors,
-  setToggleForm
-}) => (
+// BillingForm, InputField, PaymentSelector, CouponSection, TicketRow, Totals, EmptyCart
+// can be kept as previously provided.
+
+
+const BillingForm = ({ formData, handleInputChange, errors, setToggleForm }) => (
   <div className="bg-white rounded-3xl shadow-lg px-8 py-8">
     <div className="flex justify-between items-center">
       <h2 className="text-3xl font-bold text-teal-500 mb-8 uppercase tracking-wide">Billing Details</h2>
-      <button onClick={() => setToggleForm(false)}>
+      <button onClick={() => setToggleForm(false)} aria-label="Close billing form">
         <X className="w-6 h-6 mb-8 text-teal-500" />
       </button>
     </div>
@@ -270,8 +262,8 @@ const BillingForm = ({
       <InputField name="address" label="Street Address*" required value={formData.address} onChange={handleInputChange} error={errors.address} />
       <InputField name="apartment" label="Apartment, floor, etc. (optional)" value={formData.apartment} onChange={handleInputChange} />
       <InputField name="city" label="Town/City*" required value={formData.city} onChange={handleInputChange} error={errors.city} />
-      <InputField name="phone" label="Phone Number*"   required value={formData.phone}  onChange={handleInputChange} error={errors.phone} />
-      <InputField name="email" label="Email Address*"  required value={formData.email} onChange={handleInputChange} error={errors.email} />
+      <InputField name="phone" label="Phone Number*" maxLength={10} required value={formData.phone} onChange={handleInputChange} error={errors.phone} />
+      <InputField name="email" label="Email Address*" required value={formData.email} onChange={handleInputChange} error={errors.email} />
       <div className="flex items-center mt-3">
         <input
           id="saveInfo"
@@ -289,7 +281,7 @@ const BillingForm = ({
   </div>
 );
 
-const InputField = ({ name, label, value, onChange, required, error }) => (
+const InputField = ({ name, label, value, onChange, required, error, maxLength }) => (
   <div>
     <label className="block text-gray-400 text-sm mb-2" htmlFor={name}>{label}</label>
     <input
@@ -297,13 +289,13 @@ const InputField = ({ name, label, value, onChange, required, error }) => (
       name={name}
       required={required}
       value={value}
+      maxLength={maxLength}
       onChange={onChange}
       className={`p-3 rounded-lg w-full bg-gray-50 focus:ring-2 focus:ring-teal-500 ${error ? 'ring-2 ring-red-500' : ''}`}
     />
     {error && <span className="text-sm text-red-600">This field is required.</span>}
   </div>
 );
-
 
 const PaymentSelector = ({ paymentMethod, setPaymentMethod, errors, setErrors }) => (
   <div className="bg-white rounded-2xl shadow-md px-6 py-5">
@@ -377,4 +369,3 @@ const EmptyCart = () => (
     </div>
   </section>
 );
-

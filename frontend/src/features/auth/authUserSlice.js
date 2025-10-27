@@ -50,7 +50,7 @@ export const fetchBillingInfo = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await authAPI.getBillingInfo();
-      return response.data;
+      return response.data.billingInfo;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message);
     }

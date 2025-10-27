@@ -8,6 +8,61 @@ import {
   getPurchaseDetails,
 } from "./addtocartAPI";
 
+// 1. Load initial cart state from localStorage, fallback to default if not present
+const getInitialCartState = () => {
+  const local = localStorage.getItem("cartItems");
+  if (local) {
+    try {
+      return JSON.parse(local);
+    } catch {
+      // Fallback on parse error
+    }
+  }
+  return {
+    cartItems: {
+      dubaiQty: 0,
+      thailandQty: 0,
+      goldenWinnerQty: 0,
+      giftQty: 0,
+      dubaiPrice: 0,
+      thailandPrice: 0,
+      goldenWinnerPrice: 0,
+      giftPrice: 0,
+    },
+    carts: [],
+    loading: false,
+    error: null,
+    paymentRequest: null,
+    currentPurchase: null,
+    purchaseLoading: false,
+    purchaseError: null,
+  };
+};
+
+// 2. Helper to write cart state to localStorage
+const saveCartState = (state) => {
+  localStorage.setItem(
+    "cartItems",
+    JSON.stringify({
+      cartItems: state.cartItems,
+      // Don't store server state fields
+    })
+  );
+};
+
+// 3. Initial state uses loader
+const initialState = {
+  ...getInitialCartState(),
+  // Always include fields not in localStorage
+  carts: [],
+  loading: false,
+  error: null,
+  paymentRequest: null,
+  currentPurchase: null,
+  purchaseLoading: false,
+  purchaseError: null,
+};
+
 export const createPurchase = createAsyncThunk(
   "cart/createPurchase",
   async (purchaseData, { rejectWithValue }) => {
@@ -68,7 +123,6 @@ export const placeOrders = createAsyncThunk(
   }
 );
 
-// NEW: Fetch purchase by ID for success page
 export const fetchPurchaseById = createAsyncThunk(
   "cart/fetchPurchaseById",
   async (purchaseId, { rejectWithValue }) => {
@@ -81,54 +135,42 @@ export const fetchPurchaseById = createAsyncThunk(
   }
 );
 
-const initialState = {
-  carts: [],
-  loading: false,
-  error: null,
-  paymentRequest: null,
-  currentPurchase: null, // Stores fetched purchase details
-  purchaseLoading: false, // Separate loading for purchase fetch
-  purchaseError: null, // Separate error for purchase fetch
-  cartItems: {
-    dubaiQty: 0,
-    thailandQty: 0,
-    goldenWinnerQty: 0,
-    giftQty: 0,
-    dubaiPrice: 0,
-    thailandPrice: 0,
-    goldenWinnerPrice: 0,
-    giftPrice: 0,
-  }
-};
-
 const addtocartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
     setDubaiQtys(state, action) {
       state.cartItems.dubaiQty = action.payload;
+      saveCartState(state);
     },
     setThailandQtys(state, action) {
       state.cartItems.thailandQty = action.payload;
+      saveCartState(state);
     },
     setGoldenWinnerQtys(state, action) {
       state.cartItems.goldenWinnerQty = action.payload;
+      saveCartState(state);
     },
     setGiftQtys(state, action) {
       state.cartItems.giftQty = action.payload;
+      saveCartState(state);
     },
 
     setDubaiPrices(state, action) {
       state.cartItems.dubaiPrice = action.payload;
+      saveCartState(state);
     },
     setThailandPrices(state, action) {
       state.cartItems.thailandPrice = action.payload;
+      saveCartState(state);
     },
     setGoldenWinnerPrices(state, action) {
       state.cartItems.goldenWinnerPrice = action.payload;
+      saveCartState(state);
     },
     setGiftPrices(state, action) {
       state.cartItems.giftPrice = action.payload;
+      saveCartState(state);
     },
 
     clearCartItems(state) {
@@ -142,11 +184,19 @@ const addtocartSlice = createSlice({
         goldenWinnerPrice: 0,
         giftPrice: 0,
       };
+      saveCartState(state);
     },
 
     clearCurrentPurchase(state) {
       state.currentPurchase = null;
       state.purchaseError = null;
+    },
+    hydrateCartFromStorage(state) {
+      // Use when you want to forcibly reload from localStorage (if needed)
+      const local = localStorage.getItem("cartItems");
+      if (local) {
+        state.cartItems = JSON.parse(local).cartItems || state.cartItems;
+      }
     }
   },
   extraReducers: (builder) => {
@@ -217,7 +267,6 @@ const addtocartSlice = createSlice({
         state.error = action.payload;
       })
 
-      // NEW: Fetch purchase by ID reducers
       .addCase(fetchPurchaseById.pending, (state) => {
         state.purchaseLoading = true;
         state.purchaseError = null;
@@ -244,6 +293,7 @@ export const {
   setGoldenWinnerPrices,
   setGiftPrices,
   clearCurrentPurchase,
+  hydrateCartFromStorage,
 } = addtocartSlice.actions;
 
 export default addtocartSlice.reducer;
