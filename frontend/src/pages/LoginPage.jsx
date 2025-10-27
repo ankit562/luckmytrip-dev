@@ -46,19 +46,15 @@ const LoginPage = () => {
     dispatch(loginUser({ email, password }))
       .unwrap()
       .then((userData) => {
-        console.log('Login successful, user data:', userData);
+        
         setEmail('');
         setPassword('');
         
         // Handle redirection after successful login
         const role = userData.role?.toLowerCase();
-        console.log('User role:', role);
-        
         if (role === 'client') {
-          console.log('Redirecting to home page');
           navigate('/', { replace: true });
         } else if (['admin', 'superadmin', 'content-creator'].includes(role)) {
-          console.log('Redirecting to dashboard');
           navigate('/dashboard', { replace: true });
         }
       })

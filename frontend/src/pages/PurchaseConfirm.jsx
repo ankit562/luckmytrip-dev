@@ -23,7 +23,7 @@ export const PurchaseConfirm = () => {
     const status = searchParams.get("status");
     const mihpayid = searchParams.get("mihpayid");
 
-    console.log("PayU Redirect Data:", { txnid, status, mihpayid });
+   
 
     if (txnid) {
       // Fetch order details
