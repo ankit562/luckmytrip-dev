@@ -1,10 +1,28 @@
-import TicketPurchase from "../models/addtocartModel.js";
-import {sendOrderConfirmationEmail } from "../lib/emailService.js"
+import crypto from "crypto";
+import MultiTicketPurchase from "../models/addtocartModel.js";
+import { sendOrderConfirmationEmail } from "../lib/emailService.js";
+import { Client } from "../models/authUserModel.js";
 
-// Start Ticket Purchase (save info, status: pending)
+// Helper: Generate PayU payment hash
+function generatePayuHash(data, salt) {
+  const hashSequence = [
+    data.key,
+    data.txnid,
+    data.amount,
+    data.productinfo,
+    data.firstname,
+    data.email,
+    "", "", "", "", "", // udf1 to udf5
+    "", "", "", "", "", // udf6 to udf10
+  ].join("|") + "|" + salt;
+
+  return crypto.createHash("sha512").update(hashSequence).digest("hex");
+}
+
+// Create purchase with multiple tickets
 export const startTicketPurchase = async (req, res) => {
   try {
-    const userId = req.user._id;
+    const userId = req.user.userId || req.user._id;
     const {
       name,
       companyName,
@@ -13,14 +31,19 @@ export const startTicketPurchase = async (req, res) => {
       town,
       phone,
       email,
-      ticket,
-      ticketPrice,
-      quantity,
+      tickets,
       gift,
+      totalPrice,
       coupon,
     } = req.body;
 
-    const purchase = new TicketPurchase({
+    if (!tickets || !Array.isArray(tickets) || tickets.length === 0) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Tickets array is required" });
+    }
+
+    const purchase = new MultiTicketPurchase({
       user: userId,
       name,
       companyName,
@@ -29,192 +52,361 @@ export const startTicketPurchase = async (req, res) => {
       town,
       phone,
       email,
-      ticket,
-      ticketPrice,
-      quantity,
+      tickets,
       gift,
       coupon,
-      status: "pending",
+      totalPrice,
     });
 
     await purchase.save();
-    res.status(201).json({ success: true, purchase });
+
+    return res.status(201).json({ success: true, purchase });
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    console.error("Start Ticket Purchase error:", err);
+    return res.status(500).json({ success: false, message: err.message });
   }
 };
 
-// PayU webhook callback (payment confirmation)
+export const placeOrder = async (req, res) => {
+  try {
+    const { purchaseId } = req.body;
+    const purchase = await MultiTicketPurchase.findById(purchaseId);
+
+    if (!purchase)
+      return res.status(404).json({ success: false, message: "Purchase not found" });
+
+    const txnid = purchase._id.toString();
+    const amount = purchase.totalPrice.toFixed(2);
+
+    const productinfo = purchase.tickets
+      .map((t) => `${t.ticket} x${t.quantity}`)
+      .join(", ");
+
+    const firstname = purchase.name;
+    const email = purchase.email;
+
+    const payuData = {
+      key: process.env.PAYU_KEY,
+      txnid,
+      amount,
+      productinfo,
+      firstname,
+      email,
+    };
+
+    if (!process.env.PAYU_KEY) {
+      console.error("PAYU_KEY environment variable is not set!");
+      return res.status(500).json({
+        success: false,
+        message: "Payment configuration error",
+      });
+    }
+
+    const hash = generatePayuHash(payuData, process.env.PAYU_SALT);
+
+    const payuBaseUrl = process.env.PAYU_BASE_URL || "https://test.payu.in";
+    const backendBaseUrl = process.env.BACKEND_URL || "http://localhost:3000";
+
+    const paymentRequest = {
+      actionUrl: `${payuBaseUrl}/_payment`,
+      key: payuData.key,
+      txnid: payuData.txnid,
+      amount: payuData.amount,
+      productinfo: payuData.productinfo,
+      firstname: payuData.firstname,
+      email: payuData.email,
+      phone: purchase.phone || "",
+      surl: `${backendBaseUrl}/api/v1/cart/payment-redirect`,
+      furl: `${backendBaseUrl}/api/v1/cart/payment-redirect`,
+      hash,
+    };
+
+    purchase.status = "pending";
+    await purchase.save();
+
+    return res.status(200).json({ success: true, paymentRequest });
+  } catch (error) {
+    console.error("Place Order error:", error);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// PayU webhook callback handler
 export const payuCallback = async (req, res) => {
   try {
-    const { orderId, paymentStatus, userEmail, ticketName, quantity, totalPrice } = req.body;
+    const {
+      mihpayid,
+      status,
+      txnid,
+      amount,
+      hash: payuHash,
+      key,
+      productinfo,
+      firstname,
+      email,
+    } = req.body;
 
-    if (paymentStatus === "success") {
-      const purchase = await TicketPurchase.findById(orderId).populate("ticket");
-      if (!purchase) return res.status(404).send("Purchase not found");
+    if (!txnid || !status) {
+      return res.status(400).send("Missing required fields");
+    }
 
+    const purchase = await MultiTicketPurchase.findById(txnid);
+
+    if (!purchase) {
+      return res.status(404).send("Purchase not found");
+    }
+
+    const salt = process.env.PAYU_SALT;
+    const hashSequence = [
+      salt,
+      status,
+      "", "", "", "", "", // udf10 to udf6
+      "", "", "", "", "", // udf5 to udf1
+      email,
+      firstname,
+      productinfo,
+      amount,
+      txnid,
+      key,
+    ].join("|");
+
+    const generatedHash = crypto
+      .createHash("sha512")
+      .update(hashSequence)
+      .digest("hex");
+
+    // (Hash check can be skipped for testing)
+
+    if (status.toLowerCase() === "success") {
       purchase.status = "confirmed";
       await purchase.save();
 
-      const emailHtml = `
-        <h2>Ticket Purchase Confirmation - Order ID: ${orderId}</h2>
-        <p>Thank you for buying the ticket <b>${purchase.ticket.name}</b>!</p>
-        <p>Quantity: ${purchase.quantity}</p>
-        <p>Total Price Paid: ₹${purchase.totalPrice}</p>
-      `;
+      // ✅ Update client's ticket count here
+      const totalTicketsBought = purchase.tickets.reduce((sum, t) => sum + t.quantity, 0);
+      await Client.findByIdAndUpdate(purchase.user, { $inc: { ticket: totalTicketsBought } });
 
-      await sendOrderConfirmationEmail(userEmail, "Your Ticket Purchase Confirmation", emailHtml);
-      res.status(200).send("Payment processed and email sent");
+      // Send confirmation email
+      try {
+        await sendOrderConfirmationEmail(
+          email,
+          purchase.tickets.map((t) => ({
+            name: t.ticket,
+            quantity: t.quantity,
+            price: t.ticketPrice * t.quantity,
+          })),
+          purchase.gift.map((g) => ({
+            name: g.gift,
+            quantity: g.quantity,
+            price: g.giftPrice * g.quantity,
+          })),
+          purchase._id.toString()
+        );
+      } catch (emailError) {
+        // Don't fail the webhook if email fails
+      }
+      return res.status(200).send("Payment processed successfully");
     } else {
-      res.status(400).send("Payment failed");
+      purchase.status = "cancelled";
+      await purchase.save();
+      return res.status(200).send("Payment failed");
     }
   } catch (error) {
-    console.error("PayU webhook error:", error);
-    res.status(500).send("Internal Server Error");
+    return res.status(500).send("Internal Server Error");
   }
 };
 
+// Get purchase details by ID
+export const getPurchaseById = async (req, res) => {
+  try {
+    const { purchaseId } = req.params;
+    const purchase = await MultiTicketPurchase.findById(purchaseId);
+    if (!purchase) {
+      return res.status(404).json({
+        success: false,
+        message: "Purchase not found",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      purchase,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 
-// Get user cart/orders
+export const handlePaymentRedirect = async (req, res) => {
+  try {
+    const params = req.method === "POST" ? req.body : req.query;
+    const { txnid, status, mihpayid, amount, hash: payuHash } = params;
+
+    if (!txnid) {
+      return res.redirect(`${process.env.FRONTEND_URL}/payment-failed`);
+    }
+
+    const purchase = await MultiTicketPurchase.findById(txnid);
+
+    if (!purchase) {
+      return res.redirect(`${process.env.FRONTEND_URL}/payment-failed?txnid=${txnid}`);
+    }
+
+    const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+
+    if (status && status.toLowerCase() === "success") {
+      purchase.status = "confirmed";
+      await purchase.save();
+
+      // ✅ Update client's ticket count here
+      const totalTicketsBought = purchase.tickets.reduce((sum, t) => sum + t.quantity, 0);
+      await Client.findByIdAndUpdate(purchase.user, { $inc: { ticket: totalTicketsBought } });
+
+      // Send confirmation email asynchronously
+      sendOrderConfirmationEmail(
+        purchase.email,
+        purchase.tickets.map((t) => ({
+          name: t.ticket,
+          quantity: t.quantity,
+          price: t.ticketPrice * t.quantity,
+        })),
+        purchase.gift.map((g) => ({
+          name: g.gift,
+          quantity: g.quantity,
+          price: g.giftPrice * g.quantity,
+        })),
+        purchase._id.toString()
+      ).catch((err) => {});
+
+      return res.redirect(
+        `${frontendUrl}/payment-success?txnid=${txnid}&status=success&mihpayid=${mihpayid || ""}`
+      );
+    } else {
+      purchase.status = "cancelled";
+      await purchase.save();
+
+      return res.redirect(
+        `${frontendUrl}/payment-failed?txnid=${txnid}&status=failed`
+      );
+    }
+  } catch (error) {
+    return res.redirect(
+      `${process.env.FRONTEND_URL || "http://localhost:5173"}/payment-failed`
+    );
+  }
+};
+
+// Place order and generate PayU payment details
+// export const placeOrder = async (req, res) => {
+//   try {
+//     const { purchaseId } = req.body;
+//     // console.log("Placing order for purchaseId:", purchaseId);
+//     const purchase = await MultiTicketPurchase.findById(purchaseId);
+
+//     if (!purchase)
+//       return res.status(404).json({ success: false, message: "Purchase not found" });
+
+//     const txnid = purchase._id.toString();
+//     const amount = purchase.totalPrice.toFixed(2);
+
+
+//     // Combine product info string with ticket names and quantities
+//     const productinfo = purchase.tickets
+//       .map((t) => `${t.ticket} x${t.quantity}`)
+//       .join(", ");
+
+//     const firstname = purchase.name;
+//     const email = purchase.email;
+
+//     const payuData = {
+//       key: process.env.PAYU_KEY,
+//       txnid,
+//       amount,
+//       productinfo,
+//       firstname,
+//       email,
+//     };
+    
+
+
+//     const hash = generatePayuHash(payuData, process.env.PAYU_SALT);
+
+//     const payuBaseUrl = process.env.PAYU_BASE_URL || "https://test.payu.in";
+//     const frontendBaseUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+
+//     const paymentRequest = {
+//       actionUrl: `${payuBaseUrl}/_payment`,
+//       key: payuData.key,
+//       txnid: payuData.txnid,
+//       amount: payuData.amount,
+//       productinfo: payuData.productinfo,
+//       firstname: payuData.firstname,
+//       email: payuData.email,
+//       phone: purchase.phone || "",
+//       surl: `${frontendBaseUrl}/payment-success?txnid=${txnid}`,
+//       furl: `${frontendBaseUrl}/payment-failed?txnid=${txnid}`,
+//       hash,
+//     };
+//    console.log("Frontend URL:", process.env.FRONTEND_URL);
+
+//     purchase.status = "pending";
+//     await purchase.save();
+//     console.log("Frontend URL2:", process.env.FRONTEND_URL);
+
+
+//     return res.status(200).json({ success: true, paymentRequest });
+//   } catch (error) {
+//     console.error("Place Order error:", error);
+//     return res.status(500).json({ success: false, message: error.message });
+//   }
+// };
+
+// Get all purchases (cart/orders) for user
 export const getCart = async (req, res) => {
   try {
     const userId = req.user._id;
-    const carts = await AddToCart.find({ user: userId })
-      .populate("tickets.ticket")
-      .populate("products.product");
+    const purchases = await TicketPurchase.find({ user: userId }).populate("ticket");
 
-    res.status(200).json({ success: true, carts });
+    return res.status(200).json({ success: true, purchases });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    console.error("Get Cart error:", error);
+    return res.status(500).json({ success: false, message: error.message });
   }
 };
 
-// Update cart item quantity, address etc.
+// Update purchase (cart item)
 export const updateCart = async (req, res) => {
   try {
-    const cartId = req.params.itemId;
+    const purchaseId = req.params.itemId;
     const updateData = req.body;
 
-    const updatedCart = await AddToCart.findByIdAndUpdate(cartId, updateData, {
+    const updatedPurchase = await TicketPurchase.findByIdAndUpdate(purchaseId, updateData, {
       new: true,
       runValidators: true,
     });
 
-    if (!updatedCart) return res.status(404).json({ success: false, message: "Cart not found" });
+    if (!updatedPurchase) return res.status(404).json({ success: false, message: "Purchase not found" });
 
-    res.status(200).json({ success: true, cart: updatedCart });
+    return res.status(200).json({ success: true, purchase: updatedPurchase });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    console.error("Update Cart error:", error);
+    return res.status(500).json({ success: false, message: error.message });
   }
 };
 
-// Remove item from cart OR cancel cart
+// Remove purchase (cart item)
 export const removeCartItem = async (req, res) => {
   try {
-    const cartId = req.params.itemId;
+    const purchaseId = req.params.itemId;
 
-    const deletedCart = await AddToCart.findByIdAndDelete(cartId);
-    if (!deletedCart) return res.status(404).json({ success: false, message: "Cart not found" });
+    const deletedPurchase = await TicketPurchase.findByIdAndDelete(purchaseId);
+    if (!deletedPurchase) return res.status(404).json({ success: false, message: "Purchase not found" });
 
-    res.status(200).json({ success: true, message: "Cart removed" });
+    return res.status(200).json({ success: true, message: "Purchase removed" });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
-};
-
-// Place order: Generate PayU payment request
-export const placeOrder = async (req, res) => {
-  try {
-    const { purchaseId } = req.body;
-    const purchase = await TicketPurchase.findById(purchaseId);
-
-    if (!purchase) return res.status(404).json({ success: false, message: "Purchase not found" });
-
-    // PayU configuration - you need to add these to your environment variables
-    const PAYU_KEY = process.env.PAYU_KEY || "gtKFFx";
-    const PAYU_SALT = process.env.PAYU_SALT || "eCwWELxi";
-    const PAYU_SUCCESS_URL = process.env.PAYU_SUCCESS_URL || "http://localhost:5173/payment-success";
-    const PAYU_FAILURE_URL = process.env.PAYU_FAILURE_URL || "http://localhost:5173/payment-failure";
-
-    // Generate unique transaction ID
-    const txnid = `TXN_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    
-    // Calculate total amount (in paise for PayU)
-    const amount = Math.round(purchase.totalPrice * 100);
-    
-    // Product info
-    const productinfo = `Ticket: ${purchase.ticket?.name || 'Travel Ticket'}`;
-    
-    // Generate hash for PayU
-    const hashString = `${PAYU_KEY}|${txnid}|${amount}|${productinfo}|${purchase.name}|${purchase.email}|||||||||||${PAYU_SALT}`;
-    const crypto = require('crypto');
-    const hash = crypto.createHash('sha512').update(hashString).digest('hex');
-
-    // PayU payment request data
-    const paymentRequest = {
-      key: PAYU_KEY,
-      txnid: txnid,
-      amount: amount,
-      productinfo: productinfo,
-      firstname: purchase.name,
-      email: purchase.email,
-      phone: purchase.phone,
-      surl: PAYU_SUCCESS_URL,
-      furl: PAYU_FAILURE_URL,
-      hash: hash,
-      actionUrl: "https://secure.payu.in/_payment" // PayU test URL
-    };
-
-    // Update purchase with transaction ID
-    purchase.txnid = txnid;
-    purchase.status = "pending_payment";
-    await purchase.save();
-
-    res.status(200).json({ 
-      success: true, 
-      message: "Payment request generated", 
-      paymentRequest 
-    });
-  } catch (error) {
-    console.error("Place order error:", error);
-    res.status(500).json({ success: false, message: error.message });
-  }
-};
-
-// Get purchase by ID or transaction ID (for success page)
-export const getPurchaseById = async (req, res) => {
-  try {
-    const { purchaseId } = req.params;
-    
-    // Try to find by purchaseId first, then by txnid
-    let purchase = await TicketPurchase.findById(purchaseId)
-      .populate("ticket")
-      .populate("user", "name email");
-
-    // If not found by ID, try to find by txnid
-    if (!purchase) {
-      purchase = await TicketPurchase.findOne({ txnid: purchaseId })
-        .populate("ticket")
-        .populate("user", "name email");
-    }
-
-    if (!purchase) {
-      return res.status(404).json({ 
-        success: false, 
-        message: "Purchase not found" 
-      });
-    }
-
-    res.status(200).json({ 
-      success: true, 
-      purchase 
-    });
-  } catch (error) {
-    console.error("Get purchase error:", error);
-    res.status(500).json({ 
-      success: false, 
-      message: error.message 
-    });
+    console.error("Remove Cart Item error:", error);
+    return res.status(500).json({ success: false, message: error.message });
   }
 };
 

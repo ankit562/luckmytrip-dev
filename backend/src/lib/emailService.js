@@ -68,20 +68,21 @@ export async function sendForgotPasswordEmail(to, resetLink) {
 
 
 export async function sendOrderConfirmationEmail(userEmail, tickets, orderId) {
-  const subject = 'Your Ticket Purchase Confirmation';
-  const htmlContent = `
-    <h2>Order ID: ${orderId}</h2>
-    <p>Thank you for your purchase! Here are your ticket details:</p>
-    <ul>
-      ${tickets
-        .map(
-          (ticket) =>
-            `<li>${ticket.name} - Quantity: ${ticket.quantity} - Price: ${ticket.price}</li>`
-        )
-        .join('')}
-    </ul>
-  `;
+  const message = {
+    from: process.env.SMTP_USER,
+    to: userEmail,
+    subject: 'Your Ticket Purchase Confirmation',
+    html: `<h2>ti ID: ${orderId}</h2>
+           <p>Thank you for your purchase! Here are your ticket details:</p>
+           <ul>
+           ${tickets
+             .map(
+               (ticket) =>
+                 `<li>${ticket.name} - Quantity: ${ticket.quantity} - Price: ${ticket.price}</li>`
+             )
+             .join('')}
+           </ul>`,
+  };
 
-  return sendEmail(userEmail, subject, htmlContent);
+  await transporter.sendMail(message);
 }
-
