@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import TripSection from '../components/ticketpageComponent/TicketCompo';
+import { useLocation } from "react-router-dom";
 
 import { fetchTickets } from '../features/tickets/ticketSlice';
 import {
@@ -20,9 +21,13 @@ import {
 export default function Tickets() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const fromExplore = location.state?.fromExplore;
 
   const { tickets } = useSelector((state) => state.tickets);
   const cartItems = useSelector((state) => state.addtocart.cartItems || {});
+
   const {
     dubaiQty = 0,
     thailandQty = 0,
@@ -46,6 +51,14 @@ export default function Tickets() {
       dispatch(setGiftPrices(49));
     }
   }, [tickets, dispatch]);
+  
+  // Redirect logic
+  useEffect(() => {
+    // Only redirect if came from Explore and goldenWinnerQty is 0
+    if (fromExplore && goldenWinnerQty === 0) {
+      navigate('/explore');
+    }
+  }, [fromExplore, goldenWinnerQty, navigate]);
 
   // Handlers for Dubai Ticket
   const handleIncrement = () => {

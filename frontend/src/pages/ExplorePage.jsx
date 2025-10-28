@@ -6,6 +6,13 @@ import TripCarosel from '../components/expolorePageComponents/TripCarosel'
 import TravelCard from '../components/expolorePageComponents/TripInfo'
 import { useRef } from 'react';
 import toast from 'react-hot-toast'
+import { useDispatch } from 'react-redux';
+import { setGoldenWinnerQtys } from '../features/addtocart/addtocartSlice';
+import { useSelector } from 'react-redux';
+// ...
+
+
+
 
 const options = [
   "VIP AIRPORT PICKUP",
@@ -17,7 +24,10 @@ const options = [
 
 const ExplorePage = () => {
 
-  
+  const dispatch = useDispatch();
+  const goldenWinnerQty = useSelector(state => state.addtocart?.cartItems?.goldenWinnerQty || 0);
+
+
   
   const Logo = (
     "WIN"
@@ -48,6 +58,7 @@ const ExplorePage = () => {
   };
 
   const handlemsg= ()=>{
+     dispatch(setGoldenWinnerQtys(goldenWinnerQty + 1));
     toast.success("Golden Ticket is added to the cart")
   }
 
@@ -202,7 +213,7 @@ const ExplorePage = () => {
           alt='beautifulView'
           className='w-full h-full object-cover rounded-2xl md:rounded-3xl' />
 
-        <Link onClick={handlemsg}  state={{ goldenqty: 1 , fromExplore: true  }}  to="/ticket"  ><div className='absolute z-20 flex justify-center items-end left-0 right-0 bottom-0 h-full px-2 sm:px-4'>
+        <Link onClick={handlemsg}  to="/ticket" state={{ fromExplore: true }}  ><div className='absolute z-20 flex justify-center items-end left-0 right-0 bottom-0 h-full px-2 sm:px-4'>
           <img
             src="/images/goldenwinner.png"
             alt="Jackpot"

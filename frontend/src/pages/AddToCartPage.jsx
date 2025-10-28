@@ -183,7 +183,7 @@ export default function AddToCartPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-100 to-slate-50">
       <Header />
-      <section className="container mx-auto px-4 py-12 max-w-7xl">
+      <section className="container mx-auto md:px-4 px-2 py-12 max-w-7xl">
         {hasItems ? (
           <div className={`grid gap-8 ${showForm ? 'grid-cols-1 lg:grid-cols-2' : 'grid-cols-1'} `}>
             <div>
@@ -223,7 +223,7 @@ export default function AddToCartPage() {
               <CouponSection />
               <button
                 onClick={handlePlaceOrder}
-                className="w-full md:w-auto bg-red-500 text-white py-3 px-8 rounded-xl font-bold hover:bg-red-600 transition uppercase text-lg shadow-lg"
+                className="w-full md:w-auto bg-red-500 text-white md:py-3 md:px-8 px-4 py-2 rounded-xl font-bold hover:bg-red-600 transition uppercase text-base md:text-lg shadow-lg"
               >
                 Place Order
               </button>
@@ -242,9 +242,9 @@ export default function AddToCartPage() {
 const BillingForm = ({ formData, handleInputChange, errors, setToggleForm }) => (
   <div className="bg-white rounded-3xl shadow-lg px-8 py-8">
     <div className="flex justify-between items-center">
-      <h2 className="text-3xl font-bold text-teal-500 mb-8 uppercase tracking-wide">Billing Details</h2>
+      <h2 className="md:text-3xl text-base font-bold text-teal-500 mb-8 uppercase tracking-wide">Billing Details</h2>
       <button onClick={() => setToggleForm(false)} aria-label="Close billing form">
-        <X className="w-6 h-6 mb-8 text-teal-500" />
+        <X className="md:w-6 md:h-6  w-5 h-5 mb-8 text-teal-500" />
       </button>
     </div>
     <div className="space-y-5">
@@ -264,7 +264,7 @@ const BillingForm = ({ formData, handleInputChange, errors, setToggleForm }) => 
           onChange={handleInputChange}
           className="w-5 h-5 accent-pink-500"
         />
-        <label htmlFor="saveInfo" className="ml-2 text-gray-800 text-sm font-medium">
+        <label htmlFor="saveInfo" className="ml-2 text-gray-800 md:text-sm text-xs font-medium">
           Save this information for faster check-out next time
         </label>
       </div>
@@ -289,9 +289,9 @@ const InputField = ({ name, label, value, onChange, required, error, maxLength }
 );
 
 const PaymentSelector = ({ paymentMethod, setPaymentMethod, errors, setErrors }) => (
-  <div className="bg-white rounded-2xl shadow-md px-6 py-5">
+  <div className="bg-white rounded-md md:rounded-2xl shadow-md md:px-6 px-2 py-3  md:py-5">
     <div className="flex justify-between items-center">
-      <div className="flex items-center gap-3">
+      <div className="flex items-center md:gap-3 gap-1">
         <input
           type="radio"
           checked={paymentMethod === 'bank'}
@@ -304,11 +304,11 @@ const PaymentSelector = ({ paymentMethod, setPaymentMethod, errors, setErrors })
         />
         <span className="font-medium text-gray-800">Bank</span>
       </div>
-      <div className="flex gap-2">
-        <div className="px-2 py-1 bg-pink-500 text-white text-xs font-bold rounded">bKash</div>
-        <div className="px-2 py-1 bg-blue-600 text-white text-xs font-bold rounded">VISA</div>
-        <div className="px-2 py-1 bg-orange-500 text-white text-xs font-bold rounded">MC</div>
-        <div className="px-2 py-1 bg-orange-600 text-white text-xs font-bold rounded">Nagad</div>
+      <div className="flex md:gap-2  gap-1.5">
+        <div className="md:px-2 md:py-1 px-1 py-0.5 bg-pink-500 text-white text-xs font-bold rounded">bKash</div>
+        <div className="md:px-2 md:py-1 px-1 py-0.5 bg-blue-600 text-white text-xs font-bold rounded">VISA</div>
+        <div className="md:px-2 md:py-1 px-1 py-0.5 bg-orange-500 text-white text-xs font-bold rounded">MC</div>
+        <div className="md:px-2 md:py-1 px-1 py-0.5 bg-orange-600 text-white text-xs font-bold rounded">Nagad</div>
       </div>
     </div>
     {errors.paymentMethod && <span className="text-red-600 text-sm mt-2 block">Please select a payment method.</span>}
@@ -316,20 +316,20 @@ const PaymentSelector = ({ paymentMethod, setPaymentMethod, errors, setErrors })
 );
 
 const CouponSection = () => (
-  <div className="flex gap-3">
-    <input type="text" placeholder="Coupon Code" className="flex-1 border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-teal-500" />
-    <button className="bg-teal-500 text-white font-bold py-3 px-6 rounded-xl hover:bg-teal-600 transition uppercase">Apply Coupon</button>
+  <div className="flex md:gap-3 gap-1 md:text-base text-xs">
+    <input type="text" placeholder="Coupon Code" className="flex-1 border border-gray-300 rounded-md md:rounded-xl md:px-4 md:py-3 px-2 py-1 focus:ring-2  focus:ring-teal-500" />
+    <button className="bg-teal-500 text-white  font-bold md:py-3 md:px-6 py-1 px-2 rounded-md md:rounded-xl hover:bg-teal-600 transition uppercase">Apply Coupon</button>
   </div>
 );
 
 const TicketRow = ({ title, qty, price, setQty }) => (
-  <div className="bg-white rounded-2xl shadow-md px-6 py-5 flex items-center justify-between">
-    <div className="font-bold text-teal-600 uppercase text-lg">{title}</div>
-    <div className="flex items-center gap-6">
+  <div className="bg-white md:rounded-2xl rounded-lg shadow-md md:px-6 md:py-5 px-2 py-1 flex items-center justify-between">
+    <div className="font-bold text-teal-600 uppercase md:text-lg text-sm">{title}</div>
+    <div className="flex items-center md:gap-6 gap-2">
       <button onClick={() => setQty(Math.max(0, qty - 1))} className="w-8 h-8 bg-white flex items-center hover:bg-gray-50 justify-center rounded-md transition">
         <Minus className="w-4 h-4 text-gray-600" />
       </button>
-      <span className="px-4 font-semibold text-gray-800">{qty}</span>
+      <span className="px-4 font-semibold text-gray-800 text-xs md:text-base">{qty}</span>
       <button onClick={() => setQty(qty + 1)} className="w-8 h-8 bg-green-500 flex items-center justify-center hover:bg-green-600 rounded-md">
         <Plus className="w-4 h-4 text-white" />
       </button>

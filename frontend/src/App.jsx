@@ -49,18 +49,6 @@ if (!isInitialized) {
 }
 
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     axios.post('/auth/refresh-token').catch(() => {
-  //       // Handle failed refresh if needed (optional)
-  //     });
-  //   }, 14 * 60 * 1000); // 14 minutes before token expiry
-
-  //   return () => clearInterval(interval);
-  // }, []);
-
-
-
   return (
     <div className=''>
       <Routes>
@@ -167,7 +155,7 @@ if (!isInitialized) {
         <Route path="/contactus" element={ <ContactUsPage /> } />
         <Route path="/addtocart" element={ <AddToCartPage /> } />
         <Route path="/payment-success" element={ <PurchaseConfirm/> }/>
-        <Route path="/payment-failure" element={ <PurchaseCancel/> }/>
+        <Route path="/payment-failed" element={ <PurchaseCancel/> }/>
         <Route path="*" element={<h1>404 Not Found</h1>} />
 
       </Routes>
