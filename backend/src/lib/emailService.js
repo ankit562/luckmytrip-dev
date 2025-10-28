@@ -42,7 +42,6 @@ async function sendEmail(to, subject, html) {
 }
 
 
-
 // for sending verification email
 export async function sendVerificationEmail(to, otp) {
   const subject = "Your Email Verification OTP";

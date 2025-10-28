@@ -1,88 +1,130 @@
-// import dotenv from 'dotenv';
-// dotenv.config();
-// import nodemailer from "nodemailer";
-// const smtpUser = process.env.SMTP_USER;
-// const smtpPass = process.env.SMTP_PASS;
-// const smtpHost = process.env.SMTP_HOST; // e.g. smtp.mailtrap.io or smtp.gmail.com
-// const smtpPort = process.env.SMTP_PORT ? Number(process.env.SMTP_PORT) : undefined; // e.g. 587
-// const smtpSecure = process.env.SMTP_SECURE === 'true'; // 'true' when using port 465
-// const smtpService = process.env.SMTP_SERVICE; // optional well-known service name like 'gmail'
-
-// // Build transporter options explicitly so Nodemailer doesn't default to localhost:587
-// let transporterOptions = {};
-// if (smtpHost) {
-//   transporterOptions = {
-//     host: smtpHost,
-//     port: smtpPort || 587,
-//     secure: !!smtpSecure,
-//     auth: smtpUser && smtpPass ? { user: smtpUser, pass: smtpPass } : undefined,
-//   };
-// } else if (smtpService) {
-//   transporterOptions = {
-//     service: smtpService,
-//     auth: smtpUser && smtpPass ? { user: smtpUser, pass: smtpPass } : undefined,
-//   };
-// } else {
-//   // No SMTP configured. To avoid Nodemailer attempting network connections (and causing ETIMEDOUT),
-//   // use a safe stream transport in development which keeps messages in-memory (no network).
-//   // In production you should set SMTP_HOST/SMTP_PORT/SMTP_SECURE or SMTP_SERVICE.
-//   transporterOptions = {
-//     streamTransport: true,
-//     newline: 'unix',
-//     buffer: true,
-//   };
-//   console.warn('No SMTP_HOST or SMTP_SERVICE configured. Using in-memory stream transport (dev only).\nSet SMTP_HOST/SMTP_PORT/SMTP_SECURE or SMTP_SERVICE for real delivery.');
-// }
-
-// // create nodemailer transporter for sending emails as per the SMTP configuration.
-// const transporter = nodemailer.createTransport(transporterOptions);
+import dotenv from 'dotenv';
+dotenv.config();
+import nodemailer from 'nodemailer';
 
 
-// // verify transporter configuration (optional, run once on startup) and log success or error
-// transporter.verify((error, success) => {
-//   if (error) {
-//     console.error("Email transporter verification failed:", error);
-//   } else {
-//     console.log("Email transporter is ready"); 
-//   }
-// });
+const smtpUser = process.env.SMTP_USER || "admin@theluckmytrip.com";
+const smtpPass = process.env.SMTP_PASS || "DQb@sKqXk8";
+const smtpHost = process.env.SMTP_HOST || "209.99.17.56"; // e.g. smtp.gmail.com or smtp.mailtrap.io
+const smtpPort = process.env.SMTP_PORT ? Number(process.env.SMTP_PORT) : undefined || 587; // e.g. 587
+const smtpSecure = process.env.SMTP_SECURE === 'true'; // true only for port 465
+const smtpService = process.env.SMTP_SERVICE || "gmail"; // e.g. 'gmail'
+const appName = process.env.APP_NAME || 'LuckMyTrip';
 
-// async function sendEmail(to, subject, html) {
-//   try {
-//     const mailOptions = {
-//       from: `"Your App Name" <${process.env.SMTP_USER}>`,
-//       to,
-//       subject,
-//       html,
-//     };
-//     const info = await transporter.sendMail(mailOptions);
-//     console.log(`Email sent: ${info.messageId}`);
-//     return info;
-//   } catch (error) {
-//     console.error("Error sending email: ", error);
-//     throw error;
-//   }
-// }
+if (!smtpUser || !smtpPass) {
+  console.warn('⚠️ Missing SMTP_USER or SMTP_PASS in .env file!');
+}
 
-// // for sending verification email
-// export async function sendVerificationEmail(to, otp) {
-//   const subject = "Your Email Verification OTP";
-//   const htmlContent = `
-//     <h3>Please verify your email</h3>
-//     <p>Your OTP code is:</p>
-//     <h2>${otp}</h2>
-//     <p>This code expires in 10 minutes.</p>
-//   `;
-//   return sendEmail(to, subject, htmlContent);
-// }
+let transporterOptions = {};
 
-// // for sending forgot password email
-// export async function sendForgotPasswordEmail(to, resetLink) {
-//   const subject = "Password Reset Request";
-//   const htmlContent = `
-//     <p>You requested a password reset. Click the link below to reset your password:</p>
-//     <a href="${resetLink}">${resetLink}</a>
-//     <p>If you didn't request this, please ignore this email.</p>
-//   `;
-//   return sendEmail(to, subject, htmlContent);
-// }
+if (smtpService) {
+
+  transporterOptions = {
+    service: smtpService,
+    auth: {
+      user: smtpUser,
+      pass: smtpPass,
+    },
+  };
+} else if (smtpHost) {
+  // Use custom SMTP host
+  transporterOptions = {
+    host: smtpHost,
+    port: smtpPort || 587,
+    secure: smtpSecure || false,
+    auth: {
+      user: smtpUser,
+      pass: smtpPass,
+    },
+  };
+} else {
+  
+  transporterOptions = {
+    streamTransport: true,
+    newline: 'unix',
+    buffer: true,
+  };
+  console.warn('⚠️ No SMTP_SERVICE or SMTP_HOST found. Using in-memory transport.');
+}
+
+const transporter = nodemailer.createTransport(transporterOptions);
+
+if (process.env.NODE_ENV !== 'production') {
+  transporter.verify((error, success) => {
+    if (error) {
+      console.error('❌ Email transporter verification failed:', error);
+    } else {
+      console.log('✅ Email transporter is ready to send messages');
+    }
+  });
+}
+
+
+async function sendEmail(to, subject, html) {
+  try {
+    const mailOptions = {
+      from: `"${appName}" <${smtpUser}>`,
+      to,
+      subject,
+      html,
+      text: html.replace(/<[^>]+>/g, ''), // plain text fallback for spam safety
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+    console.log(`📨 Email sent successfully: ${info.messageId}`);
+    return info;
+  } catch (error) {
+    console.error('🚨 Error sending email:', error);
+    throw error;
+  }
+}
+
+
+//  Verification Email (OTP)
+export async function sendVerificationEmail(to, otp) {
+  const subject = 'Your Email Verification OTP';
+  const htmlContent = `
+    <h2>Email Verification</h2>
+    <p>Your One-Time Password (OTP) is:</p>
+    <h1 style="color:#007bff;">${otp}</h1>
+    <p>This code will expire in <strong>10 minutes</strong>.</p>
+    <p>If you didn’t request this, please ignore this email.</p>
+  `;
+  return sendEmail(to, subject, htmlContent);
+}
+
+//  Forgot Password Email
+export async function sendForgotPasswordEmail(to, resetLink) {
+  const subject = 'Password Reset Request';
+  const htmlContent = `
+    <h2>Password Reset</h2>
+    <p>You requested a password reset. Click the link below to reset your password:</p>
+    <a href="${resetLink}" style="background:#007bff;color:white;padding:10px 15px;border-radius:6px;text-decoration:none;">
+      Reset Password
+    </a>
+    <p>If you didn’t request this, you can safely ignore this email.</p>
+  `;
+  return sendEmail(to, subject, htmlContent);
+}
+
+//  Order Confirmation Email
+export async function sendOrderConfirmationEmail(userEmail, tickets, orderId) {
+  const subject = '🎟️ Your Ticket Purchase Confirmation';
+  const htmlContent = `
+    <h2>Order Confirmation</h2>
+    <p>Thank you for your purchase! Here are your ticket details:</p>
+    <h3>Order ID: <span style="color:#007bff;">${orderId}</span></h3>
+    <ul>
+      ${tickets
+        .map(
+          (ticket) =>
+            `<li><strong>${ticket.name}</strong> — Quantity: ${ticket.quantity} — Price: ₹${ticket.price}</li>`
+        )
+        .join('')}
+    </ul>
+    <p>We look forward to seeing you at the event!</p>
+  `;
+  return sendEmail(userEmail, subject, htmlContent);
+}
+
+export { sendEmail };

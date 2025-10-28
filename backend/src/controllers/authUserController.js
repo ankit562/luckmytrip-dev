@@ -11,7 +11,7 @@ import {
   generateRefreshToken,
   verifyRefreshToken,
 } from "../lib/jsonWebToken.js";
-import { sendVerificationEmail, sendForgotPasswordEmail } from "../lib/emailService.js";
+import { sendVerificationEmail, sendForgotPasswordEmail } from "../lib/mailService.js";
 
 // Helper to resolve mongoose model for given role
 const getModelByRole = (role) => {

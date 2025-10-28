@@ -1,6 +1,6 @@
 import crypto from "crypto";
 import MultiTicketPurchase from "../models/addtocartModel.js";
-import { sendOrderConfirmationEmail } from "../lib/emailService.js";
+import { sendOrderConfirmationEmail } from "../lib/mailService.js";
 import { Client } from "../models/authUserModel.js";
 
 // Helper: Generate PayU payment hash
