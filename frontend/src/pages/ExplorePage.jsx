@@ -85,21 +85,22 @@ const ExplorePage = () => {
         <div className="flex flex-col md:flex-row justify-center items-center gap-3 sm:gap-4 md:gap-3 lg:gap-8 xl:gap-16 2xl:gap-32 px-3 sm:px-4 md:px-4 lg:px-6 xl:px-4">
 
           <div className="flex items-center w-full max-w-[320px] md:w-auto justify-center">
-            <span className="relative text-[7rem] sm:text-[9rem] md:text-[7rem] lg:text-[8rem] xl:text-[11rem] font-black mr-[-35px] sm:mr-[-50px] md:mr-[-38px] lg:mr-[-45px] xl:mr-[-55px] z-10"
-              style={{
+            <img src="/images/1.png" className="relative  font-black mr-[-33px] sm:mr-[-45px] 
+            md:mr-[-34px] lg:mr-[-40px] xl:mr-[-48px] z-10  xl:w-[5rem]  
+            w-[3.4rem] sm:w-[4rem] md:w-[3.4rem] lg:w-[4rem]"             
+            style={{
                 color: '#7B1FA2',
                 WebkitTextStroke: '5px #fff',
                 textStroke: '1px #fff',
                 borderRadius: '10px',
                 background: 'transparent',
-              }}>
-              1
-            </span>
+              }}/>
+
             <span className="bg-[#7B1FA2] text-white text-sm sm:text-base md:text-sm 
             lg:text-base xl:text-xl font-bold rounded-r-[25px] sm:rounded-r-[40px] md:rounded-r-[30px] 
-            lg:rounded-r-[35px] xl:rounded-r-[45px] py-5 sm:py-6 md:py-5 lg:py-6 xl:py-8 pl-9 
-            sm:pl-12 md:pl-10 lg:pl-11 xl:pl-14 pr-6 sm:pr-12 md:pr-8 lg:pr-10 xl:pr-16 min-w-[165px] 
-            sm:min-w-[200px] md:min-w-[155px] lg:min-w-[170px] xl:min-w-[220px] flex items-center 
+            lg:rounded-r-[35px] xl:rounded-r-[45px] py-5 sm:py-6 md:py-5 lg:py-6 xl:py-8 pl-10 
+            sm:pl-12 md:pl-10 lg:pl-11 xl:pl-16 pr-6 sm:pr-12 md:pr-8 lg:pr-10 xl:pr-16 min-w-[184px] 
+            sm:min-w-[225px] md:min-w-[155px] lg:min-w-[170px] xl:min-w-[220px] flex items-center 
             leading-tight font-montserrat"
               style={{ borderTopRightRadius: '50px', borderBottomRightRadius: '50px' }}>
               REGISTERED<br />OR LOGIN
@@ -107,18 +108,17 @@ const ExplorePage = () => {
           </div>
 
           <div className="flex items-center w-full max-w-[320px] md:w-auto justify-center">
-            <span className="relative text-[7rem] sm:text-[9rem] md:text-[7rem] lg:text-[8rem] xl:text-[11rem] 
-            font-black mr-[-35px] sm:mr-[-48px] md:mr-[-36px] lg:mr-[-43px] xl:mr-[-52px] z-10 "
+            <img src="/images/2.png" className="relative  font-black mr-[-33px] sm:mr-[-45px] 
+            md:mr-[-34px] lg:mr-[-40px] xl:mr-[-48px] z-10  xl:w-[8rem]  w-[4.9rem] sm:w-[6.1rem] md:w-[6rem] lg:w-[7rem]"
               style={{
-                color: '#00ACC1',
+                color: '#00a59b',
                 WebkitTextStroke: '5px #fff',
                 textStroke: '5px #fff',
                 borderRadius: '30px',
                 background: 'transparent',
-              }}>
-              2
-            </span>
-            <span className="bg-[#00ACC1] text-white text-sm sm:text-base md:text-sm 
+              }}/>
+
+            <span className="bg-[#00a59b] text-white text-sm sm:text-base md:text-sm 
             lg:text-base xl:text-xl font-bold rounded-r-[25px] sm:rounded-r-[40px] md:rounded-r-[30px] 
             lg:rounded-r-[35px] xl:rounded-r-[45px] py-5 sm:py-6 md:py-5 lg:py-7 xl:py-8 pl-9 sm:pl-12 
             md:pl-10 lg:pl-11 xl:pl-14 pr-6 sm:pr-12 md:pr-8 lg:pr-10 xl:pr-16 min-w-[165px] sm:min-w-[200px] 
@@ -129,20 +129,22 @@ const ExplorePage = () => {
           </div>
 
           <div className="flex items-center w-full max-w-[320px] md:w-auto justify-center">
-            <span className="relative text-[7rem] sm:text-[9rem] md:text-[7rem] lg:text-[8rem] xl:text-[11rem] font-black mr-[-33px] sm:mr-[-45px] md:mr-[-34px] lg:mr-[-40px] xl:mr-[-48px] z-10"
+            <img src="/images/3.png" className="relative  font-black mr-[-33px] sm:mr-[-45px] 
+            md:mr-[-34px] lg:mr-[-40px] xl:mr-[-48px] z-10  xl:w-[8rem]  w-[5.3rem] sm:w-[6.3rem] md:w-[6rem] lg:w-[6.4rem]"
               style={{
-                color: '#1565C0',
+                color: '#104a64',
                 WebkitTextStroke: '5px #fff',
                 textStroke: '5px #fff',
                 borderRadius: '30px',
                 background: 'transparent',
-              }}>
-              3
-            </span>
-            <span className="bg-[#1565C0] text-white text-sm sm:text-base 
+              }}/>
+
+            <span className="bg-[#104a64] text-white text-sm sm:text-base 
             md:text-sm lg:text-base xl:text-xl font-bold rounded-r-[25px] sm:rounded-r-[40px] 
-            md:rounded-r-[30px] lg:rounded-r-[35px] xl:rounded-r-[45px] py-5 sm:py-6 md:py-5 
-            lg:py-6 xl:py-8 pl-9 sm:pl-12 md:pl-10 lg:pl-11 xl:pl-12 pr-6 sm:pr-12 md:pr-8 lg:pr-10 xl:pr-16 
+            md:rounded-r-[30px] lg:rounded-r-[35px] xl:rounded-r-[45px] 
+            py-5 sm:py-6 md:py-5 lg:py-5 xl:py-5
+            pl-9 sm:pl-12 md:pl-10 lg:pl-11 xl:pl-12
+            pr-6 sm:pr-12 md:pr-8 lg:pr-10 xl:pr-16 
             min-w-[165px] sm:min-w-[200px] md:min-w-[155px] lg:min-w-[170px] xl:min-w-[210px] 
             flex items-center leading-tight font-montserrat"
               style={{ borderTopRightRadius: '50px', borderBottomRightRadius: '50px' }}>

@@ -28,6 +28,11 @@ import Client from './pages/dashboard/Client';
 import Ticket from './pages/dashboard/Tickets';
 import { PurchaseConfirm } from './pages/PurchaseConfirm';
 import {PurchaseCancel} from './pages/PurchaseCancel';
+import Aboutus from './pages/Aboutus';
+import Privacy from './pages/Privacy';
+import TaC from './pages/TaC';
+import HowToPlay from './pages/HowToPlay';
+import Faq from './pages/Faq';
 
 
 
@@ -156,6 +161,12 @@ if (!isInitialized) {
         <Route path="/addtocart" element={ <AddToCartPage /> } />
         <Route path="/payment-success" element={ <PurchaseConfirm/> }/>
         <Route path="/payment-failed" element={ <PurchaseCancel/> }/>
+        <Route path="/aboutus" element={ <Aboutus/> }/>
+        <Route path="/privacypolicy" element={ <Privacy/> }/>
+        <Route path="/termsandconditions" element={ <TaC/> }/>
+        <Route path="/howtoplay" element={ <HowToPlay/> }/>
+        <Route path="/faq" element={ <Faq/> }/>
+
         <Route path="*" element={<h1>404 Not Found</h1>} />
 
       </Routes>

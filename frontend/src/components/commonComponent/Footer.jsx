@@ -18,16 +18,16 @@ const Footer = () => {
             {/* Navigation Links beside logo */}
             <div className="flex-grow grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
               <div className="space-y-4">
-                <Link to="#" className="block text-gray-700 hover:text-blue-600 transition-colors font-bold text-xl font-montserrat">Home</Link>
-                <Link to="#" className="block text-gray-700 hover:text-blue-600 transition-colors font-bold text-xl font-montserrat">About Us</Link>
-                <Link to="#" className="block text-gray-700 hover:text-blue-600 transition-colors font-bold text-xl font-montserrat">How to Play</Link>
-                <Link to="#" className="block text-gray-700 hover:text-blue-600 transition-colors font-bold text-xl font-montserrat">Frequently Asked Questions</Link>
+                <Link to="/" className="block text-gray-700 hover:text-blue-600 transition-colors font-bold text-xl font-montserrat">Home</Link>
+                <Link to="/aboutus" className="block text-gray-700 hover:text-blue-600 transition-colors font-bold text-xl font-montserrat">About Us</Link>
+                <Link to="/howtoplay" className="block text-gray-700 hover:text-blue-600 transition-colors font-bold text-xl font-montserrat">How to Play</Link>
+                <Link to="/faq" className="block text-gray-700 hover:text-blue-600 transition-colors font-bold text-xl font-montserrat">Frequently Asked Questions</Link>
               </div>
               
               <div className="space-y-4">
-                <Link to="#" className="block text-gray-700 hover:text-blue-600 transition-colors font-bold text-xl font-montserrat">Terms and Conditions</Link>
-                <Link to="#" className="block text-gray-700 hover:text-blue-600 transition-colors font-bold text-xl font-montserrat">Support</Link>
-                <Link to="#" className="block text-gray-700 hover:text-blue-600 transition-colors font-bold text-xl font-montserrat">Privacy Policy</Link>
+                <Link to="/termsandconditions" className="block text-gray-700 hover:text-blue-600 transition-colors font-bold text-xl font-montserrat">Terms and Conditions</Link>
+                <Link to="/contactus" className="block text-gray-700 hover:text-blue-600 transition-colors font-bold text-xl font-montserrat">Support</Link>
+                <Link to="/privacypolicy" className="block text-gray-700 hover:text-blue-600 transition-colors font-bold text-xl font-montserrat">Privacy Policy</Link>
               </div>
             </div>
           </div>
