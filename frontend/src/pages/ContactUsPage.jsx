@@ -4,6 +4,7 @@ import Footer from '../components/commonComponent/Footer'
 import {createUserInfo} from "../features/userinfo/userInfoContactSlice"
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-hot-toast'
+import { Helmet } from 'react-helmet'
 
 const ContactUsPage = () => {
   const [name, setName] = useState('')
@@ -39,6 +40,57 @@ const ContactUsPage = () => {
 
   return (
     <div className="bg-gradient-to-b from-blue-100 to-blue-10 min-h-screen">
+      
+
+<Helmet>
+  
+  <title>Buy Contest Tickets & Win Trips</title>
+  <meta
+    name="description"
+    content=""
+  />
+  <meta
+    name="keywords"
+    content=""
+  />
+
+  {/* Open Graph Tags */}
+  <meta property="og:title" content="" />
+  <meta
+    property="og:description"
+    content=""
+  />
+  <meta property="og:url" content="" />
+
+  {/* Canonical URL */}
+  <link rel="canonical" href="" />
+
+  {/* Structured Data - Schema.org Product / Offer and Contest */}
+  <script type="">
+    {`
+      {
+        "@context": "",
+        "@type": "",
+        "name": "",
+        "url": "",
+        "description": "",
+        "offers": {
+          "@type": "",
+          "priceCurrency": "",
+          "price": "",
+          "availability": "",
+          "url": ""
+        },
+        "mainEntityOfPage": {
+          "@type": "",
+          "name": "",
+          "url": "",
+          "description": ""
+        }
+      }
+    `}
+  </script>
+</Helmet>
       <Header />
 
       <section className="py-10 px-4 flex justify-center items-center bg-blue-50 min-h-full">

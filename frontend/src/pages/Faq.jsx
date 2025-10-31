@@ -1,6 +1,7 @@
 import React  ,{useState}from 'react'
 import Header from '../components/commonComponent/Header'
 import Footer from '../components/commonComponent/Footer'
+import { Helmet } from 'react-helmet'
 
 
 const faqs = [
@@ -36,6 +37,57 @@ const Faq = () => {
 
   return (
     <div>
+      
+
+<Helmet>
+  
+  <title>Buy Contest Tickets & Win Trips</title>
+  <meta
+    name="description"
+    content=""
+  />
+  <meta
+    name="keywords"
+    content=""
+  />
+
+  {/* Open Graph Tags */}
+  <meta property="og:title" content="" />
+  <meta
+    property="og:description"
+    content=""
+  />
+  <meta property="og:url" content="" />
+
+  {/* Canonical URL */}
+  <link rel="canonical" href="" />
+
+  {/* Structured Data - Schema.org Product / Offer and Contest */}
+  <script type="">
+    {`
+      {
+        "@context": "",
+        "@type": "",
+        "name": "",
+        "url": "",
+        "description": "",
+        "offers": {
+          "@type": "",
+          "priceCurrency": "",
+          "price": "",
+          "availability": "",
+          "url": ""
+        },
+        "mainEntityOfPage": {
+          "@type": "",
+          "name": "",
+          "url": "",
+          "description": ""
+        }
+      }
+    `}
+  </script>
+</Helmet>
       <Header/>
       <section className="py-12 bg-[#E9F2FF]">
       <div className="container mx-auto px-4 max-w-4xl">

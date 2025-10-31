@@ -4,6 +4,7 @@ import Header from '../components/commonComponent/Header';
 import Footer from '../components/commonComponent/Footer';
 import toast from 'react-hot-toast';
 import { FileText, X, Minus, Plus, ShoppingCart } from 'lucide-react';
+import { Helmet } from 'react-helmet';
 
 import {
   createPurchase,
@@ -182,6 +183,57 @@ export default function AddToCartPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-100 to-slate-50">
+
+
+      <Helmet>
+
+        <title>Buy Contest Tickets & Win Trips</title>
+        <meta
+          name="description"
+          content=""
+        />
+        <meta
+          name="keywords"
+          content=""
+        />
+
+        {/* Open Graph Tags */}
+        <meta property="og:title" content="" />
+        <meta
+          property="og:description"
+          content=""
+        />
+        <meta property="og:url" content="" />
+
+        {/* Canonical URL */}
+        <link rel="canonical" href="" />
+
+        {/* Structured Data - Schema.org Product / Offer and Contest */}
+        <script type="">
+          {`
+      {
+        "@context": "",
+        "@type": "",
+        "name": "",
+        "url": "",
+        "description": "",
+        "offers": {
+          "@type": "",
+          "priceCurrency": "",
+          "price": "",
+          "availability": "",
+          "url": ""
+        },
+        "mainEntityOfPage": {
+          "@type": "",
+          "name": "",
+          "url": "",
+          "description": ""
+        }
+      }
+    `}
+        </script>
+      </Helmet>
       <Header />
       <section className="container mx-auto md:px-4 px-2 py-12 max-w-7xl">
         {hasItems ? (

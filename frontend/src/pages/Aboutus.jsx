@@ -1,10 +1,62 @@
 import React from 'react'
 import Header from '../components/commonComponent/Header'
 import Footer from '../components/commonComponent/Footer'
+import { Helmet } from 'react-helmet'
 
 const Aboutus = () => {
     return (
         <div>
+           
+
+<Helmet>
+  
+  <title>Buy Contest Tickets & Win Trips</title>
+  <meta
+    name="description"
+    content=""
+  />
+  <meta
+    name="keywords"
+    content=""
+  />
+
+  {/* Open Graph Tags */}
+  <meta property="og:title" content="" />
+  <meta
+    property="og:description"
+    content=""
+  />
+  <meta property="og:url" content="" />
+
+  {/* Canonical URL */}
+  <link rel="canonical" href="" />
+
+  {/* Structured Data - Schema.org Product / Offer and Contest */}
+  <script type="">
+    {`
+      {
+        "@context": "",
+        "@type": "",
+        "name": "",
+        "url": "",
+        "description": "",
+        "offers": {
+          "@type": "",
+          "priceCurrency": "",
+          "price": "",
+          "availability": "",
+          "url": ""
+        },
+        "mainEntityOfPage": {
+          "@type": "",
+          "name": "",
+          "url": "",
+          "description": ""
+        }
+      }
+    `}
+  </script>
+</Helmet>
             <Header />
             <section className="flex flex-col mx-auto mt-10 sm:mt-16 md:mt-6  mb-28">
                 <div className="container mx-auto py-6 sm:py-10 md:py-10 lg:py-12 xl:py-12 px-3 sm:px-6 md:px-8 lg:px-10 xl:px-8">
