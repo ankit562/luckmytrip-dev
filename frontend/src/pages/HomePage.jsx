@@ -124,8 +124,8 @@ const HomePage = () => {
       </section>
 
       {/* Journey */}
-      <section className="py-4 bg-[#E9F2FF] relative">
-        <div className="relative md:max-w-[90vw] mx-auto">
+      <section className="py-4 bg-[#E9F2FF] relative ">
+        <div className="relative max-w-full mx-auto">
           <div className="text-center mb-10">
             <h1 className="text-4xl md:text-5xl font-extrabold mb-4 text-red-500 font-berlin">Start Your Journey</h1>
             <p className="text-base md:text-xl font-medium font-montserrat">Get ready for the adventure of a lifetime!</p>
@@ -137,11 +137,12 @@ const HomePage = () => {
 
           <div
             ref={sliderTrackRef}
-            className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth md:px-8 px-1 gap-10 w-full max-w-full"
+            className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth gap-4 px-4   md:px-5 xl:px-8  md:gap-5 lg:gap-6 xl:gap-12 w-full max-w-full"
             style={{ scrollbarWidth: 'none' }}
           >
             {(tickets || []).map((item ,idx )=> (
-              <div key={idx} className="slide snap-center flex-shrink-0 w-[550px]">
+              <div key={idx} className="slide snap-center flex-shrink-0 xl:w-[560px] xl:h-[380px]
+               lg:w-[480px] lg:h-[440px] md:w-[460px] md:h-[380px]  sm:w-[520px] sm:h-[440px] w-full h-auto">
                 <OfferCard
                   mainImage={item.image}
                   shadeImage={"/images/shade.png"}
