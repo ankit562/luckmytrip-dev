@@ -9,6 +9,7 @@ import toast from 'react-hot-toast'
 import { useDispatch } from 'react-redux';
 import { setGoldenWinnerQtys } from '../features/addtocart/addtocartSlice';
 import { useSelector } from 'react-redux';
+import { Helmet } from 'react-helmet';
 // ...
 
 
@@ -64,6 +65,41 @@ const ExplorePage = () => {
 
   return (
     <div className="bg-[#eaf8fd] min-h-screen">
+            <Helmet>
+        <title>Explore Contests & Win Luxury Trips</title>
+        <meta
+          name="description"
+          content="Browse all ongoing contests. Limited to 2000 tickets per draw. Participate to win Dubai, Baku, Thailand holiday packages!"
+        />
+        <meta
+          name="keywords"
+          content="travel contest listings, Dubai contest, Baku contest, Thailand contest, participate and win, lucky draw trips"
+        />
+        <meta property="og:title" content="Explore Contests & Win Luxury Trips" />
+        <meta
+          property="og:description"
+          content="See all live contests with limited tickets. Join now for a chance to win trips to Dubai, Baku, Thailand!"
+        />
+        <meta property="og:url" content="https://www.theluckmytrip.com/explore/" />
+        <link rel="canonical" href="https://www.theluckmytrip.com/explore/" />
+        <script type="application/ld+json">
+          {`
+            {
+              "@context": "https://schema.org",
+              "@type": "CollectionPage",
+              "url": "https://www.theluckmytrip.com/explore/",
+              "name": "Explore Contests & Win Luxury Trips",
+              "description": "Browse all ongoing contests. Limited to 2000 tickets per draw. Participate to win Dubai, Baku, Thailand holiday packages!",
+              "mainEntity": {
+                "@type": "Contest",
+                "name": "Luxury Travel Packages Contests",
+                "url": "https://www.theluckmytrip.com/explore/",
+                "description": "Join limited ticket contests to win holiday packages to Dubai, Baku, Thailand, and more."
+              }
+            }
+          `}
+        </script>
+      </Helmet>
       <Header />
       <TripCarosel />
 

@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Footer from "../components/commonComponent/Footer";
 import Header from "../components/commonComponent/Header";
 import { fetchProducts } from "../features/products/productSlice"
+import { Helmet } from "react-helmet";
 
 
 
@@ -83,11 +84,10 @@ const slideJourney = (direction) => {
 
   let newIndex = idx + direction;
 
-  // loop reset logic
   if (newIndex < 0) {
     newIndex = totalTickets - 1; 
   } else if (newIndex >= totalTickets) {
-    newIndex = 0; // jump to first
+    newIndex = 0;
   }
 
   setIdex(newIndex); 
@@ -95,7 +95,6 @@ const slideJourney = (direction) => {
   const cardWidth = window.innerWidth < 768 ? 550 + 40 : 280 + 20;
   const slider = sliderTrackRef.current;
 
-  // when looping, jump to start/end instead of just scrolling by
   if (newIndex === 0 && direction > 0) {
     slider.scrollTo({ left: 0, behavior: "smooth" });
   } else if (newIndex === totalTickets - 1 && direction < 0) {
@@ -105,14 +104,55 @@ const slideJourney = (direction) => {
   }
 };
 
-
-
-
-
-
-
   return (
     <div className="bg-gradient-to-b from-blue-100 to-blue-10 min-h-screen">
+      <Helmet>
+  {/* Basic Meta Tags */}
+  <title>Play Contest. Win Luxury Travel Packages</title>
+  <meta
+    name="description"
+    content="Participate in exciting contests by buying tickets starting ₹299. Limited 2000 entries per draw. Win trips to Dubai, Baku, Thailand!"
+  />
+  <meta
+    name="keywords"
+    content="win travel contest, Dubai trip contest, Baku trip contest, Thailand trip contest, buy lucky draw ticket, 2000 entries draw"
+  />
+  
+  {/* Open Graph Tags for Social Sharing */}
+  <meta property="og:title" content="Play Contest. Win Luxury Travel Packages" />
+  <meta
+    property="og:description"
+    content="Participate in contests with only 2000 entries per draw. Buy tickets and win international trips to Dubai, Baku, Thailand!"
+  />
+  <meta property="og:url" content="https://www.theluckmytrip.com/" />
+  
+  {/* Canonical URL */}
+  <link rel="canonical" href="https://www.theluckmytrip.com/" />
+  
+  {/* Structured Data - Schema.org for Organization and Contest */}
+  <script type="application/ld+json">
+    {`
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "url": "https://www.theluckmytrip.com/",
+        "name": "Play Contest. Win Luxury Travel Packages",
+        "description": "Participate in exciting contests by buying tickets starting ₹299. Limited 2000 entries per draw. Win trips to Dubai, Baku, Thailand!",
+        "mainEntity": {
+          "@type": "Contest",
+          "name": "Luxury Travel Packages Contest",
+          "url": "https://www.theluckmytrip.com/",
+          "description": "Buy tickets to participate in contests with limited entries and win trips to top destinations.",
+          "sponsor": {
+            "@type": "Organization",
+            "name": "The Luck My Trip",
+            "url": "https://www.theluckmytrip.com/"
+          }
+        }
+      }
+    `}
+  </script>
+</Helmet>
       <Header />
 
       <section className="py-4 relative overflow-hidden md:mb-4 ">
@@ -157,13 +197,12 @@ const slideJourney = (direction) => {
             <p className="text-base md:text-xl font-medium font-montserrat">Get ready for the adventure of a lifetime!</p>
           </div>
 
-          {/* Loading and error states */}
-          {loading && <div>Loading offers...</div>}
-
+          {/* Loading and error states
+          {loading && <div>Loading offers...</div>} */}
 
           <div
             ref={sliderTrackRef}
-            className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth gap-4 px-4  w-full max-w-full"
+            className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth gap-8 px-8  w-full max-w-full"
             style={{ scrollbarWidth: 'none' }}
           >
             {(tickets || []).map((item ,idx )=> (

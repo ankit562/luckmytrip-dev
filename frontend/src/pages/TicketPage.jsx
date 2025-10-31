@@ -8,6 +8,8 @@ import TripSection from '../components/ticketpageComponent/TicketCompo';
 import { useLocation } from "react-router-dom";
 
 import { fetchTickets } from '../features/tickets/ticketSlice';
+import { Helmet } from 'react-helmet';
+
 import {
   setDubaiQtys,
   setThailandQtys,
@@ -116,7 +118,56 @@ export default function Tickets() {
   return (
     <div className="bg-gradient-to-b from-blue-100 to-blue-10 min-h-screen">
       <Header />
+      
+      <Helmet>
+  {/* Basic Meta Tags */}
+  <title>Buy Contest Tickets & Win Trips</title>
+  <meta
+    name="description"
+    content="Buy your contest tickets today (₹299, ₹499, ₹599). Each draw limited to 2000 entries. Play now and win Dubai, Baku, Thailand packages!"
+  />
+  <meta
+    name="keywords"
+    content="buy contest tickets, contest entry, lucky draw ticket, win trips, Dubai Baku Thailand packages"
+  />
 
+  {/* Open Graph Tags */}
+  <meta property="og:title" content="Buy Contest Tickets & Win Trips" />
+  <meta
+    property="og:description"
+    content="Secure your spot in contests with limited entries. Purchase tickets and stand a chance to win luxury trips!"
+  />
+  <meta property="og:url" content="https://www.theluckmytrip.com/tickets/" />
+
+  {/* Canonical URL */}
+  <link rel="canonical" href="https://www.theluckmytrip.com/tickets/" />
+
+  {/* Structured Data - Schema.org Product / Offer and Contest */}
+  <script type="application/ld+json">
+    {`
+      {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": "Contest Tickets",
+        "url": "https://www.theluckmytrip.com/tickets/",
+        "description": "Buy contest tickets at ₹299, ₹499, or ₹599. Limited draw of 2000 entries. Win trips to Dubai, Baku, Thailand.",
+        "offers": {
+          "@type": "Offer",
+          "priceCurrency": "INR",
+          "price": "299",
+          "availability": "https://schema.org/InStock",
+          "url": "https://www.theluckmytrip.com/tickets/"
+        },
+        "mainEntityOfPage": {
+          "@type": "Contest",
+          "name": "Luxury Travel Contest",
+          "url": "https://www.theluckmytrip.com/tickets/",
+          "description": "Purchase contest tickets and stand a chance to win luxury trips."
+        }
+      }
+    `}
+  </script>
+</Helmet>
       {/* Dubai and Thailand */}
       {tickets
         .filter(tri => ['dubai', 'Thailand'].includes(tri.name))
