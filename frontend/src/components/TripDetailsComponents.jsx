@@ -57,14 +57,14 @@ export
                 <span className="text-white font-bold md:text-base text-sm align-top">{fromLocation}</span>
               </div>
             </div>
-            <p className="text-white text-xs sm:text-sm font-normal flex-wrap">
+            <p className="text-white text-[9px] sm:text-sm font-normal flex-wrap">
               Draw Date: {drawDate} or{window.innerWidth > 640 && <br /> } earlier if the campaign is sold out
             </p>
           </div>
           
           <div className="mt-8 mb-0 flex flex-col justify-start items-center space-y-3 space-x-1">
             <span className="mt-1 inline-block bg-yellow-400 text-[#183f68] 
-             font-semibold md:py-1 py-1/2 px-1 md:px-3 rounded-md md:rounded-lg text-xs md:text-base">
+             font-semibold md:py-1 py-1/2 px-1 md:px-3 rounded-md md:rounded-lg text-[8px] md:text-base">
               {subtitle}
             </span>
             <div className="flex flex-col items-start pl-4">

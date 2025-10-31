@@ -75,14 +75,40 @@ const HomePage = () => {
   const [activeTestimonial, setActiveTestimonial] = useState("content1");
 
   const sliderTrackRef = useRef(null);
-  const slideJourney = (direction) => {
-    if (!sliderTrackRef.current) return;
-    const cardWidth = 550 + 40;
-    sliderTrackRef.current.scrollBy({
-      left: direction * cardWidth,
-      behavior: 'smooth',
-    });
-  };
+  const [ idx , setIdex] = useState(0); 
+
+const slideJourney = (direction) => {
+  const totalTickets = tickets.length;
+  if (!sliderTrackRef.current) return;
+
+  let newIndex = idx + direction;
+
+  // loop reset logic
+  if (newIndex < 0) {
+    newIndex = totalTickets - 1; 
+  } else if (newIndex >= totalTickets) {
+    newIndex = 0; // jump to first
+  }
+
+  setIdex(newIndex); 
+
+  const cardWidth = window.innerWidth < 768 ? 550 + 40 : 280 + 20;
+  const slider = sliderTrackRef.current;
+
+  // when looping, jump to start/end instead of just scrolling by
+  if (newIndex === 0 && direction > 0) {
+    slider.scrollTo({ left: 0, behavior: "smooth" });
+  } else if (newIndex === totalTickets - 1 && direction < 0) {
+    slider.scrollTo({ left: slider.scrollWidth, behavior: "smooth" });
+  } else {
+    slider.scrollBy({ left: direction * cardWidth, behavior: "smooth" });
+  }
+};
+
+
+
+
+
 
 
   return (
@@ -137,7 +163,7 @@ const HomePage = () => {
 
           <div
             ref={sliderTrackRef}
-            className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth gap-4 px-4   md:px-5 xl:px-8  md:gap-5 lg:gap-6 xl:gap-12 w-full max-w-full"
+            className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth gap-4 px-4  w-full max-w-full"
             style={{ scrollbarWidth: 'none' }}
           >
             {(tickets || []).map((item ,idx )=> (
