@@ -111,11 +111,11 @@ const slideJourney = (direction) => {
   <title>Play Contest. Win Luxury Travel Packages</title>
   <meta
     name="description"
-    content="Participate in exciting contests by buying tickets starting ₹299. Limited 2000 entries per draw. Win trips to Dubai, Baku, Thailand!"
+    content="Participate in exciting contests by buying tickets starting ₹299. Win trips to Dubai, Baku, Thailand!"
   />
   <meta
     name="keywords"
-    content="win travel contest, Dubai trip contest, Baku trip contest, Thailand trip contest, buy lucky draw ticket, 2000 entries draw"
+    content="win travel contest, Dubai trip contest, Baku trip contest, Thailand trip contest, buy lucky draw ticket"
   />
   
   {/* Open Graph Tags for Social Sharing */}

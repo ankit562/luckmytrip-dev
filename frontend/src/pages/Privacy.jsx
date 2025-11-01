@@ -13,11 +13,11 @@ const Privacy = () => {
         <title>Buy Contest Tickets & Win Trips</title>
         <meta
           name="description"
-          content=""
+          content="privacy policy information about how user data is handled on LuckMyTrip."
         />
         <meta
           name="keywords"
-          content=""
+          content="privacy policy, user data, LuckMyTrip"
         />
 
         {/* Open Graph Tags */}

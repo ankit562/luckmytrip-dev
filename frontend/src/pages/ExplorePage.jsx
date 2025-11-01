@@ -69,7 +69,7 @@ const ExplorePage = () => {
         <title>Explore Contests & Win Luxury Trips</title>
         <meta
           name="description"
-          content="Browse all ongoing contests. Limited to 2000 tickets per draw. Participate to win Dubai, Baku, Thailand holiday packages!"
+          content="Browse all ongoing contests. Participate to win Dubai, Baku, Thailand holiday packages!"
         />
         <meta
           name="keywords"
@@ -89,7 +89,7 @@ const ExplorePage = () => {
               "@type": "CollectionPage",
               "url": "https://www.theluckmytrip.com/explore/",
               "name": "Explore Contests & Win Luxury Trips",
-              "description": "Browse all ongoing contests. Limited to 2000 tickets per draw. Participate to win Dubai, Baku, Thailand holiday packages!",
+              "description": "Browse all ongoing contests. Participate to win Dubai, Baku, Thailand holiday packages!",
               "mainEntity": {
                 "@type": "Contest",
                 "name": "Luxury Travel Packages Contests",

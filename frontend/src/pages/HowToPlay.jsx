@@ -13,11 +13,11 @@ const HowToPlay = () => {
   <title>Buy Contest Tickets & Win Trips</title>
   <meta
     name="description"
-    content=""
+    content="How it works to play contests on LuckMyTrip. Register or login, buy contest tickets, and wait for the results to win exciting trips."
   />
   <meta
     name="keywords"
-    content=""
+    content="how to play contest, buy contest tickets, win trips"
   />
 
   {/* Open Graph Tags */}

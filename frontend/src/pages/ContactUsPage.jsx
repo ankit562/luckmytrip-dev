@@ -47,11 +47,11 @@ const ContactUsPage = () => {
   <title>Buy Contest Tickets & Win Trips</title>
   <meta
     name="description"
-    content=""
+    content="contact LuckMyTrip for any inquiries, support, or feedback regarding contests and trips."
   />
   <meta
     name="keywords"
-    content=""
+    content="contact LuckMyTrip, support, inquiries, feedback"
   />
 
   {/* Open Graph Tags */}

@@ -13,11 +13,11 @@ const Aboutus = () => {
   <title>Buy Contest Tickets & Win Trips</title>
   <meta
     name="description"
-    content=""
+    content="about LuckMyTrip, your gateway to winning amazing trips and contests."
   />
   <meta
     name="keywords"
-    content=""
+    content="about LuckMyTrip, win trips, contest information, LuckMyTrip"
   />
 
   {/* Open Graph Tags */}
