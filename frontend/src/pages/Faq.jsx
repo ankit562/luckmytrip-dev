@@ -131,7 +131,7 @@ const Faq = () => {
       <Header/>
       <section className="py-12 bg-[#E9F2FF]">
       <div className="container mx-auto px-4 max-w-4xl">
-        <h2 className="text-4xl font-extrabold mb-10 text-center text-blue-700 font-berlin">
+        <h2 className="text-4xl font-extrabold mb-10 text-center text-blue-900 font-berlin">
           Frequently Asked Questions
         </h2>
         <div className="space-y-4">
