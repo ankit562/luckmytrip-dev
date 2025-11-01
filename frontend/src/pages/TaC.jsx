@@ -102,7 +102,7 @@ const TaC = () => {
   <link rel="canonical" href="" />
 
   {/* Structured Data - Schema.org Product / Offer and Contest */}
-  <script type="">
+  <script type="application/ld+json">
     {`
       {
         "@context": "",
@@ -131,7 +131,7 @@ const TaC = () => {
             <section className="py-12 bg-[#E9F2FF]">
       <div className="container mx-auto px-4 max-w-4xl">
         <h2 className="text-4xl font-extrabold mb-10 text-center text-blue-700 font-berlin">
-          Frequently Asked Questions
+          Terms and Conditions
         </h2>
         <div className="space-y-4">
           {TaCs.map((TaC, idx) => (
