@@ -81,7 +81,7 @@ const Faq = () => {
 
 <Helmet>
   
-  <title>Buy Contest Tickets & Win Trips</title>
+  <title>Frequently Asked Questions | The LuckMyTrip</title>
   <meta
     name="description"
     content="faq about contests on LuckMyTrip. Find answers to common questions regarding participation, prizes, and rules."
@@ -132,7 +132,7 @@ const Faq = () => {
       <section className="py-12 bg-[#E9F2FF]">
       <div className="container mx-auto px-4 max-w-4xl">
         <h2 className="text-4xl font-extrabold mb-10 text-center text-blue-900 font-berlin">
-          Frequently Asked Questions
+          Frequently Asked Questions - The LuckMyTrip
         </h2>
         <div className="space-y-4">
           {faqs.map((faq, idx) => (
