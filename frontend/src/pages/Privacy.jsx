@@ -3,7 +3,7 @@ import Header from '../components/commonComponent/Header'
 import Footer from '../components/commonComponent/Footer'
 import { Helmet } from 'react-helmet'
 
-const privs = [
+const Privs = [
   {
     question: "Eligibility",
     answer: "1. Participants must be 18 years or older. 2. Employees, affiliates, or immediate family members of The Luck My Trip are not eligible to participate. 3. Contests are open to residents of India only unless explicitly stated otherwise.",
@@ -54,11 +54,11 @@ const privs = [
   },
 ];
 
-const priv = () => {
+const Privacy = () => {
 
   const [activeIndex, setActiveIndex] = useState(null);
 
-  const togglepriv = (index) => {
+  const togglePrivacy = (index) => {
     setActiveIndex(activeIndex === index ? null : index);
   };
 
@@ -123,15 +123,15 @@ const priv = () => {
           Privacy Policy
         </h2>
         <div className="space-y-4">
-          {privs.map((priv, idx) => (
+          {Privs.map((Privacy, idx) => (
             <div
               key={idx}
               className="border border-gray-300 rounded-lg p-4 cursor-pointer bg-white shadow-sm"
-              onClick={() => togglepriv(idx)}
+              onClick={() => togglePrivacy(idx)}
               aria-expanded={activeIndex === idx}
               role="button"
               tabIndex={0}
-              onKeyPress={(e) => { if (e.key === 'Enter') togglepriv(idx); }}
+              onKeyPress={(e) => { if (e.key === 'Enter') togglePrivacy(idx); }}
             >
               <h3 className=" text-sm md:text-xl font-semibold text-blue-800 flex justify-between items-center">
                 {priv.question}
