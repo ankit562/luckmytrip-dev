@@ -145,7 +145,7 @@ const TaC = () => {
               onKeyPress={(e) => { if (e.key === 'Enter') toggleTaC(idx); }}
             >
               <h3 className=" text-sm md:text-xl font-semibold text-blue-800 flex justify-between items-center">
-                {faq.question}
+                {TaC.question}
                 <span className={`transform transition-transform duration-300 ${activeIndex === idx ? "rotate-180" : "rotate-0"}`}>
                   ▼
                 </span>
