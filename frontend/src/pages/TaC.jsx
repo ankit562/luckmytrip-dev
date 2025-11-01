@@ -103,29 +103,19 @@ const TaC = () => {
 
   {/* Structured Data - Schema.org Product / Offer and Contest */}
   <script type="application/ld+json">
-    {`
-      {
-        "@context": "",
-        "@type": "",
-        "name": "",
-        "url": "",
-        "description": "",
-        "offers": {
-          "@type": "",
-          "priceCurrency": "",
-          "price": "",
-          "availability": "",
-          "url": ""
-        },
-        "mainEntityOfPage": {
-          "@type": "",
-          "name": "",
-          "url": "",
-          "description": ""
-        }
-      }
-    `}
-  </script>
+{JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": TaCs.map((item) => ({
+    "@type": "Question",
+    "name": item.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": item.answer.replace(/<br\s*\/?>/g, "\n")
+    }
+  }))
+})}
+</script>
 </Helmet>
         <Header />
             <section className="py-12 bg-[#E9F2FF]">
