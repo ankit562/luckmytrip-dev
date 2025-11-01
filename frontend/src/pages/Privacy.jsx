@@ -140,7 +140,7 @@ const Privacy = () => {
                 </span>
               </h3>
               {activeIndex === idx && (
-                <p className="text-xs md:text-base mt-2 text-gray-700 font-montserrat">{priv.answer}</p>
+                <p className="text-xs md:text-base mt-2 text-gray-700 font-montserrat">{Privacy.answer}</p>
               )}
             </div>
           ))}
