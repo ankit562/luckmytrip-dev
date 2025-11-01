@@ -15,16 +15,16 @@ export
 
   }) {
   return (
-    <div className="relative font-montserrat bg-white rounded-3xl overflow-hidden shadow-md md:w-full  flex items-end mb-7 lg:mb-0">
+    <div className="relative font-montserrat bg-white rounded-xl md:rounded-3xl overflow-hidden shadow-md md:w-full  flex items-end mb-7 lg:mb-0">
       <img
         src={mainImage}
         alt={location}
-        className="inset-0 w-full max-w-full block h-full object-cover rounded-3xl z-10"
+        className="inset-0 w-full max-w-full block h-full object-cover rounded-xl md:rounded-3xl z-10"
       />
       <img
         src={shadeImage}
         alt={`${location} shade`}
-        className="absolute inset-0 w-full max-w-full block h-full object-cover rounded-3xl z-20"
+        className="absolute inset-0 w-full max-w-full block h-full object-cover rounded-xl md:rounded-3xl z-20"
       />
       
       <div className="absolute z-30 p-4 w-full flex flex-col h-full justify-between">
