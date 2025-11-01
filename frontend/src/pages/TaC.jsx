@@ -5,64 +5,52 @@ import { Helmet } from 'react-helmet'
 
 const TaCs = [
   {
-    question: "What is The Luck My Trip?",
-    answer: "The Luck My Trip is an online contest platform where participants can buy tickets and enter lucky draws to win international travel packages such as trips to Dubai, Baku, Thailand, and more.",
+    question: "Eligibility",
+    answer: "1. Participants must be 18 years or older. 2. Employees, affiliates, or immediate family members of The Luck My Trip are not eligible to participate. 3. Contests are open to residents of India only unless explicitly stated otherwise.",
   },
    {
-    question: "How does the contest work?",
-    answer: "1. Buy a ticket for a specific contest (₹299, ₹499, ₹599)<br />2. Once all entries are sold or the contest deadline passes, a lucky draw is conducted.<br />3. One winner is randomly selected to receive the prize package.",
+    question: "Contest Entry",
+    answer: "1. Tickets are non-transferable and must be purchased via the official website.",
   },
   {
-    question: "Who is eligible to participate?",
-    answer: "1. You must be 18 years or older.<br />2. Residents of India are eligible unless otherwise stated.<br />3. Employees, affiliates, or immediate family members of The Luck My Trip are not eligible.",
+    question: "Ticket Purchase & Pricing",
+    answer: "1. Ticket prices may vary: ₹299, ₹499, ₹599, or as specified for each contest. 2. All ticket purchases are final. No refunds are permitted unless the contest is canceled by the organizer. 3. Payment must be made via the approved online payment methods only.",
   },
   {
-    question: "What prizes can I win?",
-    answer: "1. Return Flight Ticket (India → Dubai/Baku/Thailand → India)<br />2. 3-Star Hotel Stay (2 Nights)<br />3. Breakfast included.<br />4. Airport Pick-up & Drop<br />5. Basic City Tour",
+    question: "Winner Selection",
+    answer: "1. Winners are selected via a random draw once all tickets for a contest are sold or the contest deadline is reached. 2. Only participants with fully completed ticket purchases are eligible. 3. Winners will be notified via email and/or phone within [X] days of the draw.",
   },
   {
-    question: "How do I buy a ticket?",
-    answer: "1. Go to the Explore page.<br />2. Select the contest and ticket type (₹299, ₹499, ₹599).<br />3. Complete payment using approved payment methods.<br />4. Receive a confirmation email with your ticket details once the purchase is successful..",
+    question: "Prize Details",
+    answer: "1. Prizes are non-transferable, cannot be exchanged for cash, and must be claimed as specified. 2. Winners must provide necessary documentation (passport, ID) for international travel. 3. The Luck My Trip is not responsible for visa delays, flight delays, or any travel-related issues beyond its control.",
   },
   {
-    question: "Can I buy more than one ticket per contest?",
-    answer: "Each contest has a limit of one ticket per participant, unless explicitly stated otherwise on the contest page.",
+    question: "Contest Conduct",
+    answer: "1. The Luck My Trip reserves the right to disqualify participants for: a. Fraudulent activities b. Attempting to manipulate the contest c. Violating terms & conditions 2.Participants must provide accurate personal information.",
   },
   {
-    question: "How is the winner selected?",
-    answer: "1. Winners are chosen through a random draw once all tickets (2000) are sold or the contest deadline is reached.<br />2. Only participants with fully completed ticket purchases are eligible.<br />3. Winner announcements are made via email and/or phone after the draw.",
+    question: "Refunds & Cancellations",
+    answer: "1. No refunds will be provided for tickets purchased unless a contest is canceled. 2. If a contest is canceled, ticket fees will be refunded in full within 30 business days.",
   },
   {
-    question: "What if I win?",
-    answer: "1. You will be notified via the email or phone number provided during registration.<br />2. You must provide valid identification (passport, ID) for travel.<br />3. Prizes must be claimed according to the instructions provided by The LuckMyTrip.",
+    question: "Privacy & Data",
+    answer: "1. Personal data collected is used only for contest administration and prize distribution. 2. By participating, you consent to the use of your name and/or image for promotional purposes.",
   },
   {
-    question: "Can I transfer or sell my prize?",
-    answer: "No. All prizes are non-transferable and must be claimed by the winner as per the rules.",
+    question: "Liability",
+    answer: "1. The Luck My Trip is not liable for any injury, loss, or damage incurred during participation or travel. 2. Travel arrangements are subject to airline and hotel policies.",
   },
   {
-    question: "Are refunds allowed for tickets?",
-    answer: "1. Tickets are non-refundable once purchased.<br />2. Refunds will only be issued if a contest is canceled by The Luck My Trip.",
+    question: "Modification & Termination",
+    answer: "1. The Luck My Trip reserves the right to modify, suspend, or terminate any contest at its sole discretion. 2. Any changes will be posted on the website and communicated to participants where possible.",
   },
   {
-    question: "Can I participate from outside India?",
-    answer: "Unless explicitly mentioned, contests are restricted to residents of India due to travel and legal regulations.",
+    question: "Governing Law",
+    answer: "1. These terms are governed by the laws of India. 2. Any disputes arising from the contest will be subject to the exclusive jurisdiction of courts in India.",
   },
   {
-    question: "Are there any taxes or fees on the prize?",
-    answer: "1. Winners may be responsible for any applicable taxes or visa fees.<br />2. The Luck My Trip is not liable for travel delays, visa rejections, or additional charges imposed by airlines, hotels, or local authorities.",
-  },
-  {
-    question: "Is my personal information safe?",
-    answer: "Yes. All personal data is collected and used only for contest administration and prize distribution. By participating, you agree that your name and/or image may be used for promotional purposes.",
-  },
-  {
-    question: "How can I contact support?",
-    answer: "If you have any questions regarding contests, tickets, or prizes:<br />1. Email: support@theluckmytrip.com<br />3. Phone: +919891344354",
-  },
-  {
-    question: "Can The Luck My Trip cancel a contest?",
-    answer: "Yes. The Luck My Trip reserves the right to modify, suspend, or terminate any contest at its sole discretion. Participants will be informed, and refunds will be issued for canceled contests.",
+    question: "Contact",
+    answer: "For questions regarding contests, prizes, or tickets, contact us at: 1. Email: support@theluckmytrip.com 2. Phone: +919891344354",
   },
 ];
 
