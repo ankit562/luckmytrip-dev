@@ -58,7 +58,7 @@ const HowToPlay = () => {
   </script>
 </Helmet>
             <Header />
-                  <section className="how-it-works w-full py-4 sm:py-5 md:py-8 lg:py-10 xl:py-8 mt-4 sm:mt-6 md:mt-10 lg:mt-12 xl:mt-20">
+                  <section className="how-it-works w-full py-4 sm:py-5 md:py-8 lg:py-10 xl:py-8 mt-4 sm:mt-6 md:mt-10 lg:mt-12 xl:mt-20 mb-16">
         <h2 className="text-[2.0rem] sm:text-3xl md:text-3xl lg:text-4xl xl:text-5xl text-center font-extrabold mb-4 sm:mb-5 md:mb-8 lg:mb-10 xl:mb-8 px-4 font-berlin" style={{color: '#8BC34A'}}>
           HOW To Play?
         </h2>
