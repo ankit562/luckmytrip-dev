@@ -60,7 +60,7 @@ export default function AddToCartPage() {
   });
 
   const [errors, setErrors] = useState({});
-  const [paymentMethod, setPaymentMethod] = useState('');
+
 
   useEffect(() => {
     dispatch(fetchBillingInfo());
@@ -110,7 +110,7 @@ export default function AddToCartPage() {
     if (!formData.city.trim()) newErrors.city = true;
     if (!formData.phone.trim() || formData.phone.length !== 10) newErrors.phone = true;
     if (!formData.email.trim() || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(formData.email)) newErrors.email = true;
-    if (!paymentMethod) newErrors.paymentMethod = true;
+    // if (!paymentMethod) newErrors.paymentMethod = true;
     if (!hasItems) newErrors.ticketQty = 'At least one ticket is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -152,7 +152,6 @@ export default function AddToCartPage() {
       tickets: ticketsPurchased,
       gift: giftPurchased,
       totalPrice: totalPrice,
-      paymentMethod,
     };
 
     try {
@@ -271,7 +270,7 @@ export default function AddToCartPage() {
               {goldenWinnerQty > 0 && <TicketRow title="Golden Winner Ticket" qty={goldenWinnerQty} price={goldenWinnerPrice} setQty={q => dispatch(setGoldenWinnerQtys(q))} />}
               {giftQty > 0 && <TicketRow title="Gift Package" qty={giftQty} price={giftPrice} setQty={q => dispatch(setGiftQtys(q))} />}
               <Totals subtotal={subtotal} total={totalPrice} />
-              <PaymentSelector paymentMethod={paymentMethod} setPaymentMethod={setPaymentMethod} errors={errors} setErrors={setErrors} />
+              <PaymentSelector />
               <CouponSection />
               <button
                 onClick={handlePlaceOrder}
@@ -340,20 +339,10 @@ const InputField = ({ name, label, value, onChange, required, error, maxLength }
   </div>
 );
 
-const PaymentSelector = ({ paymentMethod, setPaymentMethod, errors, setErrors }) => (
+const PaymentSelector = () => (
   <div className="bg-white rounded-md md:rounded-2xl shadow-md md:px-6 px-2 py-3  md:py-5">
     <div className="flex justify-between items-center">
       <div className="flex items-center md:gap-3 gap-1">
-        <input
-          type="radio"
-          checked={paymentMethod === 'bank'}
-          onChange={() => {
-            const newVal = paymentMethod === 'bank' ? '' : 'bank';
-            setPaymentMethod(newVal);
-            if (errors.paymentMethod) setErrors(prev => ({ ...prev, paymentMethod: false }));
-          }}
-          className="w-5 h-5 accent-pink-500"
-        />
         <span className="font-medium text-gray-800">Bank</span>
       </div>
       <div className="flex md:gap-2  gap-1.5">
@@ -363,8 +352,7 @@ const PaymentSelector = ({ paymentMethod, setPaymentMethod, errors, setErrors })
         <div className="md:px-2 md:py-1 px-1 py-0.5 bg-orange-600 text-white text-xs font-bold rounded">Nagad</div>
       </div>
     </div>
-    {errors.paymentMethod && <span className="text-red-600 text-sm mt-2 block">Please select a payment method.</span>}
-  </div>
+      </div>
 );
 
 const CouponSection = () => (
