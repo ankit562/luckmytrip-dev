@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink, Link } from "react-router-dom";
-import { Menu, ShoppingCart, X } from "lucide-react";
+import { Menu, ShoppingCart, X, Trophy } from "lucide-react";
 import { logoutUser } from '../../features/auth/authUserSlice';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -83,23 +83,23 @@ const Header = () => {
           </ul>
         </div>
         <div className="flex md:space-x-4 space-x-2 font-semibold items-center font-montserrat">
-          {user 
+          {user
             ? (
-                <button
-                  onClick={handlelogout}
-                  className="hidden md:block w-full text-left text-lg hover:underline hover:text-blue-500"
-                >
-                  Logout
-                </button>
-              )
+              <button
+                onClick={handlelogout}
+                className="hidden md:block w-full text-left text-lg hover:underline hover:text-blue-500"
+              >
+                Logout
+              </button>
+            )
             : (
-                <Link
-                  to="/login"
-                  className="md:block hidden w-full text-left text-lg hover:underline hover:text-blue-500"
-                >
-                  Login
-                </Link>
-              )
+              <Link
+                to="/login"
+                className="md:block hidden w-full text-left text-lg hover:underline hover:text-blue-500"
+              >
+                Login
+              </Link>
+            )
           }
           {!user ? (
             <Link
@@ -120,6 +120,7 @@ const Header = () => {
               </div>
             </Link>
           )}
+          <Link to="/winners"><Trophy className="text-red-500 md:w-9 md:h-9 w-7 h-7 cursor-pointer active:text-blue-600" /></Link>
           <button className="md:hidden text-2xl focus:outline-none" onClick={() => setMenuOpen(!menuOpen)}>
             {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
@@ -144,10 +145,10 @@ const Header = () => {
           <div className="flex flex-col space-y-2 pt-2 border-t">
             {user ? (
               <button onClick={handlelogout} className="w-full text-left active:underline active:text-blue-500">Logout</button>
-            ) 
-            : (
-              <Link to="/login" className="w-full text-left">Login</Link>
-            )}
+            )
+              : (
+                <Link to="/login" className="w-full text-left">Login</Link>
+              )}
             {!user
               ? (<Link to="/signup" className=" hover:underline">Register</Link>)
               : ""}
