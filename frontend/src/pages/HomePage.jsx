@@ -202,7 +202,7 @@ const slideJourney = (direction) => {
 
           <div
             ref={sliderTrackRef}
-            className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth md:gap-8 md:px-8 px-2 gap-3  w-full max-w-full"
+            className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth md:gap-8 md:px-20 px-2 gap-3  w-full max-w-full"
             style={{ scrollbarWidth: 'none' }}
           >
             {(tickets || []).map((item ,idx )=> (

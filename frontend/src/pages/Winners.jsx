@@ -49,27 +49,18 @@ const WinnerList = () => {
 
       {!loading && winners.length === 0 && (
         <div className="text-center py-20  text-lg overflow-auto   ">
-            <table className="min-w-full divide-y divide-gray-200 ">
+             No recent Winner Found <span role="img" aria-label="sad">😞</span>     
+        </div>
+      )}
+
+      {winners.length > 0 && (
+        <div className="overflow-x-auto border py-20  text-lg  rounded-lg shadow-sm">
+          <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gradient-to-l from-blue-200 to-violet-200  ">
               <tr >
                 <th className="px-6 py-3 text-center text-xs md:text-sm font-bold text-gray-500 uppercase tracking-wider">Won</th>
                 <th className="px-6 py-3 text-center text-xs md:text-sm font-bold text-gray-500 uppercase tracking-wider">Name</th>
                 <th className="px-6 py-3 text-center text-xs md:text-sm font-bold text-gray-500 uppercase tracking-wider">Ticket</th>
-              </tr>
-              <td colSpan={3} > No recent Winner Found <span role="img" aria-label="sad">😞</span></td>
-            </thead>
-            </table>   
-        </div>
-      )}
-
-      {winners.length > 0 && (
-        <div className="overflow-x-auto border rounded-lg shadow-sm">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Winner</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Winner Name</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Won Ticket Type</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">

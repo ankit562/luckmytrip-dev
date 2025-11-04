@@ -8,9 +8,13 @@ export const getTicketById = (id) => axios.get(`${BASE_URL}/${id}`,{ withCredent
 
 export const addTicket = (formData) =>
   axios.post(BASE_URL, formData, {
-    headers: { 'Content-Type': 'multipart/form-data' }},{ withCredentials: true });
-
+    headers: { 'Content-Type': 'multipart/form-data' },
+    withCredentials: true,
+  });
 export const updateTicket = (id, formData) =>
-  axios.put(`${BASE_URL}/${id}`, formData, {headers: { 'Content-Type': 'multipart/form-data' }},{ withCredentials: true });
+  axios.put(`${BASE_URL}/${id}`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+    withCredentials: true,
+  });
 
 export const deleteTicket = (id) => axios.delete(`${BASE_URL}/${id}`, { withCredentials: true });

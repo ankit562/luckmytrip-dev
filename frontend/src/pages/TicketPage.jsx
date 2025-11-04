@@ -26,6 +26,7 @@ export default function Tickets() {
   const location = useLocation();
 
   const fromExplore = location.state?.fromExplore;
+  const fromdubaicarosel = location.state?.fromdubaicarosel;
 
   const { tickets } = useSelector((state) => state.tickets);
   const cartItems = useSelector((state) => state.addtocart.cartItems || {});
@@ -61,6 +62,12 @@ export default function Tickets() {
       navigate('/explore');
     }
   }, [fromExplore, goldenWinnerQty, navigate]);
+
+  useEffect(()=>{
+    if(fromdubaicarosel && dubaiQty === 0){
+      navigate("/explore")
+    }
+  },[fromdubaicarosel , dubaiQty ,  navigate])
 
   // Handlers for Dubai Ticket
   const handleIncrement = () => {

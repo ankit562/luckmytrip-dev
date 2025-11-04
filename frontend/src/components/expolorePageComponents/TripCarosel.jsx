@@ -1,9 +1,13 @@
 import React, { useEffect } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import  {useDispatch , useSelector} from "react-redux"
+import { setDubaiQtys } from '../../features/addtocart/addtocartSlice';
 
 const TripCarosel = () => {
+    const dispatch = useDispatch()
     const navigator = useNavigate();
+    const dubaiQty = useSelector(state => state.addtocart?.cartItems?.dubaiQty || 0);
     useEffect(() => {
         
         function setupCarousel(trackId, leftBtnId, rightBtnId, numberEl = null, syncTrack = null) {
@@ -151,8 +155,9 @@ const TripCarosel = () => {
     }, []);
 
     const handledubai=()=>{
+        dispatch(setDubaiQtys(dubaiQty + 1));
+        navigator("/ticket", { state: {  fromdubaicarosel:true } }); 
         toast.success("Redirecting to Ticket Page");
-        navigator("/ticket", { state: { ticketType: "dubai", qty: 1 , fromdubaicarosel:true } }); 
     }
 
     return (

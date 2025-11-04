@@ -33,11 +33,15 @@ export const createTicket = createAsyncThunk(
 );
 
 export const editTicket = createAsyncThunk(
-    'tickets/editTicket', async ({ id, formData }) => {
-        const res = await updateTicket(id, formData);
-        return res.data;
-    }
+  'tickets/editTicket',
+  async ({ id, formData }) => {
+    const res = await updateTicket(id, formData);
+    return res.data;
+  }
 );
+
+
+
 
 export const removeTicket = createAsyncThunk(
     'tickets/removeTicket', async (id) => {
