@@ -33,6 +33,7 @@ import Privacy from './pages/Privacy';
 import TaC from './pages/TaC';
 import HowToPlay from './pages/HowToPlay';
 import Faq from './pages/Faq';
+import WinnerList from './pages/Winners';
 
 
 
@@ -166,6 +167,7 @@ if (!isInitialized) {
         <Route path="/termsandconditions" element={ <TaC/> }/>
         <Route path="/howtoplay" element={ <HowToPlay/> }/>
         <Route path="/faq" element={ <Faq/> }/>
+        <Route path="/winners"  element={<WinnerList/>} />
 
         <Route path="*" element={<h1>404 Not Found</h1>} />
 
