@@ -61,7 +61,7 @@ const HomePage = () => {
 
   const dispatch = useDispatch();
   const { products } = useSelector((state) => state.products);
-  const { tickets, loading } = useSelector((state) => state.tickets);
+  const { tickets } = useSelector((state) => state.tickets);
 
 
   useEffect(() => {

@@ -4,6 +4,7 @@ import ticketReducer from '../features/tickets/ticketSlice';
 import productReducer from '../features/products/productSlice';
 import  userInfoSlice from "../features/userinfo/userInfoContactSlice"
 import addtocartReducer from '../features/addtocart/addtocartSlice';
+import winnerList from "../features/winner/winnersSlice"
 const store = configureStore({
   reducer: {
     auth: authReducer,
@@ -11,6 +12,7 @@ const store = configureStore({
     products : productReducer,
     userInfo: userInfoSlice,
     addtocart: addtocartReducer,
+    winner: winnerList
     
   },
 });
