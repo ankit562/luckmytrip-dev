@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Header from '../components/commonComponent/Header';
 import Footer from '../components/commonComponent/Footer';
 import { useSelector, useDispatch } from 'react-redux';
@@ -24,6 +24,8 @@ export default function Tickets() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+  const dubaiRef = useRef(null);
+  const thailandRef = useRef(null);
 
   const fromExplore = location.state?.fromExplore;
   const fromdubaicarosel = location.state?.fromdubaicarosel;
@@ -54,6 +56,21 @@ export default function Tickets() {
       dispatch(setGiftPrices(49));
     }
   }, [tickets, dispatch]);
+
+  // Handle deep-link navigation from homepage (hash like #dubai/#thailand)
+  useEffect(() => {
+    const hash = (location.hash || '').toLowerCase();
+    if (hash === '#dubai') {
+      dubaiRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else if (hash === '#thailand') {
+      thailandRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.hash]);
+
+  // Resolve current stock from fetched tickets
+  const dubaiStock = tickets?.find(t => t.name?.toLowerCase() === 'dubai')?.ticket ?? 0;
+  const thailandStock = tickets?.find(t => t.name?.toLowerCase() === 'thailand')?.ticket ?? 0;
   
   // Redirect logic
   useEffect(() => {
@@ -71,6 +88,10 @@ export default function Tickets() {
 
   // Handlers for Dubai Ticket
   const handleIncrement = () => {
+    if (dubaiStock <= 0) {
+      toast.error('Dubai ticket is out of stock');
+      return;
+    }
     dispatch(setDubaiQtys(dubaiQty + 1));
     if (dubaiQty === 0) toast.success('Tickets added to cart');
   };
@@ -79,6 +100,10 @@ export default function Tickets() {
     dispatch(setDubaiQtys(Math.max(0, dubaiQty - 1)));
   };
   const handleAddToCart = () => {
+    if (dubaiStock <= 0) {
+      toast.error('Dubai ticket is out of stock');
+      return;
+    }
     if (dubaiQty === 0) dispatch(setDubaiQtys(1));
     toast.success('Tickets added to cart');
     navigate('/addtocart');
@@ -86,6 +111,10 @@ export default function Tickets() {
 
   // Handlers for Thailand Ticket
   const handleIncrement2 = () => {
+    if (thailandStock <= 0) {
+      toast.error('Thailand ticket is out of stock');
+      return;
+    }
     dispatch(setThailandQtys(thailandQty + 1));
     if (thailandQty === 0) toast.success('Tickets added to cart');
   };
@@ -94,6 +123,10 @@ export default function Tickets() {
     dispatch(setThailandQtys(Math.max(0, thailandQty - 1)));
   };
   const handleAddToCart2 = () => {
+    if (thailandStock <= 0) {
+      toast.error('Thailand ticket is out of stock');
+      return;
+    }
     if (thailandQty === 0) dispatch(setThailandQtys(1));
     toast.success('Tickets added to cart');
     navigate('/addtocart');
@@ -179,6 +212,7 @@ export default function Tickets() {
       {tickets
         .filter(tri => ['dubai', 'Thailand'].includes(tri.name))
         .map(trip => (
+          <div key={trip.id} ref={trip.name?.toLowerCase() === 'dubai' ? dubaiRef : thailandRef}>
           <TripSection
             key={trip.id}
             trip={trip}
@@ -187,6 +221,7 @@ export default function Tickets() {
             onDecrement={trip.name?.toLowerCase() === 'dubai' ? handleDecrement : handleDecrement2}
             onAddToCart={trip.name?.toLowerCase() === 'dubai' ? handleAddToCart : handleAddToCart2}
           />
+          </div>
         ))}
 
       {/* Monthly Winner (Golden Ticket) */}

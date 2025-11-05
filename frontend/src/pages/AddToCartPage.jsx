@@ -39,11 +39,17 @@ export default function AddToCartPage() {
   } = cartItems;
 
   const hasItems = dubaiQty > 0 || thailandQty > 0 || goldenWinnerQty > 0 || giftQty > 0;
-  const subtotal =
-    dubaiQty * dubaiPrice +
-    thailandQty * thailandPrice +
-    goldenWinnerQty * goldenWinnerPrice +
-    giftQty * giftPrice;
+  // const subtotal =
+  //   dubaiQty * dubaiPrice +
+  //   thailandQty * thailandPrice +
+  //   goldenWinnerQty * goldenWinnerPrice +
+  //   giftQty * giftPrice;
+  const subtotal = parseFloat(
+  (dubaiQty * dubaiPrice +
+   thailandQty * thailandPrice +
+   goldenWinnerQty * goldenWinnerPrice +
+   giftQty * giftPrice).toFixed(2)
+);
   const totalPrice = subtotal;
 
   const [showForm, setShowForm] = useState(!billingInfo);
@@ -122,6 +128,9 @@ export default function AddToCartPage() {
 
     if (formData.saveInfo) {
       try {
+        console.log('Purchase Data:', purchaseData);
+        console.log('Subtotal:', subtotal, 'TotalPrice:', totalPrice);
+
         await dispatch(saveBillingInfoThunk(formData)).unwrap();
         toast.success('Billing info saved for future checkout!');
         setShowForm(false);
@@ -373,7 +382,7 @@ const TicketRow = ({ title, qty, price, setQty }) => (
       <button onClick={() => setQty(qty + 1)} className="w-8 h-8 bg-green-500 flex items-center justify-center hover:bg-green-600 rounded-md">
         <Plus className="w-4 h-4 text-white" />
       </button>
-      <div className="font-semibold text-gray-800 min-w-[80px] text-right">Rs. {qty * price}</div>
+      <div className="font-semibold text-gray-800 min-w-[80px] text-right">Rs. {(qty * price).toFixed(2)}</div>
     </div>
   </div>
 );

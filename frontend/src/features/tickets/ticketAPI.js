@@ -18,3 +18,6 @@ export const updateTicket = (id, formData) =>
   });
 
 export const deleteTicket = (id) => axios.delete(`${BASE_URL}/${id}`, { withCredentials: true });
+
+export const runDraw = (name) =>
+  axios.post(`${BASE_URL}/run-draw`, { name }, { withCredentials: true });

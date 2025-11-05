@@ -120,7 +120,10 @@ const Header = () => {
               </div>
             </Link>
           )}
-          <Link to="/winners"><Trophy className="text-red-500 md:w-9 md:h-9 w-7 h-7 cursor-pointer active:text-blue-600" /></Link>
+          <Link to="/winners">
+          <Trophy className="text-red-500 md:w-8 md:h-8 w-6 h-6 cursor-pointer active:text-blue-600" />
+          </Link>
+          
           <button className="md:hidden text-2xl focus:outline-none" onClick={() => setMenuOpen(!menuOpen)}>
             {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>

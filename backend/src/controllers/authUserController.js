@@ -11,7 +11,7 @@ import {
   generateRefreshToken,
   verifyRefreshToken,
 } from "../lib/jsonWebToken.js";
-import { sendVerificationEmail, sendForgotPasswordEmail } from "../lib/mailService.js";
+import { sendVerificationEmail, sendForgotPasswordEmail } from "../lib/emailService.js";
 
 // Helper to resolve mongoose model for given role
 const getModelByRole = (role) => {
@@ -32,7 +32,7 @@ const getModelByRole = (role) => {
 export const Register = async (req, res) => {
   try {
     const { fullName, email, password, phone, role, address, ticket, won } = req.body;
-    if (!(fullName && email && password && phone && role)) { // require role too
+    if (!(fullName && email && password && phone )) { // require role too
       return res.status(400).send("All inputs and role are required");
     }
     const UserModel = getModelByRole(role);

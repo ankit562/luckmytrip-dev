@@ -4,7 +4,8 @@ import {
     getTicketById,
     addTicket,
     updateTicket,
-    deleteTicket
+    deleteTicket,
+    runDraw
 } from './ticketAPI';
 
 // Thunks for async CRUD operations
@@ -50,6 +51,14 @@ export const removeTicket = createAsyncThunk(
     }
 );
 
+export const runTicketDraw = createAsyncThunk(
+  'tickets/runTicketDraw',
+  async (name) => {
+    const res = await runDraw(name);
+    return res.data;
+  }
+);
+
 // Slice definition
 const ticketSlice = createSlice({
     name: 'tickets',
@@ -82,7 +91,9 @@ const ticketSlice = createSlice({
             })
             .addCase(removeTicket.fulfilled, (state, action) => {
                 state.tickets = state.tickets.filter(t => t._id !== action.payload);
-            });
+            })
+            .addCase(runTicketDraw.fulfilled, (state) => {})
+            ;
     }
 });
 

@@ -12,10 +12,11 @@ export
     fromLocation,
     drawDate,
     totalTickets,
+    onClick,
 
   }) {
   return (
-    <div className="relative font-montserrat bg-white rounded-xl md:rounded-3xl overflow-hidden shadow-md md:w-full  flex items-end mb-7 lg:mb-0">
+    <div onClick={onClick} className="relative font-montserrat bg-white rounded-xl md:rounded-3xl overflow-hidden shadow-md md:w-full  flex items-end mb-7 lg:mb-0 cursor-pointer">
       <img
         src={mainImage}
         alt={location}
@@ -69,7 +70,7 @@ export
             </span>
             <div className="flex flex-col items-start pl-4">
               <span className="text-white text-xs sm:text-sm opacity-95 md:font-extrabold font-semibold leading-none">Total Tickets</span>
-              <span className="text-yellow-300 text-xl sm:text-5xl opacity-95 font-extrabold mt-0 leading-none">{totalTickets}</span>
+              <span className="text-yellow-300 text-lg sm:text-3xl opacity-95 font-extrabold mt-0 leading-none">{totalTickets}</span>
             </div>
 
           </div>

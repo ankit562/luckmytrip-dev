@@ -7,6 +7,7 @@ import Footer from "../components/commonComponent/Footer";
 import Header from "../components/commonComponent/Header";
 import { fetchProducts } from "../features/products/productSlice"
 import { Helmet } from "react-helmet";
+import { runTicketDraw } from '../features/tickets/ticketSlice';
 
 
 
@@ -62,6 +63,8 @@ const HomePage = () => {
   const dispatch = useDispatch();
   const { products } = useSelector((state) => state.products);
   const { tickets } = useSelector((state) => state.tickets);
+  const { user } = useSelector((state) => state.auth);
+
 
 
   useEffect(() => {
@@ -71,6 +74,26 @@ const HomePage = () => {
   useEffect(() => {
     dispatch(fetchTickets());
   }, [dispatch]);
+
+  // Auto-run draw for due tickets (admin only) and hide due tickets from carousel
+  useEffect(() => {
+    if (!tickets?.length) return;
+    const today = new Date();
+    today.setHours(0,0,0,0);
+
+    const due = tickets.filter(t => {
+      const d = new Date(t.date);
+      d.setHours(0,0,0,0);
+      return d.getTime() <= today.getTime();
+    });
+
+    // Trigger draw only for admins
+    if (due.length && user && ['admin','superadmin'].includes(user.role?.toLowerCase())) {
+      due.forEach((t) => {
+        dispatch(runTicketDraw(t.name));
+      });
+    }
+  }, [tickets, user, dispatch]);
 
 
   const [activeTestimonial, setActiveTestimonial] = useState("content1");
@@ -202,10 +225,19 @@ const slideJourney = (direction) => {
 
           <div
             ref={sliderTrackRef}
-            className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth md:gap-8 md:px-20 px-2 gap-3  w-full max-w-full"
+            className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth md:gap-8 xl:px-16 md:px-10 px-2 gap-3  w-full max-w-full"
             style={{ scrollbarWidth: 'none' }}
           >
-            {(tickets || []).map((item ,idx )=> (
+            {((tickets || []).filter(item => {
+              const d = new Date(item.date);
+              const today = new Date();
+              d.setHours(0,0,0,0);
+              today.setHours(0,0,0,0);
+              // hide items whose draw date is today or earlier
+              return d.getTime() > today.getTime();
+            })).map((item ,idx )=>{
+              console.log(item.ticket)
+              return(       
               <div key={idx} className="slide snap-center flex-shrink-0 xl:w-[560px] xl:h-[380px]
                lg:w-[480px] lg:h-[440px] md:w-[460px] md:h-[380px]  sm:w-[520px] sm:h-[440px] w-full h-auto">
                 <OfferCard
@@ -217,12 +249,19 @@ const slideJourney = (direction) => {
                   price={item.price}
                   currency={item.currency}
                   fromLocation={item.fromLocation}
-                  drawDate={new Date(item.date).toLocaleDateString()}   //new Date(date).toLocaleDateString()
+                  drawDate={new Date(item.date).toLocaleDateString()}   
                   totalTickets={item.ticket}
-
+                  onClick={() => {
+                    const focus = (item.name || "").toLowerCase();
+                    if (focus === 'dubai' || focus === 'thailand') {
+                      window.location.href = `/ticket#${focus}`;
+                    } else {
+                      window.location.href = '';
+                    }
+                  }}
                 />
               </div>
-            ))}
+            )})}
           </div>
 
           {/* Navigation buttons below cards on the right */}
