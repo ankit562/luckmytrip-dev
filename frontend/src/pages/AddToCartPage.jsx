@@ -14,6 +14,7 @@ import {
   setGoldenWinnerQtys,
   setGiftQtys,
 } from '../features/addtocart/addtocartSlice';
+import { fetchTickets } from '../features/tickets/ticketSlice';
 
 import {
   fetchBillingInfo,
@@ -26,6 +27,7 @@ export default function AddToCartPage() {
   const cartItems = useSelector(state => state.addtocart?.cartItems) || {};
   const billingInfo = useSelector(state => state.auth?.billingInfo);
   const billingLoading = useSelector(state => state.auth?.billingLoading);
+  const { tickets } = useSelector(state => state.tickets);
 
   const {
     dubaiQty = 0,
@@ -70,7 +72,12 @@ export default function AddToCartPage() {
 
   useEffect(() => {
     dispatch(fetchBillingInfo());
+    dispatch(fetchTickets());
   }, [dispatch]);
+
+  // Get stock for Dubai and Thailand tickets
+  const dubaiStock = tickets?.find(t => t.name?.toLowerCase() === 'dubai')?.ticket ?? 0;
+  const thailandStock = tickets?.find(t => t.name?.toLowerCase() === 'thailand')?.ticket ?? 0;
 
   useEffect(() => {
     if (billingInfo) {
@@ -274,8 +281,8 @@ export default function AddToCartPage() {
               )}
             </div>
             <div className="space-y-6">
-              {dubaiQty > 0 && <TicketRow title="Dubai Ticket" qty={dubaiQty} price={dubaiPrice} setQty={q => dispatch(setDubaiQtys(q))} />}
-              {thailandQty > 0 && <TicketRow title="Thailand Ticket" qty={thailandQty} price={thailandPrice} setQty={q => dispatch(setThailandQtys(q))} />}
+              {dubaiQty > 0 && <TicketRow title="Dubai Ticket" qty={dubaiQty} price={dubaiPrice} setQty={q => dispatch(setDubaiQtys(q))} stock={dubaiStock} />}
+              {thailandQty > 0 && <TicketRow title="Thailand Ticket" qty={thailandQty} price={thailandPrice} setQty={q => dispatch(setThailandQtys(q))} stock={thailandStock} />}
               {goldenWinnerQty > 0 && <TicketRow title="Golden Winner Ticket" qty={goldenWinnerQty} price={goldenWinnerPrice} setQty={q => dispatch(setGoldenWinnerQtys(q))} />}
               {giftQty > 0 && <TicketRow title="Gift Package" qty={giftQty} price={giftPrice} setQty={q => dispatch(setGiftQtys(q))} />}
               <Totals subtotal={subtotal} total={totalPrice} />
@@ -371,21 +378,38 @@ const CouponSection = () => (
   </div>
 );
 
-const TicketRow = ({ title, qty, price, setQty }) => (
-  <div className="bg-white md:rounded-2xl rounded-lg shadow-md md:px-6 md:py-5 px-2 py-1 flex items-center justify-between">
-    <div className="font-bold text-teal-600 uppercase md:text-lg text-sm">{title}</div>
-    <div className="flex items-center md:gap-6 gap-2">
-      <button onClick={() => setQty(Math.max(0, qty - 1))} className="w-8 h-8 bg-white flex items-center hover:bg-gray-50 justify-center rounded-md transition">
-        <Minus className="w-4 h-4 text-gray-600" />
-      </button>
-      <span className="px-4 font-semibold text-gray-800 text-xs md:text-base">{qty}</span>
-      <button onClick={() => setQty(qty + 1)} className="w-8 h-8 bg-green-500 flex items-center justify-center hover:bg-green-600 rounded-md">
-        <Plus className="w-4 h-4 text-white" />
-      </button>
-      <div className="font-semibold text-gray-800 min-w-[80px] text-right">Rs. {(qty * price).toFixed(2)}</div>
+const TicketRow = ({ title, qty, price, setQty, stock }) => {
+  const handleIncrement = () => {
+    // Only validate stock for Dubai and Thailand tickets
+    if (stock !== undefined && stock !== null) {
+      if (stock <= 0) {
+        toast.error(`${title} is out of stock`);
+        return;
+      }
+      if (qty + 1 > stock) {
+        toast.error(`Only ${stock} ${title}(s) available`);
+        return;
+      }
+    }
+    setQty(qty + 1);
+  };
+
+  return (
+    <div className="bg-white md:rounded-2xl rounded-lg shadow-md md:px-6 md:py-5 px-2 py-1 flex items-center justify-between">
+      <div className="font-bold text-teal-600 uppercase md:text-lg text-sm">{title}</div>
+      <div className="flex items-center md:gap-6 gap-2">
+        <button onClick={() => setQty(Math.max(0, qty - 1))} className="w-8 h-8 bg-white flex items-center hover:bg-gray-50 justify-center rounded-md transition">
+          <Minus className="w-4 h-4 text-gray-600" />
+        </button>
+        <span className="px-4 font-semibold text-gray-800 text-xs md:text-base">{qty}</span>
+        <button onClick={handleIncrement} className="w-8 h-8 bg-green-500 flex items-center justify-center hover:bg-green-600 rounded-md">
+          <Plus className="w-4 h-4 text-white" />
+        </button>
+        <div className="font-semibold text-gray-800 min-w-[80px] text-right">Rs. {(qty * price).toFixed(2)}</div>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 const Totals = ({ subtotal, total }) => (
   <div className="bg-white rounded-2xl shadow-md px-6 py-6 space-y-4">

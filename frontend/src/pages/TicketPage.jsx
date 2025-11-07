@@ -92,6 +92,10 @@ export default function Tickets() {
       toast.error('Dubai ticket is out of stock');
       return;
     }
+    if (dubaiQty + 1 > dubaiStock) {
+      toast.error(`Only ${dubaiStock} Dubai ticket(s) available`);
+      return;
+    }
     dispatch(setDubaiQtys(dubaiQty + 1));
     if (dubaiQty === 0) toast.success('Tickets added to cart');
   };
@@ -113,6 +117,10 @@ export default function Tickets() {
   const handleIncrement2 = () => {
     if (thailandStock <= 0) {
       toast.error('Thailand ticket is out of stock');
+      return;
+    }
+    if (thailandQty + 1 > thailandStock) {
+      toast.error(`Only ${thailandStock} Thailand ticket(s) available`);
       return;
     }
     dispatch(setThailandQtys(thailandQty + 1));
