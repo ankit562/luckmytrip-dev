@@ -236,7 +236,7 @@ const slideJourney = (direction) => {
               // hide items whose draw date is today or earlier
               return d.getTime() > today.getTime();
             })).map((item ,idx )=>{
-              console.log(item.ticket)
+              console.log(item)
               return(       
               <div key={idx} className="slide snap-center flex-shrink-0 xl:w-[560px] xl:h-[380px]
                lg:w-[480px] lg:h-[440px] md:w-[460px] md:h-[380px]  sm:w-[520px] sm:h-[440px] w-full h-auto">
@@ -247,8 +247,8 @@ const slideJourney = (direction) => {
                   location={item.name}
                   subtitle={item.description}
                   price={item.price}
-                  currency={item.currency}
-                  fromLocation={item.fromLocation}
+                  // currency="₹"
+                  fromLocation="India"
                   drawDate={new Date(item.date).toLocaleDateString()}   
                   totalTickets={item.ticket}
                   onClick={() => {
