@@ -195,7 +195,7 @@ const slideJourney = (direction) => {
 
               <div className="absolute w-32 h-42 md:w-64 md:top-[27%] top-[40%] left-14 md:left-32 transform -translate-x-1/2 bg-white rounded-lg shadow-lg p-2 z-30">
                 <img src={"/images/shanghai-urban-architecture-1.png"} alt="Baku" className="rounded-lg w-32 h-42 md:w-64 object-cover" />
-                <div className="text-red-500 text-center font-bold py-1 font-berlin">BAKU</div>
+                <div className="text-red-500 text-center font-bold py-1 font-berlin">Goa</div>
               </div>
 
               <div className="absolute w-32 h-42 md:w-64 md:bottom-[70%]  bottom-[40%] right-1/3 transform translate-x-1/2 bg-white rounded-lg shadow-lg p-2 z-30">
