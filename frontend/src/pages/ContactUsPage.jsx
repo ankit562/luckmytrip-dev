@@ -154,8 +154,8 @@ const ContactUsPage = () => {
               <div className="flex flex-col h-full justify-between">
                 <h1 className="text-gray-700 font-semibold block md:text-3xl text-2xl mb-4" htmlFor="address">Address</h1>
                 <div className="flex flex-col md:text-lg text-base mb-16 font-semibold">
-                  <p>This website is operated by HIGHLIFE EXCLUSIVE</p>
-                  <p>THIRD FLOOR, B-1/31/2</p>
+                  <p>This website is operated by Highlife Exclusive</p>
+                  <p>Third floor, B-1/31/2</p>
                   <p>Safdarjung enclave</p>
                   <p>South West Delhi</p>
                   <p>110029</p>
