@@ -161,7 +161,7 @@ const ContactUsPage = () => {
                   <p>110029</p>
                   <p>Phone: +919891344354</p>
                   <p>Email: support@luckmytrip.com</p>
-                  <p>Contact Person: PRASHANT BHATNAGAR</p>
+                  <p>Contact Person: Preshant Bhatnagar</p>
                 </div>
               </div>
             </div>
