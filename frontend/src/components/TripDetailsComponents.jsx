@@ -29,7 +29,7 @@ export
       />
 
       <div className="absolute z-30 p-4 w-full flex flex-col h-full justify-between">
-        <div className="flex justify-between w-full xl:h-[50%] md:h-[40%] sm:[40%]  items-center xl:mt-5">
+        <div className="flex justify-between w-full xl:h-[30%] md:h-[40%] sm:[40%]  items-center xl:mt-5">
           <div className="flex justify-start items-end">
             <span className="md:ml-3 font-berlin text-white font-bold text-[50px] xl:mt-16
             sm:text-[70px] md:text-[90px] leading-[0.9] tracking-tight">
@@ -44,7 +44,7 @@ export
           </div>
         </div>
 
-        <div className="flex justify-between w-full xl:h-[50%] md:h-[60%]  sm:h-[60%]   items-center xl:mt-0 mt-[-80px]">
+        <div className="flex justify-between w-full xl:h-[70%] md:h-[60%]  sm:h-[60%]   items-center xl:mt-0 mt-[-80px]">
           <div className="flex flex-col items-start justify-start space-y-5 md:ml-4 " >
             <div className="mt-8 mb-0 flex justify-start items-center md:gap-1 ">
               <div className="flex flex-col items-center justify-start leading-[0.7]">
