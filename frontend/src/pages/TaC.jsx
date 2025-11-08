@@ -66,7 +66,7 @@ const TaCs = [
   },
   {
     question: "Cancelation policy, Return & Refund Policy",
-    answer: "1. No refunds will be provided for tickets purchased unless a contest is canceled. 2. If a contest is canceled, ticket fees will be refunded in full within 30 business days.",
+    answer: "1. No refunds will be provided for tickets purchased unless a contest is canceled. 2. If a contest is canceled, ticket fees will be returned/refunded in full within 30 business days.",
   },
   {
     question: "Privacy & Data",

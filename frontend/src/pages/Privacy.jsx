@@ -29,6 +29,10 @@ const Privs = [
     answer: "You have the right to: 1. Opt-out of marketing communications 2. Withdraw consent for data processing at any time",
   },
   {
+    question: "Return & Refund Policy",
+    answer: "1. No refunds will be provided for tickets purchased unless a contest is canceled. 2. If a contest is canceled, ticket fees will be returned/refunded in full within 30 business days.",
+  },
+  {
     question: "Changes to This Privacy Policy",
     answer: "We may update this Privacy Policy from time to time. Updates will be posted on this page with the effective date.",
   },
