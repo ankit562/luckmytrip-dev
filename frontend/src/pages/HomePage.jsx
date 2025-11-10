@@ -397,12 +397,12 @@ const slideJourney = (direction) => {
             </div>
             <div className="relative mt-8 md:mt-0 flex justify-center items-center">
               <img
-                src={products?.length > 0 ? pro?.image : "/images/Spin-to-win.webp"}
+                src={products?.length > 0 ? pro?.image : "/images/bag.png"}
                 alt="Gift Box"
                 loading="lazy"
-                width="480"
-                height="480"
-                className="mx-auto lg:max-h-[30rem] md:max-h-[25rem] w-full object-contain"
+                width="340"
+                height="340"
+                className="mx-auto lg:max-h-[26rem] md:max-h-[22rem] h-[20rem] w-full object-contain"
               />
             </div>
           </div>
@@ -415,3 +415,16 @@ const slideJourney = (direction) => {
 };
 
 export default HomePage;
+
+
+
+{/* <div className="relative mt-8 md:mt-0 flex justify-center items-center">
+              <img
+                src={products?.length > 0 ? pro?.image : "/images/Spin-to-win.webp"}
+                alt="Gift Box"
+                loading="lazy"
+                width="480"
+                height="480"
+                className="mx-auto lg:max-h-[30rem] md:max-h-[25rem] w-full object-contain"
+              />
+            </div> */}
