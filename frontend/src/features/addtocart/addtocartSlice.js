@@ -28,6 +28,9 @@ const getInitialCartState = () => {
       thailandPrice: 0,
       goldenWinnerPrice: 0,
       giftPrice: 0,
+      goaQty: 0,
+      goaPrice: 0,
+
     },
     carts: [],
     loading: false,
@@ -173,6 +176,16 @@ const addtocartSlice = createSlice({
       saveCartState(state);
     },
 
+    setGoaQtys(state, action) {
+      state.cartItems.goaQty = action.payload;
+      saveCartState(state);
+    },
+    setGoaPrices(state, action) {
+      state.cartItems.goaPrice = action.payload;
+      saveCartState(state);
+    },
+
+
     clearCartItems(state) {
       state.cartItems = {
         dubaiQty: 0,
@@ -183,6 +196,8 @@ const addtocartSlice = createSlice({
         thailandPrice: 0,
         goldenWinnerPrice: 0,
         giftPrice: 0,
+        goaQty: 0,
+        goaPrice: 0,
       };
       saveCartState(state);
     },
@@ -294,6 +309,8 @@ export const {
   setGiftPrices,
   clearCurrentPurchase,
   hydrateCartFromStorage,
+  setGoaQtys,
+  setGoaPrices,
 } = addtocartSlice.actions;
 
 export default addtocartSlice.reducer;

@@ -13,6 +13,7 @@ import {
   setThailandQtys,
   setGoldenWinnerQtys,
   setGiftQtys,
+  setGoaQtys,    // Add this action import from slice if exists
 } from '../features/addtocart/addtocartSlice';
 import { fetchTickets } from '../features/tickets/ticketSlice';
 
@@ -34,28 +35,26 @@ export default function AddToCartPage() {
     thailandQty = 0,
     goldenWinnerQty = 0,
     giftQty = 0,
+    goaQty = 0,
     dubaiPrice = 0,
     thailandPrice = 0,
     goldenWinnerPrice = 149,
     giftPrice = 49,
+    goaPrice = 0,
   } = cartItems;
 
-  const hasItems = dubaiQty > 0 || thailandQty > 0 || goldenWinnerQty > 0 || giftQty > 0;
-  // const subtotal =
-  //   dubaiQty * dubaiPrice +
-  //   thailandQty * thailandPrice +
-  //   goldenWinnerQty * goldenWinnerPrice +
-  //   giftQty * giftPrice;
+  const hasItems = dubaiQty > 0 || thailandQty > 0 || goldenWinnerQty > 0 || giftQty > 0 || goaQty > 0;
+
   const subtotal = parseFloat(
-  (dubaiQty * dubaiPrice +
-   thailandQty * thailandPrice +
-   goldenWinnerQty * goldenWinnerPrice +
-   giftQty * giftPrice).toFixed(2)
-);
+    (dubaiQty * dubaiPrice +
+    thailandQty * thailandPrice +
+    goldenWinnerQty * goldenWinnerPrice +
+    giftQty * giftPrice +
+    goaQty * goaPrice).toFixed(2)
+  );
   const totalPrice = subtotal;
 
   const [showForm, setShowForm] = useState(!billingInfo);
-
   const [formData, setFormData] = useState({
     firstName: '',
     companyName: '',
@@ -66,18 +65,16 @@ export default function AddToCartPage() {
     email: '',
     saveInfo: false,
   });
-
   const [errors, setErrors] = useState({});
-
 
   useEffect(() => {
     dispatch(fetchBillingInfo());
     dispatch(fetchTickets());
   }, [dispatch]);
 
-  // Get stock for Dubai and Thailand tickets
   const dubaiStock = tickets?.find(t => t.name?.toLowerCase() === 'dubai')?.ticket ?? 0;
   const thailandStock = tickets?.find(t => t.name?.toLowerCase() === 'thailand')?.ticket ?? 0;
+  const goaStock = tickets?.find(t => t.name?.toLowerCase() === 'goa')?.ticket ?? 0;
 
   useEffect(() => {
     if (billingInfo) {
@@ -123,21 +120,16 @@ export default function AddToCartPage() {
     if (!formData.city.trim()) newErrors.city = true;
     if (!formData.phone.trim() || formData.phone.length !== 10) newErrors.phone = true;
     if (!formData.email.trim() || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(formData.email)) newErrors.email = true;
-    // if (!paymentMethod) newErrors.paymentMethod = true;
     if (!hasItems) newErrors.ticketQty = 'At least one ticket is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  // NOTE: Removed immediate clearing of cart here to keep state if payment fails/cancel
   const handlePlaceOrder = async () => {
     if (!validateForm()) return;
 
     if (formData.saveInfo) {
       try {
-        console.log('Purchase Data:', purchaseData);
-        console.log('Subtotal:', subtotal, 'TotalPrice:', totalPrice);
-
         await dispatch(saveBillingInfoThunk(formData)).unwrap();
         toast.success('Billing info saved for future checkout!');
         setShowForm(false);
@@ -154,6 +146,8 @@ export default function AddToCartPage() {
       ticketsPurchased.push({ ticket: 'THAILAND_TICKET', ticketPrice: thailandPrice, quantity: thailandQty });
     if (goldenWinnerQty > 0)
       ticketsPurchased.push({ ticket: 'GOLDEN_WINNER_TICKET', ticketPrice: goldenWinnerPrice, quantity: goldenWinnerQty });
+    if (goaQty > 0)
+      ticketsPurchased.push({ ticket: 'GOA_TICKET', ticketPrice: goaPrice, quantity: goaQty });
     if (giftQty > 0)
       giftPurchased.push({ gift: 'GIFT_TICKET', giftPrice: giftPrice, quantity: giftQty });
 
@@ -198,61 +192,19 @@ export default function AddToCartPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-100 to-slate-50">
-
-
       <Helmet>
-
         <title>Buy Contest Tickets & Win Trips</title>
-        <meta
-          name="description"
-          content=""
-        />
-        <meta
-          name="keywords"
-          content=""
-        />
-
-        {/* Open Graph Tags */}
-        <meta property="og:title" content="" />
-        <meta
-          property="og:description"
-          content=""
-        />
-        <meta property="og:url" content="" />
-
-        {/* Canonical URL */}
-        <link rel="canonical" href="" />
-
-        {/* Structured Data - Schema.org Product / Offer and Contest */}
-        <script type="">
-          {`
-      {
-        "@context": "",
-        "@type": "",
-        "name": "",
-        "url": "",
-        "description": "",
-        "offers": {
-          "@type": "",
-          "priceCurrency": "",
-          "price": "",
-          "availability": "",
-          "url": ""
-        },
-        "mainEntityOfPage": {
-          "@type": "",
-          "name": "",
-          "url": "",
-          "description": ""
-        }
-      }
-    `}
-        </script>
+        <meta name="description" content="Participate in contests by buying tickets. Win luxury trips!" />
+        <meta name="keywords" content="contest tickets, travel packages, lucky draw" />
+        <meta property="og:title" content="Buy Contest Tickets & Win Trips" />
+        <meta property="og:description" content="Get tickets for luxury travel contests." />
+        <meta property="og:url" content="https://www.theluckmytrip.com/addtocart" />
+        <link rel="canonical" href="https://www.theluckmytrip.com/addtocart" />
       </Helmet>
       <Header />
       <section className="container mx-auto md:px-4 px-2 py-12 max-w-7xl">
         {hasItems ? (
-          <div className={`grid gap-8 ${showForm ? 'grid-cols-1 lg:grid-cols-2' : 'grid-cols-1'} `}>
+          <div className={`grid gap-8 ${showForm ? 'grid-cols-1 lg:grid-cols-2' : 'grid-cols-1'}`}>
             <div>
               {billingLoading ? (
                 <div className="text-lg">Loading billing info...</div>
@@ -283,6 +235,7 @@ export default function AddToCartPage() {
             <div className="space-y-6">
               {dubaiQty > 0 && <TicketRow title="Dubai Ticket" qty={dubaiQty} price={dubaiPrice} setQty={q => dispatch(setDubaiQtys(q))} stock={dubaiStock} />}
               {thailandQty > 0 && <TicketRow title="Thailand Ticket" qty={thailandQty} price={thailandPrice} setQty={q => dispatch(setThailandQtys(q))} stock={thailandStock} />}
+              {goaQty > 0 && <TicketRow title="Goa Ticket" qty={goaQty} price={goaPrice} setQty={q => dispatch(setGoaQtys(q))} stock={goaStock} />}
               {goldenWinnerQty > 0 && <TicketRow title="Golden Winner Ticket" qty={goldenWinnerQty} price={goldenWinnerPrice} setQty={q => dispatch(setGoldenWinnerQtys(q))} />}
               {giftQty > 0 && <TicketRow title="Gift Package" qty={giftQty} price={giftPrice} setQty={q => dispatch(setGiftQtys(q))} />}
               <Totals subtotal={subtotal} total={totalPrice} />
@@ -368,7 +321,7 @@ const PaymentSelector = () => (
         <div className="md:px-2 md:py-1 px-1 py-0.5 bg-orange-600 text-white text-xs font-bold rounded">Nagad</div>
       </div>
     </div>
-      </div>
+  </div>
 );
 
 const CouponSection = () => (
@@ -380,7 +333,6 @@ const CouponSection = () => (
 
 const TicketRow = ({ title, qty, price, setQty, stock }) => {
   const handleIncrement = () => {
-    // Only validate stock for Dubai and Thailand tickets
     if (stock !== undefined && stock !== null) {
       if (stock <= 0) {
         toast.error(`${title} is out of stock`);

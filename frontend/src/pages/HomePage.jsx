@@ -79,16 +79,16 @@ const HomePage = () => {
   useEffect(() => {
     if (!tickets?.length) return;
     const today = new Date();
-    today.setHours(0,0,0,0);
+    today.setHours(0, 0, 0, 0);
 
     const due = tickets.filter(t => {
       const d = new Date(t.date);
-      d.setHours(0,0,0,0);
+      d.setHours(0, 0, 0, 0);
       return d.getTime() <= today.getTime();
     });
 
     // Trigger draw only for admins
-    if (due.length && user && ['admin','superadmin'].includes(user.role?.toLowerCase())) {
+    if (due.length && user && ['admin', 'superadmin'].includes(user.role?.toLowerCase())) {
       due.forEach((t) => {
         dispatch(runTicketDraw(t.name));
       });
@@ -99,62 +99,62 @@ const HomePage = () => {
   const [activeTestimonial, setActiveTestimonial] = useState("content1");
 
   const sliderTrackRef = useRef(null);
-  const [ idx , setIdex] = useState(0); 
+  const [idx, setIdex] = useState(0);
 
-const slideJourney = (direction) => {
-  const totalTickets = tickets.length;
-  if (!sliderTrackRef.current) return;
+  const slideJourney = (direction) => {
+    const totalTickets = tickets.length;
+    if (!sliderTrackRef.current) return;
 
-  let newIndex = idx + direction;
+    let newIndex = idx + direction;
 
-  if (newIndex < 0) {
-    newIndex = totalTickets - 1; 
-  } else if (newIndex >= totalTickets) {
-    newIndex = 0;
-  }
+    if (newIndex < 0) {
+      newIndex = totalTickets - 1;
+    } else if (newIndex >= totalTickets) {
+      newIndex = 0;
+    }
 
-  setIdex(newIndex); 
+    setIdex(newIndex);
 
-  const cardWidth = window.innerWidth < 768 ? 550 + 40 : 280 + 20;
-  const slider = sliderTrackRef.current;
+    const cardWidth = window.innerWidth < 768 ? 550 + 40 : 280 + 20;
+    const slider = sliderTrackRef.current;
 
-  if (newIndex === 0 && direction > 0) {
-    slider.scrollTo({ left: 0, behavior: "smooth" });
-  } else if (newIndex === totalTickets - 1 && direction < 0) {
-    slider.scrollTo({ left: slider.scrollWidth, behavior: "smooth" });
-  } else {
-    slider.scrollBy({ left: direction * cardWidth, behavior: "smooth" });
-  }
-};
+    if (newIndex === 0 && direction > 0) {
+      slider.scrollTo({ left: 0, behavior: "smooth" });
+    } else if (newIndex === totalTickets - 1 && direction < 0) {
+      slider.scrollTo({ left: slider.scrollWidth, behavior: "smooth" });
+    } else {
+      slider.scrollBy({ left: direction * cardWidth, behavior: "smooth" });
+    }
+  };
 
   return (
     <div className="bg-gradient-to-b from-blue-100 to-blue-10 min-h-screen">
       <Helmet>
-  {/* Basic Meta Tags */}
-  <title>Play Contest. Win Luxury Travel Packages</title>
-  <meta
-    name="description"
-    content="Participate in exciting contests by buying tickets starting ₹299. Win trips to Dubai, Baku, Thailand!"
-  />
-  <meta
-    name="keywords"
-    content="win travel contest, Dubai trip contest, Baku trip contest, Thailand trip contest, buy lucky draw ticket"
-  />
-  
-  {/* Open Graph Tags for Social Sharing */}
-  <meta property="og:title" content="Play Contest. Win Luxury Travel Packages" />
-  <meta
-    property="og:description"
-    content="Participate in contests with only 2000 entries per draw. Buy tickets and win international trips to Dubai, Baku, Thailand!"
-  />
-  <meta property="og:url" content="https://www.theluckmytrip.com/" />
-  
-  {/* Canonical URL */}
-  <link rel="canonical" href="https://www.theluckmytrip.com/" />
-  
-  {/* Structured Data - Schema.org for Organization and Contest */}
-  <script type="application/ld+json">
-    {`
+        {/* Basic Meta Tags */}
+        <title>Play Contest. Win Luxury Travel Packages</title>
+        <meta
+          name="description"
+          content="Participate in exciting contests by buying tickets starting ₹299. Win trips to Dubai, Baku, Thailand!"
+        />
+        <meta
+          name="keywords"
+          content="win travel contest, Dubai trip contest, Baku trip contest, Thailand trip contest, buy lucky draw ticket"
+        />
+
+        {/* Open Graph Tags for Social Sharing */}
+        <meta property="og:title" content="Play Contest. Win Luxury Travel Packages" />
+        <meta
+          property="og:description"
+          content="Participate in contests with only 2000 entries per draw. Buy tickets and win international trips to Dubai, Baku, Thailand!"
+        />
+        <meta property="og:url" content="https://www.theluckmytrip.com/" />
+
+        {/* Canonical URL */}
+        <link rel="canonical" href="https://www.theluckmytrip.com/" />
+
+        {/* Structured Data - Schema.org for Organization and Contest */}
+        <script type="application/ld+json">
+          {`
       {
         "@context": "https://schema.org",
         "@type": "WebPage",
@@ -174,8 +174,8 @@ const slideJourney = (direction) => {
         }
       }
     `}
-  </script>
-</Helmet>
+        </script>
+      </Helmet>
       <Header />
 
       <section className="py-4 relative overflow-hidden md:mb-4 ">
@@ -231,37 +231,39 @@ const slideJourney = (direction) => {
             {((tickets || []).filter(item => {
               const d = new Date(item.date);
               const today = new Date();
-              d.setHours(0,0,0,0);
-              today.setHours(0,0,0,0);
+              d.setHours(0, 0, 0, 0);
+              today.setHours(0, 0, 0, 0);
               // hide items whose draw date is today or earlier
               return d.getTime() > today.getTime();
-            })).map((item ,idx )=>{
+            })).map((item, idx) => {
               console.log(item)
-              return(       
-              <div key={idx} className="slide snap-center flex-shrink-0 xl:w-[560px] xl:h-[380px]
+              return (
+                <div key={idx} className="slide snap-center flex-shrink-0 xl:w-[560px] xl:h-[380px]
                lg:w-[480px] lg:h-[440px] md:w-[460px] md:h-[380px]  sm:w-[520px] sm:h-[440px] w-full h-auto">
-                <OfferCard
-                  mainImage={item.image}
-                  shadeImage={"/images/shade.png"}
-                  mainText="WIN"
-                  location={item.name}
-                  subtitle={item.description}
-                  price={item.price}
-                  // currency="₹"
-                  fromLocation="India"
-                  drawDate={new Date(item.date).toLocaleDateString()}   
-                  totalTickets={item.ticket}
-                  onClick={() => {
-                    const focus = (item.name || "").toLowerCase();
-                    if (focus === 'dubai' || focus === 'thailand') {
-                      window.location.href = `/ticket#${focus}`;
-                    } else {
-                      window.location.href = '';
-                    }
-                  }}
-                />
-              </div>
-            )})}
+                  <OfferCard
+                    mainImage={item.image}
+                    shadeImage={"/images/shade.png"}
+                    mainText="WIN"
+                    location={item.name}
+                    subtitle={item.description}
+                    price={item.price}
+                    // currency="₹"
+                    fromLocation="India"
+                    drawDate={new Date(item.date).toLocaleDateString()}
+                    totalTickets={item.ticket}
+                    onClick={() => {
+                      const focus = (item.name || "").toLowerCase();
+                      if (focus === 'dubai' || focus === 'thailand' || focus === 'goa') {
+                        window.location.href = `/ticket#${focus}`;
+                      } else {
+                        window.location.href = '';
+                      }
+                    }}
+
+                  />
+                </div>
+              )
+            })}
           </div>
 
           {/* Navigation buttons below cards on the right */}
@@ -285,7 +287,7 @@ const slideJourney = (direction) => {
       </section>
 
       {/* Jackpot CTA */}
-      {products.filter(items => items.name === "jackpot").map( imgs=> (
+      {products.filter(items => items.name === "jackpot").map(imgs => (
         <section key={imgs} className="max-w-7xl mx-auto py-8 relative overflow-hidden bg-[#E9F2FF]">
           <div className="container mx-auto px-4 relative z-10">
             <div className="mb-4">
@@ -311,11 +313,11 @@ const slideJourney = (direction) => {
                   </button>
                 </div>
                 <div className="">
-                <img
-                  src={imgs.image}
-                  alt={"Lady with city background"}
-                  className="lady-image "
-                />
+                  <img
+                    src={imgs.image}
+                    alt={"Lady with city background"}
+                    className="lady-image "
+                  />
                 </div>
               </div>
             </div>
@@ -379,7 +381,7 @@ const slideJourney = (direction) => {
       {/* Spin Luck */}
       <section className="md:py-8 py-4 min-h-96 bg-[#ffffff]">
         {products?.filter(prod => prod?.name === "spinluck").map(pro => (
-          <div key={pro} className="container md:mx-auto md:px-16 px-5 flex flex-col md:flex-row justify-start md:justify-center items-center">
+          <div key={pro} className="container md:mx-auto sm:px-16 px-2 flex flex-col md:flex-row justify-start md:justify-center  items-center">
             <div className="flex flex-col">
               <h2 className="lg:text-7xl md:text-[50px] font-montserrat text-4xl font-extrabold text-green-500 flex justify-start">Travel Coupons</h2>
               <div className="flex justify-end items-center">
@@ -395,14 +397,15 @@ const slideJourney = (direction) => {
                 </div>
               </div>
             </div>
-            <div className="relative mt-8 md:mt-0 flex justify-center items-center">
+            <div className="relative mt-8 md:mt-0 flex sm:justify-center justify-end items-center">
               <img
                 src={products?.length > 0 ? pro?.image : "/images/bag.png"}
-                alt="Gift Box"
+                alt="Tour couple img"
                 loading="lazy"
                 width="340"
                 height="340"
-                className="mx-auto lg:max-h-[26rem] md:max-h-[22rem] h-[20rem] w-full object-contain"
+                className="mx-auto lg:max-h-[26rem] md:max-h-[22rem] h-[20rem] w-full object-contain 
+                transition-transform duration-300 ease-in-out active:-translate-x-2 shodow-lg hover:scale-110 sm:ml-10 ml-0"
               />
             </div>
           </div>

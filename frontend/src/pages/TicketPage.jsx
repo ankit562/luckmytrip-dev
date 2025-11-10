@@ -3,9 +3,8 @@ import Header from '../components/commonComponent/Header';
 import Footer from '../components/commonComponent/Footer';
 import { useSelector, useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import TripSection from '../components/ticketpageComponent/TicketCompo';
-import { useLocation } from "react-router-dom";
 
 import { fetchTickets } from '../features/tickets/ticketSlice';
 import { Helmet } from 'react-helmet';
@@ -14,9 +13,11 @@ import {
   setDubaiQtys,
   setThailandQtys,
   setGoldenWinnerQtys,
+  setGoaQtys,          // Make sure this is defined in your slice
   setDubaiPrices,
   setThailandPrices,
   setGoldenWinnerPrices,
+  setGoaPrices,         // Make sure this is defined in your slice
   setGiftPrices,
 } from '../features/addtocart/addtocartSlice';
 
@@ -26,68 +27,70 @@ export default function Tickets() {
   const location = useLocation();
   const dubaiRef = useRef(null);
   const thailandRef = useRef(null);
+  const goaRef = useRef(null);
 
   const fromExplore = location.state?.fromExplore;
   const fromdubaicarosel = location.state?.fromdubaicarosel;
 
-  const { tickets } = useSelector((state) => state.tickets);
-  const cartItems = useSelector((state) => state.addtocart.cartItems || {});
+  const { tickets } = useSelector(state => state.tickets);
+  const cartItems = useSelector(state => state.addtocart.cartItems || {});
 
   const {
     dubaiQty = 0,
     thailandQty = 0,
     goldenWinnerQty = 0,
+    goaQty = 0,
     dubaiPrice = 0,
     thailandPrice = 0,
+    goaPrice = 0,
   } = cartItems;
 
   useEffect(() => {
     dispatch(fetchTickets());
   }, [dispatch]);
 
-  // Load ticket prices dynamically into Redux
   useEffect(() => {
     if (tickets?.length > 0) {
       const dubaiTicket = tickets.find(t => t.name?.toLowerCase() === 'dubai');
       const thailandTicket = tickets.find(t => t.name?.toLowerCase() === 'thailand');
+      const goaTicket = tickets.find(t => t.name?.toLowerCase() === 'goa');
       if (dubaiTicket) dispatch(setDubaiPrices(dubaiTicket.price));
       if (thailandTicket) dispatch(setThailandPrices(thailandTicket.price));
+      if (goaTicket) dispatch(setGoaPrices(goaTicket.price));
       dispatch(setGoldenWinnerPrices(149));
       dispatch(setGiftPrices(49));
     }
   }, [tickets, dispatch]);
 
-  // Handle deep-link navigation from homepage (hash like #dubai/#thailand)
   useEffect(() => {
     const hash = (location.hash || '').toLowerCase();
     if (hash === '#dubai') {
       dubaiRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     } else if (hash === '#thailand') {
       thailandRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else if (hash === '#goa') {
+      goaRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.hash]);
 
-  // Resolve current stock from fetched tickets
   const dubaiStock = tickets?.find(t => t.name?.toLowerCase() === 'dubai')?.ticket ?? 0;
   const thailandStock = tickets?.find(t => t.name?.toLowerCase() === 'thailand')?.ticket ?? 0;
-  
-  // Redirect logic
+  const goaStock = tickets?.find(t => t.name?.toLowerCase() === 'goa')?.ticket ?? 0;
+
   useEffect(() => {
-    // Only redirect if came from Explore and goldenWinnerQty is 0
     if (fromExplore && goldenWinnerQty === 0) {
       navigate('/explore');
     }
   }, [fromExplore, goldenWinnerQty, navigate]);
 
-  useEffect(()=>{
-    if(fromdubaicarosel && dubaiQty === 0){
-      navigate("/explore")
+  useEffect(() => {
+    if (fromdubaicarosel && dubaiQty === 0) {
+      navigate('/explore');
     }
-  },[fromdubaicarosel , dubaiQty ,  navigate])
+  }, [fromdubaicarosel, dubaiQty, navigate]);
 
   // Handlers for Dubai Ticket
-  const handleIncrement = () => {
+  const handleIncrementDubai = () => {
     if (dubaiStock <= 0) {
       toast.error('Dubai ticket is out of stock');
       return;
@@ -99,11 +102,11 @@ export default function Tickets() {
     dispatch(setDubaiQtys(dubaiQty + 1));
     if (dubaiQty === 0) toast.success('Tickets added to cart');
   };
-  const handleDecrement = () => {
+  const handleDecrementDubai = () => {
     if (dubaiQty === 1) toast.success('Ticket discarded successfully');
     dispatch(setDubaiQtys(Math.max(0, dubaiQty - 1)));
   };
-  const handleAddToCart = () => {
+  const handleAddToCartDubai = () => {
     if (dubaiStock <= 0) {
       toast.error('Dubai ticket is out of stock');
       return;
@@ -114,7 +117,7 @@ export default function Tickets() {
   };
 
   // Handlers for Thailand Ticket
-  const handleIncrement2 = () => {
+  const handleIncrementThailand = () => {
     if (thailandStock <= 0) {
       toast.error('Thailand ticket is out of stock');
       return;
@@ -126,11 +129,11 @@ export default function Tickets() {
     dispatch(setThailandQtys(thailandQty + 1));
     if (thailandQty === 0) toast.success('Tickets added to cart');
   };
-  const handleDecrement2 = () => {
+  const handleDecrementThailand = () => {
     if (thailandQty === 1) toast.success('Ticket discarded successfully');
     dispatch(setThailandQtys(Math.max(0, thailandQty - 1)));
   };
-  const handleAddToCart2 = () => {
+  const handleAddToCartThailand = () => {
     if (thailandStock <= 0) {
       toast.error('Thailand ticket is out of stock');
       return;
@@ -140,16 +143,43 @@ export default function Tickets() {
     navigate('/addtocart');
   };
 
+  // Handlers for Goa Ticket
+  const handleIncrementGoa = () => {
+    if (goaStock <= 0) {
+      toast.error('Goa ticket is out of stock');
+      return;
+    }
+    if (goaQty + 1 > goaStock) {
+      toast.error(`Only ${goaStock} Goa ticket(s) available`);
+      return;
+    }
+    dispatch(setGoaQtys(goaQty + 1));
+    if (goaQty === 0) toast.success('Tickets added to cart');
+  };
+  const handleDecrementGoa = () => {
+    if (goaQty === 1) toast.success('Ticket discarded successfully');
+    dispatch(setGoaQtys(Math.max(0, goaQty - 1)));
+  };
+  const handleAddToCartGoa = () => {
+    if (goaStock <= 0) {
+      toast.error('Goa ticket is out of stock');
+      return;
+    }
+    if (goaQty === 0) dispatch(setGoaQtys(1));
+    toast.success('Tickets added to cart');
+    navigate('/addtocart');
+  };
+
   // Handlers for Golden Ticket
-  const handleIncrement3 = () => {
+  const handleIncrementGolden = () => {
     dispatch(setGoldenWinnerQtys(goldenWinnerQty + 1));
     if (goldenWinnerQty === 0) toast.success('Tickets added to cart');
   };
-  const handleDecrement3 = () => {
+  const handleDecrementGolden = () => {
     if (goldenWinnerQty === 1) toast.success('Ticket discarded successfully');
     dispatch(setGoldenWinnerQtys(Math.max(0, goldenWinnerQty - 1)));
   };
-  const handleAddToCart3 = () => {
+  const handleAddToCartGolden = () => {
     if (goldenWinnerQty === 0) dispatch(setGoldenWinnerQtys(1));
     toast.success('Tickets added to cart');
     navigate('/addtocart');
@@ -166,69 +196,96 @@ export default function Tickets() {
   return (
     <div className="bg-gradient-to-b from-blue-100 to-blue-10 min-h-screen">
       <Header />
-      
+
       <Helmet>
-  {/* Basic Meta Tags */}
-  <title>Buy Contest Tickets & Win Trips</title>
-  <meta
-    name="description"
-    content="Buy your contest tickets today (₹299, ₹499, ₹599). Each draw limited to 2000 entries. Play now and win Dubai, Baku, Thailand packages!"
-  />
-  <meta
-    name="keywords"
-    content="buy contest tickets, contest entry, lucky draw ticket, win trips, Dubai Baku Thailand packages"
-  />
+        <title>Buy Contest Tickets & Win Trips</title>
+        <meta name="description" content="Buy your contest tickets today (₹299, ₹499, ₹599). Each draw limited to 2000 entries. Play now and win Dubai, Baku, Thailand packages!" />
+        <meta name="keywords" content="buy contest tickets, contest entry, lucky draw ticket, win trips, Dubai Baku Thailand packages" />
+        <meta property="og:title" content="Buy Contest Tickets & Win Trips" />
+        <meta property="og:description" content="Secure your spot in contests with limited entries. Purchase tickets and stand a chance to win luxury trips!" />
+        <meta property="og:url" content="https://www.theluckmytrip.com/tickets/" />
+        <link rel="canonical" href="https://www.theluckmytrip.com/tickets/" />
+        <script type="application/ld+json">
+          {`
+          {
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": "Contest Tickets",
+            "url": "https://www.theluckmytrip.com/tickets/",
+            "description": "Buy contest tickets at ₹299, ₹499, or ₹599. Limited draw of 2000 entries. Win trips to Dubai, Baku, Thailand.",
+            "offers": {
+              "@type": "Offer",
+              "priceCurrency": "INR",
+              "price": "299",
+              "availability": "https://schema.org/InStock",
+              "url": "https://www.theluckmytrip.com/tickets/"
+            },
+            "mainEntityOfPage": {
+              "@type": "Contest",
+              "name": "Luxury Travel Contest",
+              "url": "https://www.theluckmytrip.com/tickets/",
+              "description": "Purchase contest tickets and stand a chance to win luxury trips."
+            }
+          }
+        `}
+        </script>
+      </Helmet>
 
-  {/* Open Graph Tags */}
-  <meta property="og:title" content="Buy Contest Tickets & Win Trips" />
-  <meta
-    property="og:description"
-    content="Secure your spot in contests with limited entries. Purchase tickets and stand a chance to win luxury trips!"
-  />
-  <meta property="og:url" content="https://www.theluckmytrip.com/tickets/" />
-
-  {/* Canonical URL */}
-  <link rel="canonical" href="https://www.theluckmytrip.com/tickets/" />
-
-  {/* Structured Data - Schema.org Product / Offer and Contest */}
-  <script type="application/ld+json">
-    {`
-      {
-        "@context": "https://schema.org",
-        "@type": "Product",
-        "name": "Contest Tickets",
-        "url": "https://www.theluckmytrip.com/tickets/",
-        "description": "Buy contest tickets at ₹299, ₹499, or ₹599. Limited draw of 2000 entries. Win trips to Dubai, Baku, Thailand.",
-        "offers": {
-          "@type": "Offer",
-          "priceCurrency": "INR",
-          "price": "299",
-          "availability": "https://schema.org/InStock",
-          "url": "https://www.theluckmytrip.com/tickets/"
-        },
-        "mainEntityOfPage": {
-          "@type": "Contest",
-          "name": "Luxury Travel Contest",
-          "url": "https://www.theluckmytrip.com/tickets/",
-          "description": "Purchase contest tickets and stand a chance to win luxury trips."
-        }
-      }
-    `}
-  </script>
-</Helmet>
-      {/* Dubai and Thailand */}
+      {/* Trip Sections */}
       {tickets
-        .filter(tri => ['dubai', 'Thailand'].includes(tri.name))
+        .filter(tri => ['dubai', 'thailand', 'goa'].includes(tri.name?.toLowerCase()))
         .map(trip => (
-          <div key={trip.id} ref={trip.name?.toLowerCase() === 'dubai' ? dubaiRef : thailandRef}>
-          <TripSection
+          <div
             key={trip.id}
-            trip={trip}
-            qty={trip.name?.toLowerCase() === 'dubai' ? dubaiQty : thailandQty}
-            onIncrement={trip.name?.toLowerCase() === 'dubai' ? handleIncrement : handleIncrement2}
-            onDecrement={trip.name?.toLowerCase() === 'dubai' ? handleDecrement : handleDecrement2}
-            onAddToCart={trip.name?.toLowerCase() === 'dubai' ? handleAddToCart : handleAddToCart2}
-          />
+            ref={
+              trip.name?.toLowerCase() === 'dubai'
+                ? dubaiRef
+                : trip.name?.toLowerCase() === 'thailand'
+                ? thailandRef
+                : trip.name?.toLowerCase() === 'goa'
+                ? goaRef
+                : null
+            }
+          >
+            <TripSection
+              trip={trip}
+              qty={
+                trip.name?.toLowerCase() === 'dubai'
+                  ? dubaiQty
+                  : trip.name?.toLowerCase() === 'thailand'
+                  ? thailandQty
+                  : trip.name?.toLowerCase() === 'goa'
+                  ? goaQty
+                  : 0
+              }
+              onIncrement={
+                trip.name?.toLowerCase() === 'dubai'
+                  ? handleIncrementDubai
+                  : trip.name?.toLowerCase() === 'thailand'
+                  ? handleIncrementThailand
+                  : trip.name?.toLowerCase() === 'goa'
+                  ? handleIncrementGoa
+                  : () => {}
+              }
+              onDecrement={
+                trip.name?.toLowerCase() === 'dubai'
+                  ? handleDecrementDubai
+                  : trip.name?.toLowerCase() === 'thailand'
+                  ? handleDecrementThailand
+                  : trip.name?.toLowerCase() === 'goa'
+                  ? handleDecrementGoa
+                  : () => {}
+              }
+              onAddToCart={
+                trip.name?.toLowerCase() === 'dubai'
+                  ? handleAddToCartDubai
+                  : trip.name?.toLowerCase() === 'thailand'
+                  ? handleAddToCartThailand
+                  : trip.name?.toLowerCase() === 'goa'
+                  ? handleAddToCartGoa
+                  : () => {}
+              }
+            />
           </div>
         ))}
 
@@ -243,15 +300,14 @@ export default function Tickets() {
             <div className="relative h-full flex items-end justify-between md:p-12 p-4">
               <div className="z-30 relative">
                 <img src="/images/goldenwinner.png" className="md:w-96 w-40 md:mb-24 ml-2" />
-
                 <div className="flex items-center gap-4 mt-4">
                   <div className="flex items-center border-2 border-black rounded-md px-2 py-1">
-                    <button onClick={handleDecrement3} className="w-6 h-6 bg-gray-100 text-black font-bold">-</button>
+                    <button onClick={handleDecrementGolden} className="w-6 h-6 bg-gray-100 text-black font-bold">-</button>
                     <span className="px-3 font-bold text-white">{goldenWinnerQty}</span>
-                    <button onClick={handleIncrement3} className="w-6 h-6 bg-green-400 text-white font-bold">+</button>
+                    <button onClick={handleIncrementGolden} className="w-6 h-6 bg-green-400 text-white font-bold">+</button>
                   </div>
                   <button
-                    onClick={handleAddToCart3}
+                    onClick={handleAddToCartGolden}
                     className="bg-[#ef3232] hover:bg-[#d41313] text-white text-xs font-bold md:px-6 md:py-2 px-3 py-2 rounded-lg"
                   >
                     ADD TO CART
@@ -276,7 +332,6 @@ export default function Tickets() {
           </div>
         </div>
       </section>
-
       <Footer />
     </div>
   );

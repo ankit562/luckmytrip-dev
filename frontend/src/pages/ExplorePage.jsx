@@ -211,6 +211,8 @@ const ExplorePage = () => {
             buttonText="LEARN MORE"/>
         </div>
 
+        
+
         <div className="flex justify-end gap-2 sm:gap-3 md:gap-4 w-full mt-3 sm:mt-5 md:mt-6 pr-1">
           <button
             className="bg-green-300 px-3.5 sm:px-5 md:px-6 py-1.5 sm:py-2 md:py-2.5 text-lg sm:text-lg md:text-xl font-bold rounded-full hover:bg-green-500 transition-colors shadow-md"
