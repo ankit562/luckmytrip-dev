@@ -6,7 +6,7 @@ import { Helmet } from 'react-helmet'
 const Privs = [
   {
     question: "Information We Collect",
-    answer: "We may collect the following personal information when you interact with our website or participate in contests: 1. Name, email address, phone number 2. Payment information for ticket purchases 3. Demographic information (age, gender, location) 4. IP address and browser details for website analytics",
+    answer: "We may collect the following personal information when you interact with our website or participate in contests: 1. Name, email address, phone number 2. Payment information for ticket purchases 3. Demographic information (age, gender, location) 4. IP address and browser details for website analytics. Note: do not store card credentials, and card processing is handled by the PayU. We may verify identity as per RBI / PMLA rules and transactional monitoring may occur to prevent fraud.",
   },
   {
     question: "How We Use Your Information",
