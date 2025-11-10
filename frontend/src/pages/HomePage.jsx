@@ -381,7 +381,7 @@ const slideJourney = (direction) => {
         {products?.filter(prod => prod?.name === "spinluck").map(pro => (
           <div key={pro} className="container md:mx-auto md:px-16 px-5 flex flex-col md:flex-row justify-start md:justify-center items-center">
             <div className="flex flex-col">
-              <h2 className="lg:text-7xl md:text-[50px] font-montserrat text-4xl font-extrabold text-green-500 flex justify-start">SPIN LUCK</h2>
+              <h2 className="lg:text-7xl md:text-[50px] font-montserrat text-4xl font-extrabold text-green-500 flex justify-start">Travel Coupons</h2>
               <div className="flex justify-end items-center">
                 <div className="md:w-40 w-[39%] flex gap-1 justify-start items-center">
                   <div className="flex flex-col justify-start">
@@ -391,7 +391,7 @@ const slideJourney = (direction) => {
                   <div><span className="xl:text-[75px] lg:text-[70px] font-berlin md:text-[65px] text-[43px] font-bold text-red-500">{pro?.price || "0"}</span></div>
                 </div>
                 <div className="md:w-[60%] w-[61%]">
-                  <p className="flex items-center justify-start lg:text-xl  text-xs text-gray-700 font-bold leading-[1] font-montserrat">iPhone 16, Premium <br />Luggage & More!</p>
+                  <p className="flex items-center justify-start lg:text-xl  text-xs text-gray-700 font-bold leading-[1] font-montserrat">Travel <br />Coupons & More!</p>
                 </div>
               </div>
             </div>
