@@ -397,7 +397,7 @@ const slideJourney = (direction) => {
             </div>
             <div className="relative mt-8 md:mt-0 flex justify-center items-center">
               <img
-                src={products?.length > 0 ? pro?.image : "/images/bag.png"}
+                src={products?.length > 0 ? pro?.image : "/images/Spin-to-win.webp"}
                 alt="Gift Box"
                 loading="lazy"
                 width="480"
