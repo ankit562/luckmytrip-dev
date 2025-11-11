@@ -291,7 +291,7 @@ const HomePage = () => {
         <section key={imgs} className="max-w-7xl mx-auto py-8 relative overflow-hidden bg-[#E9F2FF]">
           <div className="container mx-auto px-4 relative z-10">
             <div className="mb-4">
-              <p className="text-4xl text-center font-bold py-2">
+              <p className="text-4xl text-center font-bold py-2 mb-10">
                 Buy a ₹599 ticket, win a luxury holiday to Dubai or Thailand
               </p>
               <div className="text-center py-6 mb-16 pb-16">
