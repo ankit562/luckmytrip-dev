@@ -292,7 +292,7 @@ const HomePage = () => {
           <div className="container mx-auto px-4 relative z-10">
             <div className="mb-4">
               <p className="text-4xl text-center font-bold py-2">
-                Buy a ₹599 ticket, win a luxury holiday to Dubai or Thailand
+                Buy a ₹199 ticket, win a luxury holiday to Dubai or Thailand
               </p>
               <div className="text-center py-6 mb-16 pb-16">
                 <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-md w-48">
