@@ -268,6 +268,7 @@ const HomePage = () => {
 
           {/* Navigation buttons below cards on the right */}
           <div className="flex justify-end gap-3 mt-6 pr-8">
+            <p className="text-base md:text-xl font-medium font-montserrat">Buy a ₹599 ticket, win a luxury holiday to Dubai or Thailand</p>
             <button
               onClick={() => slideJourney(-1)}
               className="bg-gray-300 hover:bg-gray-400 rounded-full w-12 h-12 flex items-center justify-center text-2xl text-gray-700 transition-colors duration-200 shadow-md"
