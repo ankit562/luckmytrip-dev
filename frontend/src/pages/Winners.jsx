@@ -49,7 +49,7 @@ const WinnerList = () => {
 
       {!loading && winners.length === 0 && (
         <div className="text-center py-20  text-lg overflow-auto   ">
-             No recent Winner Found <span role="img" aria-label="sad">😞</span>     
+             Winners will be updated shortly check back later <span role="img" aria-label="sad">😊</span>     
         </div>
       )}
 
