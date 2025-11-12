@@ -61,7 +61,7 @@ const Aboutus = () => {
             <section className="flex flex-col mx-auto mt-10 sm:mt-16 md:mt-6  mb-28">
                 <div className="container mx-auto py-6 sm:py-10 md:py-10 lg:py-12 xl:py-12 px-3 sm:px-6 md:px-8 lg:px-10 xl:px-8">
                     <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-6xl font-bold text-green-400 text-center mb-2 md:mb-2  font-berlin">ABOUT US</h2>
-                    <p className="text-sm sm:text-base md:text-base lg:text-xl xl:text-3xl 2xl:text-4xl text-justify sm:text-left md:text-justify mt-6 sm:mt-8 md:mt-8  xl:mt-16 px-2 sm:px-4 md:px-4 lg:px-6 xl:px-8 text-gray-700 leading-relaxed sm:leading-loose md:leading-relaxed lg:leading-loose xl:leading-loose font-montserrat text-blue-900">
+                    <p className="text-sm sm:text-base md:text-base lg:text-xl xl:text-3xl 2xl:text-4xl text-justify sm:text-left md:text-justify mt-6 sm:mt-8 md:mt-8  xl:mt-16 px-2 sm:px-4 md:px-4 lg:px-6 xl:px-8 text-blue-900 leading-relaxed sm:leading-loose md:leading-relaxed lg:leading-loose xl:leading-loose font-montserrat">
                         LuckMyTrip is an Indian travel platform that helps you discover, plan, and book unforgettable trips with ease. From weekend getaways to international holidays, we connect you with trusted partners, curated experiences, and secure payment options — all in one place.<br />
                         We focus on transparent pricing, smooth booking, and reliable customer support, so your only job is to enjoy the journey.<br />
                         Here’s your chance to win an unforgettable trip to Dubai or Thailand, where luxury meets breathtaking experiences.<br />
