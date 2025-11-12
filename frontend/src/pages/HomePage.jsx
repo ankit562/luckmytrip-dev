@@ -405,8 +405,7 @@ const HomePage = () => {
                 loading="lazy"
                 width="340"
                 height="340"
-                className="mx-auto lg:max-h-[26rem] md:max-h-[22rem] h-[20rem] w-full object-contain 
-                transition-transform duration-300 ease-in-out active:-translate-x-2 shodow-lg hover:scale-110 sm:ml-10 ml-0"
+                className="mx-auto lg:max-h-[26rem] md:max-h-[22rem] h-[20rem] w-full object-contain transition-transform duration-300 ease-in-out active:-translate-x-2 shodow-lg hover:scale-110 sm:ml-10 ml-0 rounded-xl md:rounded-3xl"
               />
             </div>
           </div>
