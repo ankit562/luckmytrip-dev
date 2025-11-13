@@ -34,9 +34,16 @@ const ExplorePage = () => {
     "WIN"
   );
   
-  const features = [
+  const featuresd = [
     "Return Ticket from Dubai",
-    "3 Star hotel for 2 nights",
+    "3 Star hotel for 1 night",
+    "Breakfast",
+    "Pick & drop from airport",
+    "Basic City Tour",
+  ];
+  const featurest = [
+    "Return Ticket from Thailand",
+    "3 Star hotel for 1 night",
     "Breakfast",
     "Pick & drop from airport",
     "Basic City Tour",
@@ -199,14 +206,14 @@ const ExplorePage = () => {
           <TravelCard
             title={<span className="text-blue-900">DUBAI</span>}
             logo={Logo}
-            features={features}
+            featuresd={featuresd}
             restrictions={restrictions}
             buttonText="LEARN MORE"/>
        
           <TravelCard
             title={<span className="text-blue-900">Thailand</span>}
             logo={Logo}
-            features={features}
+            featurest={featurest}
             restrictions={restrictions}
             buttonText="LEARN MORE"/>
         </div>
