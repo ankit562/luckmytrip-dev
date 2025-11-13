@@ -209,13 +209,6 @@ const ExplorePage = () => {
             features={features}
             restrictions={restrictions}
             buttonText="LEARN MORE"/>
-
-            <TravelCard
-            title={<span className="text-blue-900">Goa</span>}
-            logo={Logo}
-            features={features}
-            restrictions={restrictions}
-            buttonText="LEARN MORE"/>
         </div>
 
         
