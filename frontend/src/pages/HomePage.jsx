@@ -295,7 +295,7 @@ const HomePage = () => {
                 Buy more, boost your chances to win a luxury trip to Dubai, Thailand, or Goa - starting ₹49! T&C apply.
               </p>
               <div className="text-center py-6 mb-16 pb-16">
-                <button href="/ticket" className="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-md w-48">
+                <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-md w-48">
                   Click Here
                 </button>
               </div>
@@ -309,7 +309,7 @@ const HomePage = () => {
                   <p className="text-white font-bold md:text-lg text-sm w-72 mb-3 md:mb-8 ml-0 md:ml-10">
                     {imgs.content || "Enter for your chance to win this amazing prize."}
                   </p>
-                  <button href="/termsandconditions" className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 md:mb-2 px-6 rounded-md w-48 ml-0 md:ml-10">
+                  <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 md:mb-2 px-6 rounded-md w-48 ml-0 md:ml-10">
                     Learn More
                   </button>
                 </div>
