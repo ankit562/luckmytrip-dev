@@ -115,9 +115,9 @@ export default function TripSection({
 
               <div className="absolute bottom-30 left-28 z-10 text-left lg:top-28 md:mt-[-30px] lg:ml-[-12px] md:ml-4 ml-[-43px] top-[7.1rem]">
                 <h3 className="font-berlin lg:text-3xl md:text-5xl text-sm font-bold text-[#21b8b3] uppercase leading-tight mb-1">
-                  Mokobara<br />Luggage
+                 {trip.name}<br /> TRIP TICKET
                 </h3>
-                <p className="font-montserrat text-blue-900 font-bold text-xs md:text-lg lg:text-sm">{trip.name} TRIP TICKET</p>
+                {/* <p className="font-montserrat text-blue-900 font-bold text-xs md:text-lg lg:text-sm">{trip.name} TRIP TICKET</p> */}
                 <p className="font-montserrat text-blue-900 lg:text-xs text-xs md:text-base mb-2">(one person)</p>
                 <button onClick={handleGift} className="font-montserrat bg-[#ef3232] hover:bg-[#d41313] text-white font-bold md:px-4 md:py-1 
                 rounded lg:text-sm text-sm md:text-xl lg:mr-0 md:ml-4 lg:mt-0 md:mt-2 mt-0 px-2 py-1">
