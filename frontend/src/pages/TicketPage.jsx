@@ -5,9 +5,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
 import { useNavigate, useLocation } from 'react-router-dom';
 import TripSection from '../components/ticketpageComponent/TicketCompo';
+import {Link} from 'react-router-dom';
 
 import { fetchTickets } from '../features/tickets/ticketSlice';
 import { Helmet } from 'react-helmet';
+import { fetchProducts } from "../features/products/productSlice";
 
 import {
   setDubaiQtys,
@@ -29,11 +31,17 @@ export default function Tickets() {
   const thailandRef = useRef(null);
   const goaRef = useRef(null);
 
+  const { products } = useSelector((state) => state.products);
+
   const fromExplore = location.state?.fromExplore;
   const fromdubaicarosel = location.state?.fromdubaicarosel;
 
   const { tickets } = useSelector(state => state.tickets);
   const cartItems = useSelector(state => state.addtocart.cartItems || {});
+
+    useEffect(() => {
+      dispatch(fetchProducts())
+    }, [dispatch])
 
   const {
     dubaiQty = 0,
@@ -332,6 +340,38 @@ export default function Tickets() {
           </div>
         </div>
       </section>
+
+            {products.filter(items => items.name === "jackpot").map(imgs => (
+              <section key={imgs} className="max-w-7xl mx-auto py-8 relative overflow-hidden mt-16">
+                <div className="container mx-auto px-4 relative z-10">
+                  <div className="mb-4">
+                    <div className="hero-container bg-blue-900 rounded-lg flex flex-col md:flex-row items-center justify-between overflow-hidden relative">
+                      <div className="hero-text px-4 md:px-4 z-10 md:py-8 py-2">
+                        <img
+                          src={"/images/Jackpot.png"}
+                          alt="Jackpot Logo"
+                          className="md:w-72 w-48"
+                        />
+                        <p className="text-white font-bold md:text-lg text-sm w-72 mb-3 md:mb-8 ml-0 md:ml-10">
+                          {imgs.content || "Enter for your chance to win this amazing prize."}
+                        </p>
+                        <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 md:mb-2 px-6 rounded-md w-48 ml-0 md:ml-10">
+                          Learn More
+                        </button>
+                      </div>
+                      <div className="">
+                        <img
+                          src={imgs.image}
+                          alt={"Lady with city background"}
+                          className="lady-image "
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            ))}
+
       <Footer />
     </div>
   );
