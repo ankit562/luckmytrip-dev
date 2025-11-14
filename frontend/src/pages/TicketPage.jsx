@@ -5,22 +5,22 @@ import { useSelector, useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
 import { useNavigate, useLocation } from 'react-router-dom';
 import TripSection from '../components/ticketpageComponent/TicketCompo';
-import {Link} from 'react-router-dom';
-
-import { fetchTickets } from '../features/tickets/ticketSlice';
 import { Helmet } from 'react-helmet';
+import { fetchTickets } from '../features/tickets/ticketSlice';
 import { fetchProducts } from "../features/products/productSlice";
 
 import {
   setDubaiQtys,
   setThailandQtys,
   setGoldenWinnerQtys,
-  setGoaQtys,          // Make sure this is defined in your slice
+  setGoaQtys,
   setDubaiPrices,
   setThailandPrices,
   setGoldenWinnerPrices,
-  setGoaPrices,         // Make sure this is defined in your slice
+  setGoaPrices,
   setGiftPrices,
+  setJackpotPrices,
+  setJackpotQtys,
 } from '../features/addtocart/addtocartSlice';
 
 export default function Tickets() {
@@ -34,23 +34,23 @@ export default function Tickets() {
   const { products } = useSelector((state) => state.products);
 
   const fromExplore = location.state?.fromExplore;
+  const fromHome = location.state?.fromHome;
   const fromdubaicarosel = location.state?.fromdubaicarosel;
 
   const { tickets } = useSelector(state => state.tickets);
   const cartItems = useSelector(state => state.addtocart.cartItems || {});
 
-    useEffect(() => {
-      dispatch(fetchProducts())
-    }, [dispatch])
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, [dispatch]);
 
   const {
     dubaiQty = 0,
     thailandQty = 0,
     goldenWinnerQty = 0,
     goaQty = 0,
-    dubaiPrice = 0,
-    thailandPrice = 0,
-    goaPrice = 0,
+    jackpotQty = 0,
+
   } = cartItems;
 
   useEffect(() => {
@@ -62,11 +62,15 @@ export default function Tickets() {
       const dubaiTicket = tickets.find(t => t.name?.toLowerCase() === 'dubai');
       const thailandTicket = tickets.find(t => t.name?.toLowerCase() === 'thailand');
       const goaTicket = tickets.find(t => t.name?.toLowerCase() === 'goa');
+      const jackpotTicket = tickets.find(t => t.name?.toLowerCase() === 'jackpot');
+
       if (dubaiTicket) dispatch(setDubaiPrices(dubaiTicket.price));
       if (thailandTicket) dispatch(setThailandPrices(thailandTicket.price));
       if (goaTicket) dispatch(setGoaPrices(goaTicket.price));
+      if (jackpotTicket) dispatch(setJackpotPrices(jackpotTicket.price));
       dispatch(setGoldenWinnerPrices(149));
       dispatch(setGiftPrices(49));
+      dispatch(setJackpotPrices(49));
     }
   }, [tickets, dispatch]);
 
@@ -84,12 +88,19 @@ export default function Tickets() {
   const dubaiStock = tickets?.find(t => t.name?.toLowerCase() === 'dubai')?.ticket ?? 0;
   const thailandStock = tickets?.find(t => t.name?.toLowerCase() === 'thailand')?.ticket ?? 0;
   const goaStock = tickets?.find(t => t.name?.toLowerCase() === 'goa')?.ticket ?? 0;
+ 
 
   useEffect(() => {
     if (fromExplore && goldenWinnerQty === 0) {
       navigate('/explore');
     }
   }, [fromExplore, goldenWinnerQty, navigate]);
+
+  useEffect(() => {
+    if (fromHome && jackpotQty === 0) {
+      navigate('/');
+    }
+  })
 
   useEffect(() => {
     if (fromdubaicarosel && dubaiQty === 0) {
@@ -193,6 +204,21 @@ export default function Tickets() {
     navigate('/addtocart');
   };
 
+  // Handlers for Jackpot Ticket
+  const handleIncrementJackpot = () => {
+    dispatch(setJackpotQtys(jackpotQty + 1));
+    if (jackpotQty === 0) toast.success('Tickets added to cart');
+  };
+  const handleDecrementJackpot = () => {
+    if (jackpotQty === 1) toast.success('Ticket discarded successfully');
+    dispatch(setJackpotQtys(Math.max(0, jackpotQty - 1)));
+  };
+  const handleAddToCartJackpot = () => {
+    if (jackpotQty === 0) dispatch(setJackpotQtys(1));
+    toast.success('Tickets added to cart');
+    navigate('/addtocart');
+  };
+
   const options = [
     'VIP AIRPORT PICKUP',
     'PREMIUM LUXURY HOTEL',
@@ -249,10 +275,10 @@ export default function Tickets() {
               trip.name?.toLowerCase() === 'dubai'
                 ? dubaiRef
                 : trip.name?.toLowerCase() === 'thailand'
-                ? thailandRef
-                : trip.name?.toLowerCase() === 'goa'
-                ? goaRef
-                : null
+                  ? thailandRef
+                  : trip.name?.toLowerCase() === 'goa'
+                    ? goaRef
+                    : null
             }
           >
             <TripSection
@@ -261,37 +287,37 @@ export default function Tickets() {
                 trip.name?.toLowerCase() === 'dubai'
                   ? dubaiQty
                   : trip.name?.toLowerCase() === 'thailand'
-                  ? thailandQty
-                  : trip.name?.toLowerCase() === 'goa'
-                  ? goaQty
-                  : 0
+                    ? thailandQty
+                    : trip.name?.toLowerCase() === 'goa'
+                      ? goaQty
+                      : 0
               }
               onIncrement={
                 trip.name?.toLowerCase() === 'dubai'
                   ? handleIncrementDubai
                   : trip.name?.toLowerCase() === 'thailand'
-                  ? handleIncrementThailand
-                  : trip.name?.toLowerCase() === 'goa'
-                  ? handleIncrementGoa
-                  : () => {}
+                    ? handleIncrementThailand
+                    : trip.name?.toLowerCase() === 'goa'
+                      ? handleIncrementGoa
+                      : () => { }
               }
               onDecrement={
                 trip.name?.toLowerCase() === 'dubai'
                   ? handleDecrementDubai
                   : trip.name?.toLowerCase() === 'thailand'
-                  ? handleDecrementThailand
-                  : trip.name?.toLowerCase() === 'goa'
-                  ? handleDecrementGoa
-                  : () => {}
+                    ? handleDecrementThailand
+                    : trip.name?.toLowerCase() === 'goa'
+                      ? handleDecrementGoa
+                      : () => { }
               }
               onAddToCart={
                 trip.name?.toLowerCase() === 'dubai'
                   ? handleAddToCartDubai
                   : trip.name?.toLowerCase() === 'thailand'
-                  ? handleAddToCartThailand
-                  : trip.name?.toLowerCase() === 'goa'
-                  ? handleAddToCartGoa
-                  : () => {}
+                    ? handleAddToCartThailand
+                    : trip.name?.toLowerCase() === 'goa'
+                      ? handleAddToCartGoa
+                      : () => { }
               }
             />
           </div>
@@ -341,36 +367,47 @@ export default function Tickets() {
         </div>
       </section>
 
-            {products.filter(items => items.name === "jackpot").map(imgs => (
-              <section key={imgs} className="max-w-7xl mx-auto py-8 relative overflow-hidden mt-16">
-                <div className="container mx-auto px-4 relative z-10">
-                  <div className="mb-4">
-                    <div className="hero-container bg-blue-900 rounded-lg flex flex-col md:flex-row items-center justify-between overflow-hidden relative">
-                      <div className="hero-text px-4 md:px-4 z-10 md:py-8 py-2">
-                        <img
-                          src={"/images/Jackpot.png"}
-                          alt="Jackpot Logo"
-                          className="md:w-72 w-48"
-                        />
-                        <p className="text-white font-bold md:text-lg text-sm w-72 mb-3 md:mb-8 ml-0 md:ml-10">
-                          {imgs.content || "Enter for your chance to win this amazing prize."}
-                        </p>
-                        <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 md:mb-2 px-6 rounded-md w-48 ml-0 md:ml-10">
-                          Learn More
-                        </button>
-                      </div>
-                      <div className="">
-                        <img
-                          src={imgs.image}
-                          alt={"Lady with city background"}
-                          className="lady-image "
-                        />
-                      </div>
+      {/* Jackpot Section */}
+      {products.filter(items => items.name === "jackpot").map(imgs => (
+        <section key={imgs.id} className="max-w-[1100px] mx-auto py-8 relative overflow-hidden ">
+          <div className="container mx-auto px-4 relative z-10">
+            <div className="mb-4">
+              <div className="hero-container bg-blue-900 rounded-xl flex flex-col md:flex-row items-center justify-between overflow-hidden relative">
+                <div className="hero-text px-1 md:px-4 z-10 md:py-8 py-2">
+                  <img
+                    src={"/images/Jackpot.png"}
+                    alt="Jackpot Logo"
+                    className="md:w-72 w-48"
+                  />
+                  <p className="text-white font-bold md:text-lg text-sm w-72 mb-3 md:mb-8 ml-0 md:ml-10">
+                    {imgs.content || "Enter for your chance to win this amazing prize."}
+                  </p>
+                  <div className="flex items-center gap-4 mt-4">
+                    <div className="flex items-center border-2 border-black rounded-md px-2 py-1">
+                      <button onClick={handleDecrementJackpot} className="w-6 h-6 bg-gray-100 text-black font-bold">-</button>
+                      <span className="px-3 font-bold text-white">{jackpotQty}</span>
+                      <button onClick={handleIncrementJackpot} className="w-6 h-6 bg-green-400 text-white font-bold">+</button>
                     </div>
+                    <button
+                      onClick={handleAddToCartJackpot}
+                      className="bg-[#ef3232] hover:bg-[#d41313] text-white md:text-xs text-[10px] font-bold md:px-6 md:py-2 px-1.5 py-1 rounded-lg"
+                    >
+                      ADD TO CART
+                    </button>
                   </div>
                 </div>
-              </section>
-            ))}
+                <div className="">
+                  <img
+                    src={imgs.image}
+                    alt={"Lady with city background"}
+                    className="lady-image "
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      ))}
 
       <Footer />
     </div>

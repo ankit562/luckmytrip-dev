@@ -42,6 +42,22 @@ const ExplorePage = () => {
     "Basic City Tour",
   ];
 
+
+    const features2 = [
+    "Return Ticket from Thailand",
+    "3 Star hotel for 1 night",
+    "Breakfast",
+    "Pick & drop from airport",
+    "Basic City Tour",
+  ];
+
+    const features3 = [
+    "Return Ticket from Goa",
+    "3 Star hotel for 1 night",
+    "Breakfast",
+    "Pick & drop from airport",
+    "Basic City Tour",
+  ];
   const restrictions = ["VISA", "Lunch & Dinner", "Alcohol"];
 
   const scrollRef = useRef(null);
@@ -52,11 +68,22 @@ const ExplorePage = () => {
     }
   };
 
-  const slideRight = () => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollBy({ left: 300, behavior: 'smooth' });
+const slideRight = () => {
+  if (scrollRef.current) {
+    const { scrollLeft, clientWidth, scrollWidth } = scrollRef.current;
+    const maxScrollLeft = scrollWidth - clientWidth;
+    const scrollStep = 300; // same as your scroll amount
+
+    if (scrollLeft + scrollStep >= maxScrollLeft) {
+      // If next scroll goes beyond max, loop back to start
+      scrollRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+    } else {
+      // Normal scroll right
+      scrollRef.current.scrollBy({ left: scrollStep, behavior: 'smooth' });
     }
-  };
+  }
+};
+
 
   const handlemsg= ()=>{
      dispatch(setGoldenWinnerQtys(goldenWinnerQty + 1));
@@ -206,14 +233,14 @@ const ExplorePage = () => {
           <TravelCard
             title={<span className="text-blue-900">Thailand</span>}
             logo={Logo}
-            features={features}
+            features={features2}
             restrictions={restrictions}
-            buttonText="LEARN MORE"/>
+            buttonText="LEARN MORE" />
 
             <TravelCard
             title={<span className="text-blue-900">Goa</span>}
             logo={Logo}
-            features={features}
+            features={features3}
             restrictions={restrictions}
             buttonText="LEARN MORE"/>
         </div>

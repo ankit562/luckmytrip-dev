@@ -1,4 +1,5 @@
 import { CircleCheck, CircleX } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function TravelCard({
     title,
@@ -7,6 +8,10 @@ export default function TravelCard({
     restrictions = [],
     buttonText = "LEARN MORE",
 }) {
+
+
+
+
     return (
         <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg border border-gray-100 px-3 sm:px-4 md:px-5 lg:px-5 xl:px-5 py-3 sm:py-4 md:py-4 lg:py-5 xl:py-5 w-full min-w-[260px] max-w-[300px] sm:max-w-[340px] md:max-w-[360px] lg:max-w-[380px] xl:max-w-xl mx-auto flex flex-col justify-between min-h-[320px] sm:min-h-[350px] md:min-h-[380px] lg:min-h-[400px] xl:min-h-[400px]">
             <div className="flex justify-center items-start gap-2 sm:gap-2.5 md:gap-3 lg:gap-3 xl:gap-4 mt-1 sm:mt-2 md:mt-2">
@@ -40,10 +45,13 @@ export default function TravelCard({
                     </div>
                 ))}
             </div>
+            
             <div className="flex justify-end mt-1.5 sm:mt-2 md:mt-2 lg:mt-2.5 xl:mt-3">
-                <button className="bg-[#00ACC1] hover:bg-[#0097A7] rounded-lg sm:rounded-xl py-1.5 sm:py-2 md:py-2 lg:py-2.5 xl:py-3 px-3 sm:px-5 md:px-5 lg:px-6 xl:px-8 text-[10px] sm:text-xs md:text-xs lg:text-sm xl:text-base font-bold text-white shadow-md hover:shadow-lg transition-all duration-200 w-auto min-w-[90px] sm:min-w-[100px] md:min-w-[110px] lg:min-w-[120px] xl:min-w-[140px] uppercase font-montserrat">
+                <Link to={"/termsandconditions"}>
+                <button  className="bg-[#00ACC1] hover:bg-[#0097A7] rounded-lg sm:rounded-xl py-1.5 sm:py-2 md:py-2 lg:py-2.5 xl:py-3 px-3 sm:px-5 md:px-5 lg:px-6 xl:px-8 text-[10px] sm:text-xs md:text-xs lg:text-sm xl:text-base font-bold text-white shadow-md hover:shadow-lg transition-all duration-200 w-auto min-w-[90px] sm:min-w-[100px] md:min-w-[110px] lg:min-w-[120px] xl:min-w-[140px] uppercase font-montserrat">
                     {buttonText}
                 </button>
+                </Link>
             </div>
         </div>
     );

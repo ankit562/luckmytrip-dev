@@ -30,6 +30,8 @@ const getInitialCartState = () => {
       giftPrice: 0,
       goaQty: 0,
       goaPrice: 0,
+      jackpotQty: 0,
+      jackpotPrice: 0,
 
     },
     carts: [],
@@ -184,7 +186,15 @@ const addtocartSlice = createSlice({
       state.cartItems.goaPrice = action.payload;
       saveCartState(state);
     },
-
+    setJackpotQtys(state, action) {
+      state.cartItems.jackpotQty = action.payload;
+      saveCartState(state);
+    },
+    setJackpotPrices(state, action) {
+      state.cartItems.jackpotPrice = action.payload;
+      saveCartState(state);
+    },
+  
 
     clearCartItems(state) {
       state.cartItems = {
@@ -198,6 +208,8 @@ const addtocartSlice = createSlice({
         giftPrice: 0,
         goaQty: 0,
         goaPrice: 0,
+        jackpotQty: 0,
+        jackpotPrice: 0,
       };
       saveCartState(state);
     },
@@ -311,6 +323,8 @@ export const {
   hydrateCartFromStorage,
   setGoaQtys,
   setGoaPrices,
+  setJackpotQtys,
+  setJackpotPrices,
 } = addtocartSlice.actions;
 
 export default addtocartSlice.reducer;

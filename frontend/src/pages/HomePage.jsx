@@ -8,6 +8,8 @@ import Header from "../components/commonComponent/Header";
 import { fetchProducts } from "../features/products/productSlice"
 import { Helmet } from "react-helmet";
 import { runTicketDraw } from '../features/tickets/ticketSlice';
+import { setJackpotQtys } from "../features/addtocart/addtocartSlice";
+import toast from "react-hot-toast";
 
 
 
@@ -64,6 +66,12 @@ const HomePage = () => {
   const { products } = useSelector((state) => state.products);
   const { tickets } = useSelector((state) => state.tickets);
   const { user } = useSelector((state) => state.auth);
+  const jackpotQty = useSelector(state => state.addtocart?.cartItems?.jackpotQty || 0);
+
+    const handlemsg= ()=>{
+     dispatch(setJackpotQtys(jackpotQty + 1));
+    toast.success("Golden Ticket is added to the cart")
+  }
 
 
 
@@ -287,6 +295,7 @@ const HomePage = () => {
       </section>
 
       {/* Jackpot CTA */}
+      
       {products.filter(items => items.name === "jackpot").map(imgs => (
         <section key={imgs} className="max-w-7xl mx-auto py-8 relative overflow-hidden bg-[#E9F2FF]">
           <div className="container mx-auto px-4 relative z-10">
@@ -309,9 +318,10 @@ const HomePage = () => {
                   <p className="text-white font-bold md:text-lg text-sm w-72 mb-3 md:mb-8 ml-0 md:ml-10">
                     {imgs.content || "Enter for your chance to win this amazing prize."}
                   </p>
+                  <Link onClick={handlemsg}  to="/ticket" state={{ fromHome: true }}  >
                   <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 md:mb-2 px-6 rounded-md w-48 ml-0 md:ml-10">
                     Learn More
-                  </button>
+                  </button></Link>
                 </div>
                 <div className="">
                   <img
@@ -418,16 +428,3 @@ const HomePage = () => {
 };
 
 export default HomePage;
-
-
-
-{/* <div className="relative mt-8 md:mt-0 flex justify-center items-center">
-              <img
-                src={products?.length > 0 ? pro?.image : "/images/Spin-to-win.webp"}
-                alt="Gift Box"
-                loading="lazy"
-                width="480"
-                height="480"
-                className="mx-auto lg:max-h-[30rem] md:max-h-[25rem] w-full object-contain"
-              />
-            </div> */}

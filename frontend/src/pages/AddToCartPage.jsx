@@ -13,7 +13,8 @@ import {
   setThailandQtys,
   setGoldenWinnerQtys,
   setGiftQtys,
-  setGoaQtys,    // Add this action import from slice if exists
+  setGoaQtys,
+  setJackpotQtys,
 } from '../features/addtocart/addtocartSlice';
 import { fetchTickets } from '../features/tickets/ticketSlice';
 
@@ -36,21 +37,32 @@ export default function AddToCartPage() {
     goldenWinnerQty = 0,
     giftQty = 0,
     goaQty = 0,
+    jackpotQty = 0,
     dubaiPrice = 0,
     thailandPrice = 0,
     goldenWinnerPrice = 149,
     giftPrice = 49,
     goaPrice = 0,
+    jackpotPrice = 149, // Fixed jackpot price at 149
   } = cartItems;
 
-  const hasItems = dubaiQty > 0 || thailandQty > 0 || goldenWinnerQty > 0 || giftQty > 0 || goaQty > 0;
+  const hasItems =
+    dubaiQty > 0 ||
+    thailandQty > 0 ||
+    goldenWinnerQty > 0 ||
+    giftQty > 0 ||
+    goaQty > 0 ||
+    jackpotQty > 0;
 
   const subtotal = parseFloat(
-    (dubaiQty * dubaiPrice +
-    thailandQty * thailandPrice +
-    goldenWinnerQty * goldenWinnerPrice +
-    giftQty * giftPrice +
-    goaQty * goaPrice).toFixed(2)
+    (
+      dubaiQty * dubaiPrice +
+      thailandQty * thailandPrice +
+      goldenWinnerQty * goldenWinnerPrice +
+      giftQty * giftPrice +
+      goaQty * goaPrice +
+      jackpotQty * jackpotPrice
+    ).toFixed(2)
   );
   const totalPrice = subtotal;
 
@@ -72,6 +84,7 @@ export default function AddToCartPage() {
     dispatch(fetchTickets());
   }, [dispatch]);
 
+  // Stocks only for non-jackpot tickets (jackpot has no stock limit)
   const dubaiStock = tickets?.find(t => t.name?.toLowerCase() === 'dubai')?.ticket ?? 0;
   const thailandStock = tickets?.find(t => t.name?.toLowerCase() === 'thailand')?.ticket ?? 0;
   const goaStock = tickets?.find(t => t.name?.toLowerCase() === 'goa')?.ticket ?? 0;
@@ -148,6 +161,8 @@ export default function AddToCartPage() {
       ticketsPurchased.push({ ticket: 'GOLDEN_WINNER_TICKET', ticketPrice: goldenWinnerPrice, quantity: goldenWinnerQty });
     if (goaQty > 0)
       ticketsPurchased.push({ ticket: 'GOA_TICKET', ticketPrice: goaPrice, quantity: goaQty });
+    if (jackpotQty > 0)
+      ticketsPurchased.push({ ticket: 'JACKPOT_TICKET', ticketPrice: jackpotPrice, quantity: jackpotQty });
     if (giftQty > 0)
       giftPurchased.push({ gift: 'GIFT_TICKET', giftPrice: giftPrice, quantity: giftQty });
 
@@ -188,6 +203,15 @@ export default function AddToCartPage() {
     } catch (err) {
       toast.error('Failed to place order: ' + err);
     }
+  };
+
+  // Jackpot handlers without stock checks or limits
+  const handleIncrementJackpot = () => {
+    dispatch(setJackpotQtys(jackpotQty + 1));
+  };
+
+  const handleDecrementJackpot = () => {
+    dispatch(setJackpotQtys(Math.max(0, jackpotQty - 1)));
   };
 
   return (
@@ -233,11 +257,58 @@ export default function AddToCartPage() {
               )}
             </div>
             <div className="space-y-6">
-              {dubaiQty > 0 && <TicketRow title="Dubai Ticket" qty={dubaiQty} price={dubaiPrice} setQty={q => dispatch(setDubaiQtys(q))} stock={dubaiStock} />}
-              {thailandQty > 0 && <TicketRow title="Thailand Ticket" qty={thailandQty} price={thailandPrice} setQty={q => dispatch(setThailandQtys(q))} stock={thailandStock} />}
-              {goaQty > 0 && <TicketRow title="Goa Ticket" qty={goaQty} price={goaPrice} setQty={q => dispatch(setGoaQtys(q))} stock={goaStock} />}
-              {goldenWinnerQty > 0 && <TicketRow title="Golden Winner Ticket" qty={goldenWinnerQty} price={goldenWinnerPrice} setQty={q => dispatch(setGoldenWinnerQtys(q))} />}
-              {giftQty > 0 && <TicketRow title="Gift Package" qty={giftQty} price={giftPrice} setQty={q => dispatch(setGiftQtys(q))} />}
+              {dubaiQty > 0 && (
+                <TicketRow
+                  title="Dubai Ticket"
+                  qty={dubaiQty}
+                  price={dubaiPrice}
+                  setQty={q => dispatch(setDubaiQtys(q))}
+                  stock={dubaiStock}
+                />
+              )}
+              {thailandQty > 0 && (
+                <TicketRow
+                  title="Thailand Ticket"
+                  qty={thailandQty}
+                  price={thailandPrice}
+                  setQty={q => dispatch(setThailandQtys(q))}
+                  stock={thailandStock}
+                />
+              )}
+              {goaQty > 0 && (
+                <TicketRow
+                  title="Goa Ticket"
+                  qty={goaQty}
+                  price={goaPrice}
+                  setQty={q => dispatch(setGoaQtys(q))}
+                  stock={goaStock}
+                />
+              )}
+              {goldenWinnerQty > 0 && (
+                <TicketRow
+                  title="Golden Winner Ticket"
+                  qty={goldenWinnerQty}
+                  price={goldenWinnerPrice}
+                  setQty={q => dispatch(setGoldenWinnerQtys(q))}
+                />
+              )}
+              {giftQty > 0 && (
+                <TicketRow
+                  title="Gift Package"
+                  qty={giftQty}
+                  price={giftPrice}
+                  setQty={q => dispatch(setGiftQtys(q))}
+                />
+              )}
+              {jackpotQty > 0 && (
+                <TicketRow
+                  title="Jackpot Ticket"
+                  qty={jackpotQty}
+                  price={jackpotPrice}
+                  setQty={q => dispatch(setJackpotQtys(q))}
+                  /* no stock prop */
+                />
+              )}
               <Totals subtotal={subtotal} total={totalPrice} />
               <PaymentSelector />
               <CouponSection />
