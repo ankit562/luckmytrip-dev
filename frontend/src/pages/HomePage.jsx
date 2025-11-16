@@ -68,9 +68,9 @@ const HomePage = () => {
   const { user } = useSelector((state) => state.auth);
   const jackpotQty = useSelector(state => state.addtocart?.cartItems?.jackpotQty || 0);
 
-    const handlemsg= ()=>{
-     dispatch(setJackpotQtys(jackpotQty + 1));
-    toast.success("Golden Ticket is added to the cart")
+  const handlemsg = () => {
+    dispatch(setJackpotQtys(jackpotQty + 1));
+    toast.success("Jackpot Vip Ticket is added to the cart")
   }
 
 
@@ -241,13 +241,13 @@ const HomePage = () => {
               const today = new Date();
               d.setHours(0, 0, 0, 0);
               today.setHours(0, 0, 0, 0);
-              // hide items whose draw date is today or earlier
               return d.getTime() > today.getTime();
             })).map((item, idx) => {
-              console.log(item)
+              const focus = (item.name || "").toLowerCase();
+              if (!['dubai', 'thailand', 'goa'].includes(focus)) return null;
               return (
-                <div key={idx} className="slide snap-center flex-shrink-0 xl:w-[560px] xl:h-[380px]
-               lg:w-[480px] lg:h-[440px] md:w-[460px] md:h-[380px]  sm:w-[520px] sm:h-[440px] w-full h-auto">
+                <Link key={idx} to={`/ticket#${focus}`} className="slide snap-center flex-shrink-0 xl:w-[560px] xl:h-[380px]
+      lg:w-[480px] lg:h-[440px] md:w-[460px] md:h-[380px] sm:w-[520px] sm:h-[440px] w-full h-auto">
                   <OfferCard
                     mainImage={item.image}
                     shadeImage={"/images/shade.png"}
@@ -255,23 +255,14 @@ const HomePage = () => {
                     location={item.name}
                     subtitle={item.description}
                     price={item.price}
-                    // currency="₹"
                     fromLocation="India"
                     drawDate={new Date(item.date).toLocaleDateString()}
                     totalTickets={item.ticket}
-                    onClick={() => {
-                      const focus = (item.name || "").toLowerCase();
-                      if (focus === 'dubai' || focus === 'thailand' || focus === 'goa') {
-                        window.location.href = `/ticket#${focus}`;
-                      } else {
-                        window.location.href = '';
-                      }
-                    }}
-
                   />
-                </div>
-              )
+                </Link>
+              );
             })}
+
           </div>
 
           {/* Navigation buttons below cards on the right */}
@@ -295,7 +286,7 @@ const HomePage = () => {
       </section>
 
       {/* Jackpot CTA */}
-      
+
       {products.filter(items => items.name === "jackpot").map(imgs => (
         <section key={imgs} className="max-w-7xl mx-auto py-8 relative overflow-hidden bg-[#E9F2FF]">
           <div className="container mx-auto px-4 relative z-10">
@@ -304,7 +295,7 @@ const HomePage = () => {
                 Buy more, boost your chances to win a luxury trip to Dubai, Thailand, or Goa - starting ₹49! T&C apply.
               </p>
               <div className="text-center py-6 mb-16 pb-16">
-                <Link to={"/ticket"}  className="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-md w-48">
+                <Link to={"/ticket"} className="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-md w-48">
                   Click Here
                 </Link>
               </div>
@@ -318,10 +309,11 @@ const HomePage = () => {
                   <p className="text-white font-bold md:text-lg text-sm w-72 mb-3 md:mb-8 ml-0 md:ml-10">
                     {imgs.content || "Enter for your chance to win this amazing prize."}
                   </p>
-                  <Link onClick={handlemsg}  to="/ticket" state={{ fromHome: true }}  >
-                  <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 md:mb-2 px-6 rounded-md w-48 ml-0 md:ml-10">
-                    Learn More
-                  </button></Link>
+                  <Link onClick={handlemsg} to="/ticket#jackpot" state={{ fromHome: true }} >
+                    <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 md:mb-2 px-6 rounded-md w-48 ml-0 md:ml-10">
+                      Learn More
+                    </button>
+                  </Link>
                 </div>
                 <div className="">
                   <img

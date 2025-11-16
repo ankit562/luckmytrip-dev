@@ -10,7 +10,6 @@ import { useDispatch } from 'react-redux';
 import { setGoldenWinnerQtys } from '../features/addtocart/addtocartSlice';
 import { useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet';
-// ...
 
 
 
@@ -278,7 +277,8 @@ const slideRight = () => {
           </p>
         </div>
       </section>
-
+      
+      {/* golden winner */}
       <section className='relative w-full max-w-[96%] sm:max-w-[90%] md:max-w-[90%]
        lg:max-w-[85%] xl:max-w-6xl px-2 sm:px-4 md:px-4 h-[320px] sm:h-[360px] md:h-[400px] 
        lg:h-[480px] xl:h-[480px] mx-auto mt-8 sm:mt-16 md:mt-16 lg:mt-20 overflow-hidden'>
@@ -287,7 +287,7 @@ const slideRight = () => {
           alt='beautifulView'
           className='w-full h-full object-cover rounded-2xl md:rounded-3xl' />
 
-        <Link onClick={handlemsg}  to="/ticket" state={{ fromExplore: true }}  ><div className='absolute z-20 flex justify-center items-end left-0 right-0 bottom-0 h-full px-2 sm:px-4'>
+        <Link onClick={handlemsg}  to="/ticket#goldenwinner" state={{ fromExplore: true }}  ><div className='absolute z-20 flex justify-center items-end left-0 right-0 bottom-0 h-full px-2 sm:px-4'>
           <img
             src="/images/goldenwinner.png"
             alt="Jackpot"
@@ -299,7 +299,7 @@ const slideRight = () => {
             className=" h-auto  w-full md:mr-[-80px]  mr-12  max-h-full object-contain object-bottom" />
         </div> </Link>
       </section>
-      {/* w-[50%] sm:w-[48%] md:w-[50%] lg:w-[52%] xl:w-[45%] */}
+      
 
       <div className="w-full max-w-[96%] sm:max-w-[90%] md:max-w-[90%] lg:max-w-[85%] xl:max-w-[80%] mx-auto px-2 sm:px-4 md:px-4 md:py-4 lg:p-4 mt-4 sm:mt-6 md:mt-6 lg:mt-8 xl:mt-10 mb-6">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3 md:gap-3 lg:gap-3 xl:gap-4">

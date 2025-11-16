@@ -27,22 +27,21 @@ export default function Tickets() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+
   const dubaiRef = useRef(null);
   const thailandRef = useRef(null);
   const goaRef = useRef(null);
+  const jackpotRef = useRef(null);
+  const goldenWinnerRef = useRef(null);
+
 
   const { products } = useSelector((state) => state.products);
+  const { tickets } = useSelector(state => state.tickets);
+  const cartItems = useSelector(state => state.addtocart.cartItems || {});
 
   const fromExplore = location.state?.fromExplore;
   const fromHome = location.state?.fromHome;
   const fromdubaicarosel = location.state?.fromdubaicarosel;
-
-  const { tickets } = useSelector(state => state.tickets);
-  const cartItems = useSelector(state => state.addtocart.cartItems || {});
-
-  useEffect(() => {
-    dispatch(fetchProducts());
-  }, [dispatch]);
 
   const {
     dubaiQty = 0,
@@ -50,8 +49,11 @@ export default function Tickets() {
     goldenWinnerQty = 0,
     goaQty = 0,
     jackpotQty = 0,
-
   } = cartItems;
+
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(fetchTickets());
@@ -74,39 +76,27 @@ export default function Tickets() {
     }
   }, [tickets, dispatch]);
 
-  useEffect(() => {
-    const hash = (location.hash || '').toLowerCase();
-    if (hash === '#dubai') {
-      dubaiRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    } else if (hash === '#thailand') {
-      thailandRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    } else if (hash === '#goa') {
-      goaRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  }, [location.hash]);
+  // Scroll to section on hash change
+ useEffect(() => {
+  const hash = (location.hash || '').toLowerCase();
+  if (hash === '#dubai') {
+    dubaiRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } else if (hash === '#thailand') {
+    thailandRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } else if (hash === '#goa') {
+    goaRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } else if (hash === '#jackpot') {
+    jackpotRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  else if (hash === '#goldenwinner') {
+    goldenWinnerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}, [location.hash]);
+
 
   const dubaiStock = tickets?.find(t => t.name?.toLowerCase() === 'dubai')?.ticket ?? 0;
   const thailandStock = tickets?.find(t => t.name?.toLowerCase() === 'thailand')?.ticket ?? 0;
   const goaStock = tickets?.find(t => t.name?.toLowerCase() === 'goa')?.ticket ?? 0;
- 
-
-  useEffect(() => {
-    if (fromExplore && goldenWinnerQty === 0) {
-      navigate('/explore');
-    }
-  }, [fromExplore, goldenWinnerQty, navigate]);
-
-  useEffect(() => {
-    if (fromHome && jackpotQty === 0) {
-      navigate('/');
-    }
-  })
-
-  useEffect(() => {
-    if (fromdubaicarosel && dubaiQty === 0) {
-      navigate('/explore');
-    }
-  }, [fromdubaicarosel, dubaiQty, navigate]);
 
   // Handlers for Dubai Ticket
   const handleIncrementDubai = () => {
@@ -227,6 +217,24 @@ export default function Tickets() {
     'DINNER WITH MODEL',
   ];
 
+  useEffect(() => {
+    if (fromExplore && goldenWinnerQty === 0) {
+      navigate('/explore');
+    }
+  }, [fromExplore, goldenWinnerQty, navigate]);
+
+  useEffect(() => {
+    if (fromHome && jackpotQty === 0) {
+      navigate('/');
+    }
+  });
+
+  useEffect(() => {
+    if (fromdubaicarosel && dubaiQty === 0) {
+      navigate('/explore');
+    }
+  }, [fromdubaicarosel, dubaiQty, navigate]);
+
   return (
     <div className="bg-gradient-to-b from-blue-100 to-blue-10 min-h-screen">
       <Header />
@@ -261,7 +269,7 @@ export default function Tickets() {
               "description": "Purchase contest tickets and stand a chance to win luxury trips."
             }
           }
-        `}
+          `}
         </script>
       </Helmet>
 
@@ -323,13 +331,13 @@ export default function Tickets() {
           </div>
         ))}
 
-      {/* Monthly Winner (Golden Ticket) */}
+      {/* Monthly Winner Section */}
       <section className="py-12">
         <div className="container mx-auto px-4">
           <h2 className="text-[3.1rem] font-bold text-red-500 text-center mb-12 font-berlin">
             Monthly Winner
           </h2>
-          <div className="relative max-w-[1053.7px] mx-auto rounded-3xl overflow-hidden shadow-2xl md:h-[452.59px] h-[320px]">
+          <div ref={goldenWinnerRef} className="relative max-w-[1053.7px] mx-auto rounded-3xl overflow-hidden shadow-2xl md:h-[452.59px] h-[320px]">
             <img src="/images/beautifulview.jpg" alt="Desert" className="absolute inset-0 w-full h-full object-cover" />
             <div className="relative h-full flex items-end justify-between md:p-12 p-4">
               <div className="z-30 relative">
@@ -369,7 +377,7 @@ export default function Tickets() {
 
       {/* Jackpot Section */}
       {products.filter(items => items.name === "jackpot").map(imgs => (
-        <section key={imgs.id} className="max-w-[1100px] mx-auto py-8 relative overflow-hidden ">
+  <section key={imgs.id} ref={jackpotRef} className="max-w-[1100px] mx-auto py-8 relative overflow-hidden ">
           <div className="container mx-auto px-4 relative z-10">
             <div className="mb-4">
               <div className="hero-container bg-blue-900 rounded-xl flex flex-col md:flex-row items-center justify-between overflow-hidden relative">
