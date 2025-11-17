@@ -7,7 +7,7 @@ import TravelCard from '../components/expolorePageComponents/TripInfo'
 import { useRef } from 'react';
 import toast from 'react-hot-toast'
 import { useDispatch } from 'react-redux';
-import { setGoldenWinnerQtys } from '../features/addtocart/addtocartSlice';
+import { setGoldenWinnerQtys , setDubaiQtys , setThailandQtys , setGoaPrices, setGoaQtys } from '../features/addtocart/addtocartSlice';
 import { useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet';
 
@@ -26,6 +26,9 @@ const ExplorePage = () => {
 
   const dispatch = useDispatch();
   const goldenWinnerQty = useSelector(state => state.addtocart?.cartItems?.goldenWinnerQty || 0);
+  const dubaiQty = useSelector(state => state.addtocart?.cartItems?.dubaiQty || 0);
+  const thailandQty = useSelector(state => state.addtocart?.cartItems?.thailandQty || 0);
+  const goaQty = useSelector(state => state.addtocart?.cartItems?.goaQty || 0);
 
 
   
@@ -87,6 +90,22 @@ const slideRight = () => {
   const handlemsg= ()=>{
      dispatch(setGoldenWinnerQtys(goldenWinnerQty + 1));
     toast.success("Golden Ticket is added to the cart")
+  }
+
+  const handleDubai = ()=>{
+    dispatch(setDubaiQtys(dubaiQty + 1));
+    toast.success("Dubai Ticket is added to the cart")
+
+  }
+  const handleThailand = ()=>{
+    dispatch(setThailandQtys(thailandQty + 1));
+    toast.success("Thailand Ticket is added to the cart")
+    
+  }
+  const handleGoa = ()=>{
+    dispatch(setGoaQtys(goaQty + 1));
+    toast.success("Goa Ticket is added to the cart")
+    
   }
 
   return (
@@ -216,51 +235,88 @@ const slideRight = () => {
         </div>
       </section>
 
-      <section className='w-full max-w-[92%] sm:max-w-[85%] md:max-w-[88%] lg:max-w-[85%] xl:max-w-[80%] px-2 sm:px-6 md:px-4 lg:px-6 xl:px-8 mx-auto flex flex-col mt-10 sm:mt-10 md:mt-12 lg:mt-14 xl:mt-12'>
-        <div
-          ref={scrollRef}
-          className='flex gap-3 sm:gap-6 md:gap-6 lg:gap-12 xl:gap-20 overflow-x-auto no-scrollbar py-4 md:py-5 lg:py-6'
-          style={{ scrollSnapType: 'x mandatory' }} 
-        >
-          <TravelCard
-            title={<span className="text-blue-900">DUBAI</span>}
-            logo={Logo}
-            features={features}
-            restrictions={restrictions}
-            buttonText="LEARN MORE"/>
-       
-          <TravelCard
-            title={<span className="text-blue-900">Thailand</span>}
-            logo={Logo}
-            features={features2}
-            restrictions={restrictions}
-            buttonText="LEARN MORE" />
-
-            <TravelCard
-            title={<span className="text-blue-900">Goa</span>}
-            logo={Logo}
-            features={features3}
-            restrictions={restrictions}
-            buttonText="LEARN MORE"/>
-        </div>
-
-        
-
-        <div className="flex justify-end gap-2 sm:gap-3 md:gap-4 w-full mt-3 sm:mt-5 md:mt-6 pr-1">
-          <button
-            className="bg-green-300 px-3.5 sm:px-5 md:px-6 py-1.5 sm:py-2 md:py-2.5 text-lg sm:text-lg md:text-xl font-bold rounded-full hover:bg-green-500 transition-colors shadow-md"
-            onClick={slideLeft}
+      {/* learn more section */}
+<section
+  className='w-full max-w-[92%] sm:max-w-[85%] md:max-w-[88%] lg:max-w-[100%] xl:max-w-[100%] px-2 sm:px-6 md:px-4 lg:px-6 xl:px-8 mx-auto flex flex-col mt-10 sm:mt-10 md:mt-12 lg:mt-14 xl:mt-12'
+>
+  <div
+    ref={scrollRef}
+    className='flex overflow-x-auto no-scrollbar py-4 md:py-5 lg:py-6'
+    style={{ scrollSnapType: 'x mandatory', scrollBehavior: 'smooth' }}
+  >
+    {/* Each TravelCard gets 50% width to show 2 onscreen */}
+    <div className="flex-shrink-0 w-1/2 pr-3 md:pr-6 lg:pr-12">
+      <TravelCard
+        title={
+          <Link
+            to="/ticket#dubai"
+            state={{ fromdubai1: true }}
+            className="text-blue-900"
+            onClick={handleDubai}
           >
-            ‹
-          </button>
-          <button
-            className="bg-green-300 px-3.5 sm:px-5 md:px-6 py-1.5 sm:py-2 md:py-2.5 text-lg sm:text-lg md:text-xl font-bold rounded-full hover:bg-green-500 transition-colors shadow-md"
-            onClick={slideRight}
+            DUBAI
+          </Link>
+        }
+        logo={Logo}
+        features={features}
+        restrictions={restrictions}
+        buttonText="LEARN MORE"
+      />
+    </div>
+    <div className="flex-shrink-0 w-1/2 pr-3 md:pr-6 lg:pr-12">
+      <TravelCard
+        title={
+          <Link
+            to="/ticket#thailand"
+            state={{ fromthailand1: true }}
+            className="text-blue-900"
+            onClick={handleThailand}
           >
-            ›
-          </button>
-        </div>
-      </section>
+            Thailand
+          </Link>
+        }
+        logo={Logo}
+        features={features2}
+        restrictions={restrictions}
+        buttonText="LEARN MORE"
+      />
+    </div>
+    <div className="flex-shrink-0 w-1/2 pr-3 md:pr-6 lg:pr-12">
+      <TravelCard
+        title={
+          <Link
+            to="/ticket#goa"
+            state={{ fromgoa1: true }}
+            className="text-blue-900"
+            onClick={handleGoa}
+          >
+            Goa
+          </Link>
+        }
+        logo={Logo}
+        features={features3}
+        restrictions={restrictions}
+        buttonText="LEARN MORE"
+      />
+    </div>
+  </div>
+
+  <div className="flex justify-end gap-2 sm:gap-3 md:gap-4 w-full mt-3 sm:mt-5 md:mt-6 pr-1">
+    <button
+      className="bg-green-300 px-3.5 sm:px-5 md:px-6 py-1.5 sm:py-2 md:py-2.5 text-lg sm:text-lg md:text-xl font-bold rounded-full hover:bg-green-500 transition-colors shadow-md"
+      onClick={slideLeft}
+    >
+      ‹
+    </button>
+    <button
+      className="bg-green-300 px-3.5 sm:px-5 md:px-6 py-1.5 sm:py-2 md:py-2.5 text-lg sm:text-lg md:text-xl font-bold rounded-full hover:bg-green-500 transition-colors shadow-md"
+      onClick={slideRight}
+    >
+      ›
+    </button>
+  </div>
+</section>
+
 
       <section className="flex flex-col mx-auto mt-10 sm:mt-16 md:mt-16 lg:mt-20">
         <div className="container mx-auto py-6 sm:py-10 md:py-10 lg:py-12 xl:py-12 px-3 sm:px-6 md:px-8 lg:px-10 xl:px-8">

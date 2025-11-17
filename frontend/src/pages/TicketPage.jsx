@@ -42,6 +42,9 @@ export default function Tickets() {
   const fromExplore = location.state?.fromExplore;
   const fromHome = location.state?.fromHome;
   const fromdubaicarosel = location.state?.fromdubaicarosel;
+  const fromdubai1 = location.state?.fromdubai1;
+  const fromthailand1 = location.state?.fromthailand1;
+  const fromgoa1 = location.state?.fromgoa1;
 
   const {
     dubaiQty = 0,
@@ -217,6 +220,26 @@ export default function Tickets() {
     'DINNER WITH MODEL',
   ];
 
+
+  useEffect(() => {
+  if (fromdubai1 && dubaiQty === 0) {
+    navigate('/explore');
+  }
+}, [fromdubai1, dubaiQty, navigate]);
+
+useEffect(() => {
+  if (fromthailand1 && thailandQty === 0) {
+    navigate('/explore');
+  }
+}, [fromthailand1, thailandQty, navigate]);
+
+useEffect(() => {
+  if (fromgoa1 && goaQty === 0) {
+    navigate('/explore');
+  }
+}, [fromgoa1, goaQty, navigate]);
+
+
   useEffect(() => {
     if (fromExplore && goldenWinnerQty === 0) {
       navigate('/explore');
@@ -234,6 +257,10 @@ export default function Tickets() {
       navigate('/explore');
     }
   }, [fromdubaicarosel, dubaiQty, navigate]);
+
+  const handleBuyMore =()=>{
+    navigate('/explore');
+  }
 
   return (
     <div className="bg-gradient-to-b from-blue-100 to-blue-10 min-h-screen">
@@ -327,6 +354,7 @@ export default function Tickets() {
                       ? handleAddToCartGoa
                       : () => { }
               }
+              onBuyMore={handleBuyMore}
             />
           </div>
         ))}
