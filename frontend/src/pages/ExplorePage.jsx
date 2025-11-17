@@ -241,7 +241,7 @@ const slideRight = () => {
 >
   <div
     ref={scrollRef}
-    className='flex overflow-x-auto no-scrollbar py-4 md:py-5 lg:py-6'
+    className='flex overflow-x-hidden no-scrollbar py-4 md:py-5 lg:py-6 '
     style={{ scrollSnapType: 'x mandatory', scrollBehavior: 'smooth' }}
   >
     {/* Each TravelCard gets 50% width to show 2 onscreen */}
