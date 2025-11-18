@@ -247,6 +247,7 @@ const ExplorePage = () => {
       </section>
 
       {/* learn more section */}
+<<<<<<< HEAD
       <section
         className='w-full max-w-[92%] sm:max-w-[85%] md:max-w-[88%] lg:max-w-[100%] xl:max-w-[100%] 
                   px-2 sm:px-6 md:px-4 lg:px-6 xl:px-7
@@ -314,6 +315,72 @@ const ExplorePage = () => {
             />
           </div>
         </div>
+=======
+<section
+  className='w-full max-w-[92%] sm:max-w-[85%] md:max-w-[88%] lg:max-w-[100%] xl:max-w-[100%] px-2 sm:px-6 md:px-4 lg:px-6 xl:px-8 mx-auto flex flex-col mt-10 sm:mt-10 md:mt-12 lg:mt-14 xl:mt-12'
+>
+  <div
+    ref={scrollRef}
+    className='flex overflow-x-hidden no-scrollbar py-4 md:py-5 lg:py-6 '
+    style={{ scrollSnapType: 'x mandatory', scrollBehavior: 'smooth' }}
+  >
+    {/* Each TravelCard gets 50% width to show 2 onscreen */}
+    <div className="flex-shrink-0 w-1/2 pr-3 md:pr-6 lg:pr-12">
+      <TravelCard
+        title={
+          <Link
+            to="/ticket#dubai"
+            state={{ fromdubai1: true }}
+            className="text-blue-900"
+            onClick={handleDubai}
+          >
+            DUBAI
+          </Link>
+        }
+        logo={Logo}
+        features={features}
+        restrictions={restrictions}
+        buttonText="LEARN MORE"
+      />
+    </div>
+    <div className="flex-shrink-0 w-1/2 pr-3 md:pr-6 lg:pr-12">
+      <TravelCard
+        title={
+          <Link
+            to="/ticket#thailand"
+            state={{ fromthailand1: true }}
+            className="text-blue-900"
+            onClick={handleThailand}
+          >
+            Thailand
+          </Link>
+        }
+        logo={Logo}
+        features={features2}
+        restrictions={restrictions}
+        buttonText="LEARN MORE"
+      />
+    </div>
+    <div className="flex-shrink-0 w-1/2 pr-3 md:pr-6 lg:pr-12">
+      <TravelCard
+        title={
+          <Link
+            to="/ticket#goa"
+            state={{ fromgoa1: true }}
+            className="text-blue-900"
+            onClick={handleGoa}
+          >
+            Goa
+          </Link>
+        }
+        logo={Logo}
+        features={features3}
+        restrictions={restrictions}
+        buttonText="LEARN MORE"
+      />
+    </div>
+  </div>
+>>>>>>> c2e2f431387bc110768bc09f18b4efc85e9bffc3
 
         <div className="flex justify-end gap-2 sm:gap-3 md:gap-4 w-full mt-3 sm:mt-5 md:mt-6 pr-1">
           <button
