@@ -267,20 +267,26 @@ const handleJourneyClick = (location) => {
               const focus = (item.name || "").toLowerCase();
               if (!['dubai', 'thailand', 'goa'].includes(focus)) return null;
               return (
-                <Link key={idx} to={`/ticket#${focus}`} className="slide snap-center flex-shrink-0 xl:w-[560px] xl:h-[380px]
-      lg:w-[480px] lg:h-[440px] md:w-[460px] md:h-[380px] sm:w-[520px] sm:h-[440px] w-full h-auto">
-                  <OfferCard
-                    mainImage={item.image}
-                    shadeImage={"/images/shade.png"}
-                    mainText="WIN"
-                    location={item.name}
-                    subtitle={item.description}
-                    price={item.price}
-                    fromLocation="India"
-                    drawDate={new Date(item.date).toLocaleDateString()}
-                    totalTickets={item.ticket}
-                  />
-                </Link>
+              <div
+  key={idx}
+  onClick={() => handleJourneyClick(focus)}
+  className="slide snap-center flex-shrink-0 xl:w-[560px] xl:h-[380px]
+             lg:w-[480px] lg:h-[440px] md:w-[460px] md:h-[380px]
+             sm:w-[520px] sm:h-[440px] w-full h-auto cursor-pointer"
+>
+  <OfferCard
+    mainImage={item.image}
+    shadeImage={"/images/shade.png"}
+    mainText="WIN"
+    location={item.name}
+    subtitle={item.description}
+    price={item.price}
+    fromLocation="India"
+    drawDate={new Date(item.date).toLocaleDateString()}
+    totalTickets={item.ticket}
+  />
+</div>
+
               );
             })}
 
