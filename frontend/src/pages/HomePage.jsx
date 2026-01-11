@@ -13,9 +13,10 @@ import { setJackpotQtys } from "../features/addtocart/addtocartSlice";
 import toast from "react-hot-toast";
 import {
   setDubaiQtys,
-  setThailandQtys,
-  setGoaQtys
+  setGoaQtys,
+  setThailandQtys
 } from "../features/addtocart/addtocartSlice";
+
 
 
 const testimonials = [
@@ -73,16 +74,9 @@ const HomePage = () => {
   const { tickets } = useSelector((state) => state.tickets);
   const { user } = useSelector((state) => state.auth);
   const jackpotQty = useSelector(state => state.addtocart?.cartItems?.jackpotQty || 0);
-  const dubaiQty = useSelector(
-  state => state.addtocart?.cartItems?.dubaiQty || 0
-);
-const thailandQty = useSelector(
-  state => state.addtocart?.cartItems?.thailandQty || 0
-);
-const goaQty = useSelector(
-  state => state.addtocart?.cartItems?.goaQty || 0
-);
-
+ const dubaiQty = useSelector(state => state.addtocart?.cartItems?.dubaiQty || 0);
+const goaQty = useSelector(state => state.addtocart?.cartItems?.goaQty || 0);
+const thailandQty = useSelector(state => state.addtocart?.cartItems?.thailandQty || 0);
   const handlemsg = () => {
     dispatch(setJackpotQtys(jackpotQty + 1));
     toast.success("Jackpot Vip Ticket is added to the cart")
@@ -149,22 +143,20 @@ const goaQty = useSelector(
       slider.scrollBy({ left: direction * cardWidth, behavior: "smooth" });
     }
   };
-const handleJourneyClick = (location) => {
-  if (location === "dubai") {
+const handleJourneyClick = (focus) => {
+  if (focus === "dubai") {
     dispatch(setDubaiQtys(dubaiQty > 0 ? dubaiQty + 1 : 1));
   }
 
-  if (location === "thailand") {
-    dispatch(setThailandQtys(thailandQty > 0 ? thailandQty + 1 : 1));
-  }
-
-  if (location === "goa") {
+  if (focus === "goa") {
     dispatch(setGoaQtys(goaQty > 0 ? goaQty + 1 : 1));
   }
 
-  navigate(`/ticket#${location}`, {
-    state: { fromHome: true }
-  });
+  if (focus === "thailand") {
+    dispatch(setThailandQtys(thailandQty > 0 ? thailandQty + 1 : 1));
+  }
+
+  navigate(`/ticket#${focus}`);
 };
 
   return (
@@ -277,28 +269,27 @@ const handleJourneyClick = (location) => {
             })).map((item, idx) => {
               const focus = (item.name || "").toLowerCase();
               if (!['dubai', 'thailand', 'goa'].includes(focus)) return null;
-            {tickets.map((item, idx) => {
-  const focus = item.name.toLowerCase();
-  if (!["dubai", "thailand", "goa"].includes(focus)) return null;
-
               return (
-             <div
-      key={idx}
-      onClick={() => handleJourneyClick(focus)}
-      className="cursor-pointer"
-    >
-      <OfferCard
-        mainImage={item.image}
-        shadeImage="/images/shade.png"
-        mainText="WIN"
-        location={item.name}
-        subtitle={item.description}
-        price={item.price}
-        fromLocation="India"
-        drawDate={new Date(item.date).toLocaleDateString()}
-        totalTickets={item.ticket}
-      />
-    </div>
+            <div
+  key={idx}
+  onClick={() => handleJourneyClick(focus)}
+  className="slide snap-center flex-shrink-0 xl:w-[560px] xl:h-[380px]
+    lg:w-[480px] lg:h-[440px] md:w-[460px] md:h-[380px]
+    sm:w-[520px] sm:h-[440px] w-full h-auto cursor-pointer"
+>
+  <OfferCard
+    mainImage={item.image}
+    shadeImage={"/images/shade.png"}
+    mainText="WIN"
+    location={item.name}
+    subtitle={item.description}
+    price={item.price}
+    fromLocation="India"
+    drawDate={new Date(item.date).toLocaleDateString()}
+    totalTickets={item.ticket}
+  />
+</div>
+
               );
             })}
 
