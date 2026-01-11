@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { OfferCard } from "../components/TripDetailsComponents";
 import { fetchTickets } from '../features/tickets/ticketSlice'
@@ -10,7 +11,11 @@ import { Helmet } from "react-helmet";
 import { runTicketDraw } from '../features/tickets/ticketSlice';
 import { setJackpotQtys } from "../features/addtocart/addtocartSlice";
 import toast from "react-hot-toast";
-
+import {
+  setDubaiQtys,
+  setThailandQtys,
+  setGoaQtys
+} from "../features/addtocart/addtocartSlice";
 
 
 const testimonials = [
@@ -63,10 +68,20 @@ const testimonials = [
 const HomePage = () => {
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { products } = useSelector((state) => state.products);
   const { tickets } = useSelector((state) => state.tickets);
   const { user } = useSelector((state) => state.auth);
   const jackpotQty = useSelector(state => state.addtocart?.cartItems?.jackpotQty || 0);
+  const dubaiQty = useSelector(
+  state => state.addtocart?.cartItems?.dubaiQty || 0
+);
+const thailandQty = useSelector(
+  state => state.addtocart?.cartItems?.thailandQty || 0
+);
+const goaQty = useSelector(
+  state => state.addtocart?.cartItems?.goaQty || 0
+);
 
   const handlemsg = () => {
     dispatch(setJackpotQtys(jackpotQty + 1));
@@ -134,6 +149,23 @@ const HomePage = () => {
       slider.scrollBy({ left: direction * cardWidth, behavior: "smooth" });
     }
   };
+const handleJourneyClick = (location) => {
+  if (location === "dubai") {
+    dispatch(setDubaiQtys(dubaiQty > 0 ? dubaiQty + 1 : 1));
+  }
+
+  if (location === "thailand") {
+    dispatch(setThailandQtys(thailandQty > 0 ? thailandQty + 1 : 1));
+  }
+
+  if (location === "goa") {
+    dispatch(setGoaQtys(goaQty > 0 ? goaQty + 1 : 1));
+  }
+
+  navigate(`/ticket#${location}`, {
+    state: { fromHome: true }
+  });
+};
 
   return (
     <div className="bg-gradient-to-b from-blue-100 to-blue-10 min-h-screen">
@@ -245,21 +277,28 @@ const HomePage = () => {
             })).map((item, idx) => {
               const focus = (item.name || "").toLowerCase();
               if (!['dubai', 'thailand', 'goa'].includes(focus)) return null;
+            {tickets.map((item, idx) => {
+  const focus = item.name.toLowerCase();
+  if (!["dubai", "thailand", "goa"].includes(focus)) return null;
+
               return (
-                <Link key={idx} to={`/ticket#${focus}`} className="slide snap-center flex-shrink-0 xl:w-[560px] xl:h-[380px]
-      lg:w-[480px] lg:h-[440px] md:w-[460px] md:h-[380px] sm:w-[520px] sm:h-[440px] w-full h-auto">
-                  <OfferCard
-                    mainImage={item.image}
-                    shadeImage={"/images/shade.png"}
-                    mainText="WIN"
-                    location={item.name}
-                    subtitle={item.description}
-                    price={item.price}
-                    fromLocation="India"
-                    drawDate={new Date(item.date).toLocaleDateString()}
-                    totalTickets={item.ticket}
-                  />
-                </Link>
+             <div
+      key={idx}
+      onClick={() => handleJourneyClick(focus)}
+      className="cursor-pointer"
+    >
+      <OfferCard
+        mainImage={item.image}
+        shadeImage="/images/shade.png"
+        mainText="WIN"
+        location={item.name}
+        subtitle={item.description}
+        price={item.price}
+        fromLocation="India"
+        drawDate={new Date(item.date).toLocaleDateString()}
+        totalTickets={item.ticket}
+      />
+    </div>
               );
             })}
 
