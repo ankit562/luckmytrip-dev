@@ -69,6 +69,7 @@ const testimonials = [
 const HomePage = () => {
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { products } = useSelector((state) => state.products);
   const { tickets } = useSelector((state) => state.tickets);
   const { user } = useSelector((state) => state.auth);
