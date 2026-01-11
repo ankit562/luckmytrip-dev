@@ -99,17 +99,17 @@ const ExplorePage = () => {
 
 
   const handlemsg = () => {
-    dispatch(setGoldenWinnerQtys(goldenWinnerQty + 1));
+    dispatch(setGoldenWinnerQtys(1));
     toast.success("Golden Ticket is added to the cart")
   }
 
   const handleDubai = () => {
-    dispatch(setDubaiQtys(dubaiQty + 1));
+    dispatch(setDubaiQtys(1));
     toast.success("Dubai Ticket is added to the cart")
 
   }
   const handleThailand = () => {
-    dispatch(setThailandQtys(thailandQty + 1));
+    dispatch(setThailandQtys(1));
     toast.success("Thailand Ticket is added to the cart")
 
   }
