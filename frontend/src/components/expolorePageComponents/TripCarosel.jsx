@@ -31,8 +31,7 @@ const TripCarosel = () => {
     const dispatch = useDispatch();
     const navigator = useNavigate();
     const dubaiQty = useSelector(state => state.addtocart?.cartItems?.dubaiQty || 0);
-    const thailandQty = useSelector(state => state.addtocart?.cartItems?.thailandQty || 0);
-const goaQty = useSelector(state => state.addtocart?.cartItems?.goaQty || 0);
+ 
     const [currentIndex, setCurrentIndex] = useState(0);
 
     // Sync carousels and headings
