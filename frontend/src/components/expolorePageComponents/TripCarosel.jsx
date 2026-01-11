@@ -31,7 +31,8 @@ const TripCarosel = () => {
     const dispatch = useDispatch();
     const navigator = useNavigate();
     const dubaiQty = useSelector(state => state.addtocart?.cartItems?.dubaiQty || 0);
-
+    const thailandQty = useSelector(state => state.addtocart?.cartItems?.thailandQty || 0);
+const goaQty = useSelector(state => state.addtocart?.cartItems?.goaQty || 0);
     const [currentIndex, setCurrentIndex] = useState(0);
 
     // Sync carousels and headings
@@ -60,23 +61,23 @@ const TripCarosel = () => {
   const selected = destinations[currentIndex];
 
   if (selected === "DUBAI") {
-    /*dispatch(setDubaiQtys(dubaiQty + 1));*/
-    dispatch(setDubaiQtys(1));
+    dispatch(setDubaiQtys(dubaiQty > 0 ? dubaiQty + 1 : 1));
     navigator("/ticket", { state: { fromdubai1: true } });
   }
 
   if (selected === "THAILAND") {
-    dispatch(setThailandQtys(1));
+    dispatch(setThailandQtys(thailandQty > 0 ? thailandQty + 1 : 1));
     navigator("/ticket", { state: { fromthailand1: true } });
   }
 
   if (selected === "GOA") {
-    dispatch(setGoaQtys(1));
+    dispatch(setGoaQtys(goaQty > 0 ? goaQty + 1 : 1));
     navigator("/ticket", { state: { fromgoa1: true } });
   }
 
   toast.success("Redirecting to Ticket Page");
 };
+
 
 
     return (
