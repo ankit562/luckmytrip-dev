@@ -2,7 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux"
-import { setDubaiQtys } from '../../features/addtocart/addtocartSlice';
+import {
+  setDubaiQtys,
+  setThailandQtys,
+  setGoaQtys
+} from '../../features/addtocart/addtocartSlice';
+
 
 const images = [
     "/images/MaskGroup.png",
@@ -46,11 +51,33 @@ const TripCarosel = () => {
     const next = () => setCurrentIndex(prev => (prev + 1) % images.length);
     const prev = () => setCurrentIndex(prev => (prev - 1 + images.length) % images.length);
 
-    const handledubai = () => {
-        dispatch(setDubaiQtys(dubaiQty + 1));
-        navigator("/ticket", { state: { fromdubaicarosel: true } });
-        toast.success("Redirecting to Ticket Page");
-    };
+    //const handledubai = () => {
+        //dispatch(setDubaiQtys(dubaiQty + 1));
+        //navigator("/ticket", { state: { fromdubaicarosel: true } });
+       // toast.success("Redirecting to Ticket Page");
+    //};
+    const handleSelectTrip = () => {
+  const selected = destinations[currentIndex];
+
+  if (selected === "DUBAI") {
+    /*dispatch(setDubaiQtys(dubaiQty + 1));*/
+    dispatch(setDubaiQtys(1));
+    navigator("/ticket", { state: { fromdubai1: true } });
+  }
+
+  if (selected === "THAILAND") {
+    dispatch(setThailandQtys(1));
+    navigator("/ticket", { state: { fromthailand1: true } });
+  }
+
+  if (selected === "GOA") {
+    dispatch(setGoaQtys(1));
+    navigator("/ticket", { state: { fromgoa1: true } });
+  }
+
+  toast.success("Redirecting to Ticket Page");
+};
+
 
     return (
         <div className="bg-[#edf8fd] flex justify-center items-center min-h-screen md:mt-0">
@@ -160,7 +187,7 @@ const TripCarosel = () => {
                         </div>
 
                         <button
-                            onClick={handledubai}
+                            onClick={handleSelectTrip}
                             className="lg:mt-7 mt-4 bg-[#8ac541] text-white 
                 lg:py-5 lg:px-6 py-2 px-3 text-sm lg:text-2xl rounded-[100%] 
                 shadow-lg hover:bg-[#3d660b] transition font-bold"
