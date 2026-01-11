@@ -74,8 +74,7 @@ const HomePage = () => {
   const { user } = useSelector((state) => state.auth);
   const jackpotQty = useSelector(state => state.addtocart?.cartItems?.jackpotQty || 0);
   const dubaiQty = useSelector(state => state.addtocart?.cartItems?.dubaiQty || 0);
-const thailandQty = useSelector(state => state.addtocart?.cartItems?.thailandQty || 0);
-const goaQty = useSelector(state => state.addtocart?.cartItems?.goaQty || 0);
+ 
   const handlemsg = () => {
     dispatch(setJackpotQtys(jackpotQty + 1));
     toast.success("Jackpot Vip Ticket is added to the cart")
