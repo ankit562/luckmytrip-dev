@@ -10,7 +10,11 @@ import { Helmet } from "react-helmet";
 import { runTicketDraw } from '../features/tickets/ticketSlice';
 import { setJackpotQtys } from "../features/addtocart/addtocartSlice";
 import toast from "react-hot-toast";
-
+import {
+  setDubaiQtys,
+  setThailandQtys,
+  setGoaQtys
+} from "../features/addtocart/addtocartSlice";
 
 
 const testimonials = [
@@ -67,7 +71,9 @@ const HomePage = () => {
   const { tickets } = useSelector((state) => state.tickets);
   const { user } = useSelector((state) => state.auth);
   const jackpotQty = useSelector(state => state.addtocart?.cartItems?.jackpotQty || 0);
-
+  const dubaiQty = useSelector(state => state.addtocart?.cartItems?.dubaiQty || 0);
+const thailandQty = useSelector(state => state.addtocart?.cartItems?.thailandQty || 0);
+const goaQty = useSelector(state => state.addtocart?.cartItems?.goaQty || 0);
   const handlemsg = () => {
     dispatch(setJackpotQtys(jackpotQty + 1));
     toast.success("Jackpot Vip Ticket is added to the cart")
@@ -134,6 +140,21 @@ const HomePage = () => {
       slider.scrollBy({ left: direction * cardWidth, behavior: "smooth" });
     }
   };
+const handleJourneyClick = (location) => {
+  if (location === "dubai") {
+    dispatch(setDubaiQtys(dubaiQty > 0 ? dubaiQty + 1 : 1));
+  }
+
+  if (location === "thailand") {
+    dispatch(setThailandQtys(thailandQty > 0 ? thailandQty + 1 : 1));
+  }
+
+  if (location === "goa") {
+    dispatch(setGoaQtys(goaQty > 0 ? goaQty + 1 : 1));
+  }
+
+  navigate(`/ticket#${location}`, { state: { fromHome: true } });
+};
 
   return (
     <div className="bg-gradient-to-b from-blue-100 to-blue-10 min-h-screen">
