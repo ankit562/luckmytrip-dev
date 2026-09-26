@@ -1,29 +1,16 @@
+
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import authAPI from './authUserAPI';
 
-export const signupUser = createAsyncThunk(
-  'auth/signupUser',
-  async (userData, { rejectWithValue }) => {
-    try {
-      const response = await authAPI.signup(userData);
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response?.data?.message || error.message);
-    }
-  }
-);
+export const signupUser = createAsyncThunk('auth/signupUser', async (userData) => {
+  const response = await authAPI.signup(userData);
+  return response.data;
+});
 
-export const loginUser = createAsyncThunk(
-  'auth/loginUser',
-  async (credentials, { rejectWithValue }) => {
-    try {
-      const response = await authAPI.login(credentials);
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response?.data?.message || error.message);
-    }
-  }
-);
+export const loginUser = createAsyncThunk('auth/loginUser', async (credentials) => {
+  const response = await authAPI.login(credentials);
+  return response.data;
+});
 
 export const logoutUser = createAsyncThunk('auth/logoutUser', async () => {
   await authAPI.logout();
@@ -34,33 +21,25 @@ export const fetchProfile = createAsyncThunk('auth/fetchProfile', async () => {
   return response.data;
 });
 
-export const verifyOtpUser = createAsyncThunk(
-  'auth/verifyOtpUser',
-  async (otpData, { rejectWithValue }) => {
-    try {
-      const response = await authAPI.verifyOtp(otpData);
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response?.data?.message || error.message);
-    }
-  }
-);
+export const verifyOtpUser = createAsyncThunk('auth/verifyOtpUser', async (otpData) => {
+  const response = await authAPI.verifyOtp(otpData);
+  return response.data;
+});
 
 export const getAllProfile = createAsyncThunk('auth/getAllProfile', async () => {
   const response = await authAPI.getAllProfile();
   return response.data;
-});
+})
 
 export const deleteUser = createAsyncThunk('auth/deleteUser', async (id) => {
   const response = await authAPI.deleteUser(id);
   return response.data;
-});
+})
 
 export const UpdateProfile = createAsyncThunk('auth/UpdateProfile', async ({ id, userData }) => {
   const response = await authAPI.UpdateProfile(id, userData);
   return response.data;
 });
-
 export const searchUser = createAsyncThunk('auth/searchUser', async (query) => {
   const response = await authAPI.searchUser(query);
   return response.data;
@@ -90,9 +69,10 @@ export const saveBillingInfoThunk = createAsyncThunk(
   }
 );
 
+
 const authSlice = createSlice({
   name: 'auth',
-  initialState: {
+ initialState: {
     user: null,
     loading: false,
     users: [],
@@ -117,7 +97,6 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // SIGNUP
       .addCase(signupUser.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -130,11 +109,9 @@ const authSlice = createSlice({
       })
       .addCase(signupUser.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || action.error.message;
+        state.error = action.error.message;
         state.isInitialized = true;
       })
-
-      // LOGIN
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -147,39 +124,34 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || action.error.message;
+        state.error = action.error.message;
         state.isInitialized = true;
       })
-
-      // LOGOUT
       .addCase(logoutUser.fulfilled, (state) => {
         state.user = null;
         state.isAuthenticated = false;
         state.isInitialized = true;
-        state.error = null;
       })
-
-      // FETCH PROFILE (Runs automatically on page load)
       .addCase(fetchProfile.pending, (state) => {
         state.loading = true;
-        state.error = null;
       })
       .addCase(fetchProfile.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload;
         state.isAuthenticated = true;
         state.isInitialized = true;
-        state.error = null;
       })
-      .addCase(fetchProfile.rejected, (state) => {
+      .addCase(fetchProfile.rejected, (state, action) => {
         state.loading = false;
         state.user = null;
         state.isAuthenticated = false;
         state.isInitialized = true;
-        state.error = null; // ALWAYS set error to null on failed initial load
+        // Don't set error for profile fetch failures as it's expected when not logged in
+        if (action.error.message !== 'Request failed with status code 401' &&
+          action.error.message !== 'Request failed with status code 500') {
+          state.error = action.error.message;
+        }
       })
-
-      // VERIFY OTP
       .addCase(verifyOtpUser.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -192,11 +164,9 @@ const authSlice = createSlice({
       })
       .addCase(verifyOtpUser.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || action.error.message;
+        state.error = action.error.message;
         state.isInitialized = true;
       })
-
-      // GET ALL PROFILES
       .addCase(getAllProfile.pending, (state) => {
         state.loading = true;
       })
@@ -208,8 +178,6 @@ const authSlice = createSlice({
       .addCase(getAllProfile.rejected, (state) => {
         state.loading = false;
       })
-
-      // DELETE USER
       .addCase(deleteUser.pending, (state) => {
         state.loading = true;
       })
@@ -220,8 +188,6 @@ const authSlice = createSlice({
       .addCase(deleteUser.rejected, (state) => {
         state.loading = false;
       })
-
-      // UPDATE PROFILE
       .addCase(UpdateProfile.pending, (state) => {
         state.loading = true;
       })
@@ -232,8 +198,6 @@ const authSlice = createSlice({
       .addCase(UpdateProfile.rejected, (state) => {
         state.loading = false;
       })
-
-      // SEARCH USER
       .addCase(searchUser.pending, (state) => {
         state.searchLoading = true;
         state.searchError = null;
@@ -246,8 +210,6 @@ const authSlice = createSlice({
         state.searchLoading = false;
         state.searchError = action.error.message;
       })
-
-      // FETCH BILLING INFO
       .addCase(fetchBillingInfo.pending, (state) => {
         state.billingLoading = true;
         state.billingError = null;
@@ -261,8 +223,6 @@ const authSlice = createSlice({
         state.billingInfo = null;
         state.billingError = action.payload;
       })
-
-      // SAVE BILLING INFO
       .addCase(saveBillingInfoThunk.pending, (state) => {
         state.billingLoading = true;
         state.billingError = null;
@@ -275,8 +235,8 @@ const authSlice = createSlice({
         state.billingLoading = false;
         state.billingError = action.payload;
       });
-  },
+  }
 });
 
-export const { clearError, forceInitialization } = authSlice.actions;
+export const { clearError } = authSlice.actions;
 export default authSlice.reducer;
