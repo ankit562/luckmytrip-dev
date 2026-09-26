@@ -3,14 +3,6 @@
   "builds": [
     { "src": "src/server.js", "use": "@vercel/node" }
   ],
-  "headers": [
-    {
-      "source": "/api/(.*)",
-      "headers": [
-        { "key": "Access-Control-Allow-Origin", "value": "https://www.theluckmytrip.com" }
-      ]
-    }
-  ],
   "routes": [
     { "src": "/(.*)", "dest": "src/server.js" }
   ]
